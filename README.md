@@ -1,6 +1,6 @@
 # GLPI Agent Monitor
 
-[![GLPI Agent Monitor CI](https://github.com/redddcyclone/glpi-agentmonitor/actions/workflows/glpi-agentmonitor-ci.yml/badge.svg)](https://github.com/redddcyclone/glpi-agentmonitor/actions/workflows/glpi-agentmonitor-ci.yml)
+[![GLPI Agent Monitor CI](actions/workflows/glpi-agentmonitor-ci.yml/badge.svg)](actions/workflows/glpi-agentmonitor-ci.yml)
 
 ## Description
 
