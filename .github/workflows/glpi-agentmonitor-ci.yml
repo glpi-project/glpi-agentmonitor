@@ -10,11 +10,11 @@ on:
 jobs:
   windows-compile:
     runs-on: windows-latest
-    
+
     strategy:
       matrix:
         arch: [ x64, x86 ]
-    
+
     steps:
     - uses: actions/checkout@v3
     - uses: ilammy/msvc-dev-cmd@v1.12.1
@@ -23,6 +23,27 @@ jobs:
     - name: Compile and link
       run: |
         msbuild GLPI-AgentMonitor.vcxproj -p:Configuration=Release -p:Platform=${{ matrix.arch }} -p:OutDir=Release\ -p:IntermediateOutputPath=Release\ -v:detailed -fl -flp:logfile=Release\msbuild.log
+    - name: Rename built binary to include ${{ matrix.arch }}
+      run: |
+        mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
+      shell: bash
+    - name: Code Signing
+      if: ${{ env.CODESIGN_COMMAND }}
+      run: |
+        umask 0077
+        mkdir ~/.ssh
+        echo "$CODESIGN_KNOWNHOST"            > ~/.ssh/known_hosts
+        echo "$CODESIGN_PRIVATE"              > private.key
+        umask 0002
+        EXE="GLPI-AgentMonitor-${{ matrix.arch }}.exe"
+        cat "Release\\$EXE" | $CODESIGN_COMMAND codesign "$EXE" > "$EXE"
+        rm -f private.key ~/.ssh/known_hosts "Release\\$EXE"
+        mv -f "$EXE" "Release\\$EXE"
+      shell: bash
+      env:
+        CODESIGN_KNOWNHOST: ${{ secrets.CODESIGN_KNOWNHOST }}
+        CODESIGN_COMMAND: ${{ secrets.CODESIGN_COMMAND }}
+        CODESIGN_PRIVATE: ${{ secrets.CODESIGN_PRIVATE }}
     - name: Upload built artifact
       uses: actions/upload-artifact@v3
       with:
@@ -36,3 +57,27 @@ jobs:
         path: |
           Release\msbuild.log
           Release\*.tlog
+
+  release:
+
+    runs-on: ubuntu-latest
+
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    needs: [ windows-compile ]
+
+    steps:
+    - name: Download x64 Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: GLPI-AgentMonitor-Build-x64
+    - name: Download x86 Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: GLPI-AgentMonitor-Build-x86
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: GLPI Agent Monitor v${{ github.ref_name }}
+        fail_on_unmatched_files: true
+        files: |
+          GLPI-AgentMonitor-*.exe
