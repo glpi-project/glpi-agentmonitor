@@ -28,7 +28,7 @@ jobs:
         mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
       shell: bash
     - name: Code Signing
-      if: ${{ env.CODESIGN_COMMAND }}
+      if: ${{ startsWith(github.ref, 'refs/tags/') && env.CODESIGN_COMMAND }}
       run: |
         umask 0077
         mkdir ~/.ssh
