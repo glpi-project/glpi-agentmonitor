@@ -130,8 +130,8 @@ jobs:
     - name: Get sha256 sums
       id: sha256
       run: |
-        read X64 XXX <<< GLPI-AgentMonitor-x64.exe
-        read X86 XXX <<< GLPI-AgentMonitor-x86.exe
+        read X64 XXX <<< $( sha256sum GLPI-AgentMonitor-x64.exe )
+        read X86 XXX <<< $( sha256sum GLPI-AgentMonitor-x86.exe )
         echo "GLPI-AgentMonitor-x64.exe SHA256: $X64"
         echo "GLPI-AgentMonitor-x86.exe SHA256: $X86"
         echo "x64=$X64" >>$GITHUB_OUTPUT
