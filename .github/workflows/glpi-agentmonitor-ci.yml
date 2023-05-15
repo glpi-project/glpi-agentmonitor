@@ -28,6 +28,7 @@ jobs:
         mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
       shell: bash
     - name: Code Signing
+      id: signing
       if: ${{ startsWith(github.ref, 'refs/tags/') && env.CODESIGN_COMMAND }}
       run: |
         umask 0077
@@ -39,6 +40,9 @@ jobs:
         cat "Release\\$EXE" | $CODESIGN_COMMAND codesign "$EXE" > "$EXE"
         rm -f private.key ~/.ssh/known_hosts "Release\\$EXE"
         mv -f "$EXE" "Release\\$EXE"
+        read SHA256 XXX <<<$(sha256sum "Release\\$EXE")
+        echo "$EXE SHA256: $SHA256"
+        echo "sha256=$SHA256" >>$GITHUB_OUTPUT
       shell: bash
       env:
         CODESIGN_KNOWNHOST: ${{ secrets.CODESIGN_KNOWNHOST }}
@@ -57,6 +61,51 @@ jobs:
         path: |
           Release\msbuild.log
           Release\*.tlog
+    - name: VirusTotal Scan submission
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: crazy-max/ghaction-virustotal@v3
+      with:
+        vt_api_key: ${{ secrets.VT_API_KEY }}
+        files: |
+          Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe
+    - name: VirusTotal Analysis report check
+      if: startsWith(github.ref, 'refs/tags/') && env.VT_API_KEY
+      run: |
+        let TRY=20
+        while curl -s --request GET --url https://www.virustotal.com/api/v3/files/$SHA256 --header "x-apikey: $VT_API_KEY" >vt.json
+        do
+            ERRCODE=$(jq .error.code vt.json 2>&1)
+            if [ "$ERRCODE" == "null" ]; then
+                if [ "$(jq .data.attributes.last_analysis_results.VBA32 vt.json)" != "null" ]; then
+                    echo "$(date): Current analysis stats:"
+                    jq .data.attributes.last_analysis_stats vt.json
+                    let MALICIOUS=$(jq .data.attributes.last_analysis_stats.malicious vt.json)
+                    let SUSPICIOUS=$(jq .data.attributes.last_analysis_stats.suspicious vt.json)
+                    (( MALICIOUS ))  && echo "::warning title=Malicous analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
+                    (( SUSPICIOUS )) && echo "::warning title=Suspicious analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
+                    break
+                else
+                    echo "$(date): Analysis is running"
+                fi
+            else
+                echo "$(date): $ERRCODE"
+                if [ "$TRY" -lt 15 -a "$ERRCODE" != '"NotFoundError"' ]; then
+                    echo "$(date): Failing to access VT reporting"
+                    break
+                fi
+            fi
+            rm -f vt.json
+            if (( --TRY < 0 )); then
+                echo "$(date): Nothing to report"
+                break
+            fi
+            sleep 15
+        done
+        exit 0
+      shell: bash
+      env:
+        VT_API_KEY: ${{ secrets.VT_API_KEY }}
+        SHA256: ${{ steps.signing.outputs.sha256 }}
 
   release:
 
@@ -74,10 +123,32 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: GLPI-AgentMonitor-Build-x86
+    - name: Get sha256 sums
+      id: sha256
+      run: |
+        read X64 XXX <<< GLPI-AgentMonitor-x64.exe
+        read X86 XXX <<< GLPI-AgentMonitor-x86.exe
+        echo "GLPI-AgentMonitor-x64.exe SHA256: $X64"
+        echo "GLPI-AgentMonitor-x86.exe SHA256: $X86"
+        echo "x64=$X64" >>$GITHUB_OUTPUT
+        echo "x86=$X86" >>$GITHUB_OUTPUT
+      shell: bash
     - name: Publish release
       uses: softprops/action-gh-release@v1
       with:
+        draft: ${{ contains(github.ref_name, 'test') }}
+        prerelease: ${{ contains(github.ref_name, 'beta') }}
         name: GLPI Agent Monitor v${{ github.ref_name }}
+        body: |
+          ## For 64 bits windows OS, use:
+          [GLPI-AgentMonitor-x64.exe](https://github.com/glpi-project/glpi-agentmonitor/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x64.exe)
+          
+          ## For 32 bits windows OS, use:
+          [GLPI-AgentMonitor-x86.exe](https://github.com/glpi-project/glpi-agentmonitor/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x86.exe)
+          
+          ## VirusTotal reports
+          * [GLPI-AgentMonitor-x64.exe VirusTotal report](https://www.virustotal.com/gui/file/${{ steps.sha256.outputs.x64 }})
+          * [GLPI-AgentMonitor-x86.exe VirusTotal report](https://www.virustotal.com/gui/file/${{ steps.sha256.outputs.x86 }})
         fail_on_unmatched_files: true
         files: |
           GLPI-AgentMonitor-*.exe
