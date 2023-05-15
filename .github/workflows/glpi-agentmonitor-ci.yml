@@ -79,10 +79,14 @@ jobs:
                 if [ "$(jq .data.attributes.last_analysis_results.VBA32 vt.json)" != "null" ]; then
                     echo "$(date): Current analysis stats:"
                     jq .data.attributes.last_analysis_stats vt.json
-                    let MALICIOUS=$(jq .data.attributes.last_analysis_stats.malicious vt.json)
-                    let SUSPICIOUS=$(jq .data.attributes.last_analysis_stats.suspicious vt.json)
-                    (( MALICIOUS ))  && echo "::warning title=Malicous analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
-                    (( SUSPICIOUS )) && echo "::warning title=Suspicious analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
+                    MALICIOUS="$(jq .data.attributes.last_analysis_stats.malicious vt.json)"
+                    SUSPICIOUS="$(jq .data.attributes.last_analysis_stats.suspicious vt.json)"
+                    if [ -n "$MALICIOUS" -a "$MALICIOUS" != "null" -a "$MALICIOUS" -gt 0 ]; then
+                      echo "::warning title=Malicious analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
+                    fi
+                    if [ -n "$SUSPICIOUS" -a "$SUSPICIOUS" != "null" -a "$SUSPICIOUS" -gt 0 ]; then
+                      echo "::warning title=Suspicious analysis reporting for GLPI-AgentMonitor-${{ matrix.arch }}.exe::See https://www.virustotal.com/gui/file/$SHA256"
+                    fi
                     break
                 else
                     echo "$(date): Analysis is running"
