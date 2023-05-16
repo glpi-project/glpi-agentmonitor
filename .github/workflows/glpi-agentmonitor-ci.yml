@@ -48,7 +48,7 @@ jobs:
         msbuild GLPI-AgentMonitor.vcxproj -p:Configuration=Release -p:Platform=${{ matrix.arch }} -p:OutDir=Release\ -p:IntermediateOutputPath=Release\ -v:detailed -fl -flp:logfile=Release\msbuild.log
     - name: Rename built binary to include ${{ matrix.arch }}
       run: |
-        ls -l "Release\\*.exe"
+        find Release -ls
         if [ -e "Release\\GLPI-AgentMonitor.exe" ]; then
           mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
         fi
@@ -76,17 +76,20 @@ jobs:
         CODESIGN_PRIVATE: ${{ secrets.CODESIGN_PRIVATE }}
     - name: Upload built artifact
       uses: actions/upload-artifact@v3
+      if: success() || failure()
       with:
         name: GLPI-AgentMonitor-Build-${{ matrix.arch }}
         path: |
           Release\*.exe
     - name: Upload build logs artifact
       uses: actions/upload-artifact@v3
+      if: success() || failure()
       with:
         name: GLPI-AgentMonitor-BuildLogs-${{ matrix.arch }}
         path: |
           Release\msbuild.log
           Release\*.tlog
+          version.h
     - name: VirusTotal Scan submission
       if: startsWith(github.ref, 'refs/tags/')
       uses: crazy-max/ghaction-virustotal@v3
