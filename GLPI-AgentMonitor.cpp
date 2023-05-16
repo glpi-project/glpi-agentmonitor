@@ -443,6 +443,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     VerQueryValue(szVerBuffer, L"\\", (LPVOID*)&lpFfi, &uFfiLen);
     DWORD dwVerMaj = HIWORD(lpFfi->dwFileVersionMS);
     DWORD dwVerMin = LOWORD(lpFfi->dwFileVersionMS);
+    DWORD dwVerRev = HIWORD(lpFfi->dwFileVersionLS);
 
     GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
@@ -478,7 +479,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     // Create WinHTTP handles
     WCHAR szUserAgent[64];
-    wsprintf(szUserAgent, L"%s/%d.%d", USERAGENT_NAME, dwVerMaj, dwVerMin);
+    wsprintf(szUserAgent, L"%s/%d.%d.%d", USERAGENT_NAME, dwVerMaj, dwVerMin, dwVerRev);
 
     hSession = WinHttpOpen(szUserAgent, WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, NULL);
     hConn = WinHttpConnect(hSession, L"127.0.0.1", (INTERNET_PORT)dwPort, 0);
@@ -510,7 +511,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     SendMessage(GetDlgItem(hWnd, IDC_PCLOGO), STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hLogo);
 
     WCHAR szVer[20];
-    wsprintf(szVer, L"v%d.%d", dwVerMaj, dwVerMin);
+    wsprintf(szVer, L"v%d.%d.%d", dwVerMaj, dwVerMin, dwVerRev);
     SetDlgItemText(hWnd, IDC_VERSION, szVer);
 
     LoadString(hInst, IDS_APP_TITLE, szBuffer, dwBufferLen);
