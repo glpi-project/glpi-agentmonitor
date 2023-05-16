@@ -24,7 +24,7 @@ jobs:
       run: |
         shopt -s extglob
         echo "#define VI_FILENAME         \"GLPI-AgentMonitor-$ARCH.exe\""                        > version.h
-        if [ -z "${GITHUB_REF#refs/tags/*}" ]; then
+        if [ -z "${GITHUB_REF##refs/tags/*}" ]; then
           TAG=${GITHUB_REF#refs/tags/}
           VTAG=${TAG#*-}
           if [ -n "$TAG" -a -z "${TAG##+([[:digit:]]).+([[:digit:]]).+([[:digit:]])?(-*)}" ]; then
