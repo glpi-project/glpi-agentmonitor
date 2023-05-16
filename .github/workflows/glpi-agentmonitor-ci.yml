@@ -4,8 +4,7 @@ on:
   push:
   pull_request:
     branches:
-      - develop
-      - glpi-agentmonitor
+      - main
 
 jobs:
   windows-compile:
@@ -170,11 +169,11 @@ jobs:
         prerelease: ${{ contains(github.ref_name, 'beta') }}
         name: GLPI Agent Monitor v${{ github.ref_name }}
         body: |
-          ## For 64 bits windows OS, use:
-          [GLPI-AgentMonitor-x64.exe](https://github.com/glpi-project/glpi-agentmonitor/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x64.exe)
+          ## For 64 bits Windows OS, use:
+          [GLPI-AgentMonitor-x64.exe](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x64.exe)
           
-          ## For 32 bits windows OS, use:
-          [GLPI-AgentMonitor-x86.exe](https://github.com/glpi-project/glpi-agentmonitor/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x86.exe)
+          ## For 32 bits Windows OS, use:
+          [GLPI-AgentMonitor-x86.exe](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/GLPI-AgentMonitor-x86.exe)
           
           ## VirusTotal reports
           * [GLPI-AgentMonitor-x64.exe VirusTotal report](https://www.virustotal.com/gui/file/${{ steps.sha256.outputs.x64 }})
