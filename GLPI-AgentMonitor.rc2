@@ -1,0 +1,68 @@
+/////////////////////////////////////////////////////////////////////////////
+// Neutro (Padrão do Sistema) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUSD)
+LANGUAGE LANG_NEUTRAL, SUBLANG_SYS_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+#include "version.h"
+
+VS_VERSION_INFO VERSIONINFO
+#ifdef VI_VERSIONDEF
+ FILEVERSION VI_VERSIONDEF
+ PRODUCTVERSION VI_VERSIONDEF
+#else
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+#endif
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "FileDescription", "GLPI Agent Monitor"
+#ifdef VI_VERSIONSTRING
+            VALUE "FileVersion", VI_VERSIONSTRING
+#else
+            VALUE "FileVersion", "1.0.0.0"
+#endif
+#ifdef VI_FILENAME
+            VALUE "InternalName", VI_FILENAME
+            VALUE "OriginalFilename", VI_FILENAME
+#else
+            VALUE "InternalName", "GLPI-AgentMonitor.exe"
+            VALUE "OriginalFilename", "GLPI-AgentMonitor.exe"
+#endif
+#ifdef VI_PRODUCTNAME
+            VALUE "ProductName", VI_PRODUCTNAME
+#else
+            VALUE "ProductName", "GLPI Agent Monitor"
+#endif
+#ifdef VI_VERSIONSTRING
+            VALUE "ProductVersion", VI_VERSIONSTRING
+#else
+            VALUE "ProductVersion", "1.0.0.0"
+#endif
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // Neutro (Padrão do Sistema) resources
+/////////////////////////////////////////////////////////////////////////////

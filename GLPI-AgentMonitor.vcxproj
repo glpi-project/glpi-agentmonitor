@@ -152,6 +152,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLPI-AgentMonitor.cpp" />
@@ -163,6 +164,9 @@
     <Image Include="Resources\glpierr.ico" />
     <Image Include="Resources\glpilogo.png" />
     <Image Include="Resources\glpiok.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GLPI-AgentMonitor.rc2" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
