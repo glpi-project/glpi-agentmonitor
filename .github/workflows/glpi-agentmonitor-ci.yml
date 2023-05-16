@@ -48,10 +48,7 @@ jobs:
         msbuild GLPI-AgentMonitor.vcxproj -p:Configuration=Release -p:Platform=${{ matrix.arch }} -p:OutDir=Release\ -p:IntermediateOutputPath=Release\ -v:detailed -fl -flp:logfile=Release\msbuild.log
     - name: Rename built binary to include ${{ matrix.arch }}
       run: |
-        find Release -ls
-        if [ -e "Release\\GLPI-AgentMonitor.exe" ]; then
-          mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
-        fi
+        mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
       shell: bash
     - name: Code Signing
       id: signing
