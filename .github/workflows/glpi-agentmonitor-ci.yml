@@ -20,12 +20,38 @@ jobs:
     - uses: ilammy/msvc-dev-cmd@v1.12.1
       with:
         arch: ${{ matrix.arch }}
+    - name: Set version
+      run: |
+        shopt -s extglob
+        echo "#define VI_FILENAME         \"GLPI-AgentMonitor-$ARCH.exe\""                        > version.h
+        if [ -z "${GITHUB_REF#refs/tags/*}" ]; then
+          TAG=${GITHUB_REF#refs/tags/}
+          VTAG=${TAG#*-}
+          if [ -n "$TAG" -a -z "${TAG##+([[:digit:]]).+([[:digit:]]).+([[:digit:]])?(-*)}" ]; then
+            FULLVERSION=${TAG%%-*}
+            BUILD_VERSION=${FULLVERSION##*.}
+            VERSION=${FULLVERSION%.*}
+            MAJOR_VERSION=${VERSION%.*}
+            MINOR_VERSION=${VERSION#*.}
+            echo "#define VI_VERSIONDEF       $MAJOR_VERSION,$MINOR_VERSION,$BUILD_VERSION,0"     >> version.h
+            echo "#define VI_VERSIONSTRING    \"$MAJOR_VERSION.$MINOR_VERSION.$BUILD_VERSION.0\"" >> version.h
+          fi
+          if [ -n "$VTAG" ]; then
+            echo "#define VI_PRODUCTNAME      \"GLPI Agent Monitor ($VTAG)\""                     >> version.h
+          fi
+        fi
+      shell: bash
+      env:
+        ARCH: ${{ matrix.arch }}
     - name: Compile and link
       run: |
         msbuild GLPI-AgentMonitor.vcxproj -p:Configuration=Release -p:Platform=${{ matrix.arch }} -p:OutDir=Release\ -p:IntermediateOutputPath=Release\ -v:detailed -fl -flp:logfile=Release\msbuild.log
     - name: Rename built binary to include ${{ matrix.arch }}
       run: |
-        mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
+        ls -l "Release\\*.exe"
+        if [ -e "Release\\GLPI-AgentMonitor.exe" ]; then
+          mv -f "Release\\GLPI-AgentMonitor.exe" "Release\\GLPI-AgentMonitor-${{ matrix.arch }}.exe"
+        fi
       shell: bash
     - name: Code Signing
       id: signing
