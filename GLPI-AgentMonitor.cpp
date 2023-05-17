@@ -89,6 +89,10 @@ UINT const WMAPP_NOTIFYCALLBACK = WM_APP + 1;
 // Dynamic text colors
 COLORREF colorSvcStatus = RGB(0, 0, 0);
 
+// GLPI server URL
+WCHAR szServer[256];
+BOOL bFoundBaseURL = false;
+
 // Global string buffer
 WCHAR szBuffer[256];
 DWORD dwBufferLen = sizeof(szBuffer) / sizeof(WCHAR);
@@ -452,6 +456,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     WCHAR szKey[MAX_PATH];
     WCHAR szValueBuf[MAX_PATH];
     DWORD szValueBufLen = sizeof(szValueBuf);
+    DWORD szServerLen = sizeof(szServer);
     DWORD dwPort = 62354;
 
     wsprintf(szKey, L"SOFTWARE\\%s", SERVICE_NAME);
@@ -475,6 +480,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         }
         else
             dwPort = _wtoi(szValueBuf);
+
+        // Get server URL
+        lRes = RegQueryValueEx(hk, L"server", 0, NULL, (LPBYTE)szServer, &szServerLen);
+        if (lRes == ERROR_SUCCESS) {
+            if (wcsncmp(L"https://", szServer, 8) == 0 || wcsncmp(L"http://", szServer, 8) == 0) {
+                // Get GLPI server base URL (as GLPI may be located in a subfolder,
+                // we can't guess the exact location just by stripping the domain
+                // from the "server" parameter).
+                LPWSTR szSubstr = wcsstr(szServer, L"/plugins/glpiinventory");
+                if (szSubstr == nullptr) {
+                    szSubstr = wcsstr(szServer, L"/marketplace/glpiinventory");
+                    if (szSubstr == nullptr)
+                        szSubstr = wcsstr(szServer, L"/front/inventory.php");
+                }
+                if (szSubstr != nullptr) {
+                    // As szSubstr points to where the first character of the substring
+                    // was found in the string itself, replacing it with a null character
+                    // effectively cuts the string.
+                    szSubstr[0] = '\0';
+                }
+                // In case we didn't find the substrings, assume the "server" value
+                // in the registry is the base GLPI url itself.
+                bFoundBaseURL = true;
+            }
+        }
     }
 
     // Create WinHTTP handles
@@ -539,6 +569,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     LoadString(hInst, IDS_FORCEINV, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDFORCE, szBuffer);
+    LoadString(hInst, IDS_NEWTICKET, szBuffer, dwBufferLen);
+    SetDlgItemText(hWnd, IDNEWTICK, szBuffer);
     LoadString(hInst, IDS_CLOSE, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDCLOSE, szBuffer);
 
@@ -580,6 +612,34 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case ID_RMENU_OPEN:
                     ShowWindowFront(hWnd, SW_SHOW);
                     UpdateStatus(hWnd, NULL, NULL, NULL);
+                    break;
+                // New ticket
+                case IDNEWTICK:
+                    EndDialog(hWnd, NULL);
+                case ID_RMENU_NEWTICKET:
+                    if (bFoundBaseURL) {
+                        // Take screenshot to clipboard (simulating PrintScreen) and open the ticket URL
+                        WCHAR szTicketURL[256];
+                        INPUT ipInput[2] = { 0 };
+                        Sleep(300);
+                        ipInput[0].type = INPUT_KEYBOARD;
+                        ipInput[0].ki.wVk = VK_SNAPSHOT;
+                        ipInput[1] = ipInput[0];
+                        ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
+                        SendInput(2, ipInput, sizeof(INPUT));
+                        wsprintf(szTicketURL, L"%s/front/ticket.form.php", szServer);
+                        ShellExecute(NULL, L"open", szTicketURL, NULL, NULL, SW_SHOWNORMAL);
+
+                        // Notify user that a screenshot is in the clipboard
+                        nid.uFlags |= NIF_INFO;
+                        nid.uTimeout = 10000;
+                        //nid.dwInfoFlags = NULL;
+                        LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
+                        LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
+                        Shell_NotifyIcon(NIM_MODIFY, &nid);
+                    }
+                    else
+                        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SERVER, IDS_ERROR, MB_OK | MB_ICONERROR);
                     break;
                 // Exit
                 case ID_RMENU_EXIT:
@@ -628,6 +688,9 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         LoadString(hInst, IDS_RMENU_FORCE, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_FORCE, false, &mi);
+                        LoadString(hInst, IDS_RMENU_NEWTICKET, szBuffer, dwBufferLen);
+                        mi.dwTypeData = szBuffer;
+                        SetMenuItemInfo(hMenu, ID_RMENU_NEWTICKET, false, &mi);
                         LoadString(hInst, IDS_RMENU_EXIT, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_EXIT, false, &mi);
