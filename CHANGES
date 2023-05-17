@@ -1,0 +1,15 @@
+Revision history for GLPI Agent Monitor
+
+
+1.1.0
+
+* "New ticket" button added on main window and right-click menu
+  This button opens the "New ticket" page using the URL obtained
+  from the "server" parameter of GLPI Agent. It also takes a
+  screenshot and notifies the user about it and how to attach
+  it to the new ticket.
+
+
+1.0.0
+
+Initial release
