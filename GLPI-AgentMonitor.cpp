@@ -485,12 +485,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         lRes = RegQueryValueEx(hk, L"server", 0, NULL, (LPBYTE)szServer, &szServerLen);
         if (lRes == ERROR_SUCCESS) {
             if (wcsncmp(L"https://", szServer, 8) == 0 || wcsncmp(L"http://", szServer, 8) == 0) {
+                // Get only the first URL if more than one is configured
+                LPWSTR szSubstr = wcsstr(szServer, L",http://");
+                if (szSubstr == nullptr)
+                    szSubstr = wcsstr(szServer, L",https://");
+                if (szSubstr != nullptr)
+                    szSubstr[0] = '\0';
                 // Get GLPI server base URL (as GLPI may be located in a subfolder,
                 // we can't guess the exact location just by stripping the domain
                 // from the "server" parameter).
-                LPWSTR szSubstr = wcsstr(szServer, L"/plugins/glpiinventory");
+                szSubstr = wcsstr(szServer, L"/plugins/");
                 if (szSubstr == nullptr) {
-                    szSubstr = wcsstr(szServer, L"/marketplace/glpiinventory");
+                    szSubstr = wcsstr(szServer, L"/marketplace/");
                     if (szSubstr == nullptr)
                         szSubstr = wcsstr(szServer, L"/front/inventory.php");
                 }
@@ -500,6 +506,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                     // effectively cuts the string.
                     szSubstr[0] = '\0';
                 }
+                // Strip trailing slash
+                DWORD dwServerLen = wcslen(szServer);
+                if (szServer[dwServerLen - 1] == '/')
+                    szServer[dwServerLen - 1] = '\0';
                 // In case we didn't find the substrings, assume the "server" value
                 // in the registry is the base GLPI url itself.
                 bFoundBaseURL = true;
