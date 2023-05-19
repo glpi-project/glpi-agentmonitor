@@ -293,13 +293,10 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
             DWORD szValueLen = sizeof(szValue);
             lRes = RegQueryValueEx(hk, L"Version", 0, NULL, (LPBYTE)szValue, &szValueLen);
             if (lRes != ERROR_SUCCESS)
-            {
                 LoadString(hInst, IDS_ERR_AGENTVERNOTFOUND, szBuffer, dwBufferLen);
-                SetDlgItemText(hWnd, IDC_AGENTVER, szBuffer);
-            }
             else
                 wsprintf(szBuffer, L"GLPI Agent %s", szValue);
-                SetDlgItemText(hWnd, IDC_AGENTVER, szBuffer);
+            SetDlgItemText(hWnd, IDC_AGENTVER, szBuffer);
         }
 
 
@@ -587,13 +584,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     SetDlgItemText(hWnd, IDC_GBSTATUS, szBuffer);
 
     LoadString(hInst, IDS_FORCEINV, szBuffer, dwBufferLen);
-    SetDlgItemText(hWnd, IDFORCE, szBuffer);
+    SetDlgItemText(hWnd, IDC_BTN_FORCE, szBuffer);
     LoadString(hInst, IDS_VIEWLOGS, szBuffer, dwBufferLen);
-    SetDlgItemText(hWnd, IDVIEWLOGS, szBuffer);
+    SetDlgItemText(hWnd, IDC_BTN_VIEWLOGS, szBuffer);
     LoadString(hInst, IDS_NEWTICKET, szBuffer, dwBufferLen);
-    SetDlgItemText(hWnd, IDNEWTICK, szBuffer);
+    SetDlgItemText(hWnd, IDC_BTN_NEWTICKET, szBuffer);
     LoadString(hInst, IDS_CLOSE, szBuffer, dwBufferLen);
-    SetDlgItemText(hWnd, IDCLOSE, szBuffer);
+    SetDlgItemText(hWnd, IDC_BTN_CLOSE, szBuffer);
 
     //-------------------------------------------------------------------------
 
@@ -621,12 +618,12 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (LOWORD(wParam))
             {
                 // Force inventory
-                case IDFORCE:
+                case IDC_BTN_FORCE:
                 case ID_RMENU_FORCE:
                     ForceInventory(hWnd);
                     break;
                 // Close
-                case IDCLOSE:
+                case IDC_BTN_CLOSE:
                     EndDialog(hWnd, NULL);
                     break;
                 // Open
@@ -635,12 +632,12 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     UpdateStatus(hWnd, NULL, NULL, NULL);
                     break;
                 // View logs
-                case IDVIEWLOGS:
+                case IDC_BTN_VIEWLOGS:
                 case ID_RMENU_VIEWLOGS:
                     ShellExecute(NULL, L"open", L"notepad.exe", szLogfile, NULL, SW_SHOWNORMAL);
                     break;
                 // New ticket
-                case IDNEWTICK:
+                case IDC_BTN_NEWTICKET:
                     EndDialog(hWnd, NULL);
                 case ID_RMENU_NEWTICKET:
                     if (bFoundBaseURL) {
