@@ -9,6 +9,11 @@ Revision history for GLPI Agent Monitor
   screenshot and notifies the user about it and how to attach
   it to the new ticket.
 
+* "View agent logs" button added on main window and right-click menu
+  This button opens the GLPI Agent logfile, as configured in
+  the "logfile" parameter. It opens the file directly, so it uses
+  your system's preferred log file viewer.
+
 
 1.0.0
 
