@@ -634,7 +634,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 // View logs
                 case IDC_BTN_VIEWLOGS:
                 case ID_RMENU_VIEWLOGS:
-                    ShellExecute(NULL, L"open", L"notepad.exe", szLogfile, NULL, SW_SHOWNORMAL);
+                    ShellExecute(NULL, L"open", szLogfile, NULL, NULL, SW_SHOWNORMAL);
                     break;
                 // New ticket
                 case IDC_BTN_NEWTICKET:
