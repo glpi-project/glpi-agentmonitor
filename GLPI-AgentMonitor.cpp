@@ -93,6 +93,9 @@ COLORREF colorSvcStatus = RGB(0, 0, 0);
 WCHAR szServer[256];
 BOOL bFoundBaseURL = false;
 
+// Agent logfile
+WCHAR szLogfile[MAX_PATH];
+
 // Global string buffer
 WCHAR szBuffer[256];
 DWORD dwBufferLen = sizeof(szBuffer) / sizeof(WCHAR);
@@ -515,6 +518,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                 bFoundBaseURL = true;
             }
         }
+
+        // Get agent logfile path
+        DWORD szLogfileLen = sizeof(szLogfile);
+        lRes = RegQueryValueEx(hk, L"logfile", 0, NULL, (LPBYTE)szLogfile, &szLogfileLen);
+        if (lRes != ERROR_SUCCESS)
+            szLogfile[0] = '\0';
     }
 
     // Create WinHTTP handles
@@ -579,6 +588,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     LoadString(hInst, IDS_FORCEINV, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDFORCE, szBuffer);
+    LoadString(hInst, IDS_VIEWLOGS, szBuffer, dwBufferLen);
+    SetDlgItemText(hWnd, IDVIEWLOGS, szBuffer);
     LoadString(hInst, IDS_NEWTICKET, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDNEWTICK, szBuffer);
     LoadString(hInst, IDS_CLOSE, szBuffer, dwBufferLen);
@@ -622,6 +633,11 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case ID_RMENU_OPEN:
                     ShowWindowFront(hWnd, SW_SHOW);
                     UpdateStatus(hWnd, NULL, NULL, NULL);
+                    break;
+                // View logs
+                case IDVIEWLOGS:
+                case ID_RMENU_VIEWLOGS:
+                    ShellExecute(NULL, L"open", L"notepad.exe", szLogfile, NULL, SW_SHOWNORMAL);
                     break;
                 // New ticket
                 case IDNEWTICK:
@@ -698,6 +714,9 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         LoadString(hInst, IDS_RMENU_FORCE, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_FORCE, false, &mi);
+                        LoadString(hInst, IDS_RMENU_VIEWLOGS, szBuffer, dwBufferLen);
+                        mi.dwTypeData = szBuffer;
+                        SetMenuItemInfo(hMenu, ID_RMENU_VIEWLOGS, false, &mi);
                         LoadString(hInst, IDS_RMENU_NEWTICKET, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_NEWTICKET, false, &mi);

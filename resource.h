@@ -68,7 +68,10 @@
 #define IDS_NOTIF_NEWTICKET_TITLE       247
 #define IDS_NOTIF_NEWTICKET             248
 #define IDS_NEWTICKET                   249
+#define IDS_VIEWLOGS                    250
+#define IDS_RMENU_VIEWLOGS              251
 #define IDD_GLPIAGENTMONITORCPP_DIALOG  400
+#define IDVIEWLOGS                      400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402
 #define IDC_GLPIAGENTMONITORCPP         600
@@ -94,6 +97,7 @@
 #define ID_RMENU_FORCE                  32761
 #define ID_RMENU_EXIT                   32762
 #define ID_RMENU_NEWTICKET              32781
+#define ID_RMENU_VIEWLOGS               32782
 #define IDC_STATIC                      -1
 #define IDC_STATIC_TITLE                -1
 
@@ -103,7 +107,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        154
-#define _APS_NEXT_COMMAND_VALUE         32782
+#define _APS_NEXT_COMMAND_VALUE         32783
 #define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
