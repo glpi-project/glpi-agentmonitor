@@ -53,6 +53,7 @@
 #include <vector>
 #include <windows.h>
 #include <winhttp.h>
+#include <winuser.h>
 #include <shellapi.h>
 #include <CommCtrl.h>
 #include <gdiplus.h>
@@ -435,6 +436,12 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     hInst = hInstance;
+
+    // Create app mutex to keep only one instance running
+    CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+        return 0;
+
 
     // Read app version
     WCHAR szFileName[MAX_PATH];
