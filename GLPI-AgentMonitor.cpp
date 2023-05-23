@@ -748,6 +748,19 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
             break;
         }
+        // Restart Manager
+        case WM_QUERYENDSESSION:
+        {
+            if(lParam == ENDSESSION_CLOSEAPP)
+                return TRUE;
+            break;
+        }
+        case WM_ENDSESSION:
+        {
+            if (lParam == ENDSESSION_CLOSEAPP && wParam == TRUE)
+                PostMessage(hWnd, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
+            break;
+        }
         case WM_CLOSE:
         {
             // Right-click Exit button
