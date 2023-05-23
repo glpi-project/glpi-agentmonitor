@@ -25,6 +25,12 @@ You can also force an inventory by right-clicking the system tray icon and
 clicking "Force inventory", or by clicking the "Force inventory" button
 on the tool window.
 
+For future release features, read the [Changelog](CHANGES).
+
+## Releases
+
+Official releases will be provided by the [glpi-project/glpi-agentmonitor](https://github.com/glpi-project/glpi-agentmonitor) fork.
+
 ## License
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
