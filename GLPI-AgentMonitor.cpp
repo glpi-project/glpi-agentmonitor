@@ -506,10 +506,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                     // effectively cuts the string.
                     szSubstr[0] = '\0';
                 }
-                // Strip trailing slash
-                DWORD dwServerLen = wcslen(szServer);
-                if (szServer[dwServerLen - 1] == '/')
-                    szServer[dwServerLen - 1] = '\0';
+                // Strip any trailing slash
+                size_t lServerLen = wcslen(szServer);
+                while (--lServerLen >= 0 && szServer[lServerLen] == '/') {
+                    szServer[lServerLen] = '\0';
+                }
                 // In case we didn't find the substrings, assume the "server" value
                 // in the registry is the base GLPI url itself.
                 bFoundBaseURL = true;
