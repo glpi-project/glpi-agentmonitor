@@ -629,21 +629,21 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case IDC_BTN_FORCE:
                 case ID_RMENU_FORCE:
                     ForceInventory(hWnd);
-                    break;
+                    return TRUE;
                 // Close
                 case IDC_BTN_CLOSE:
                     EndDialog(hWnd, NULL);
-                    break;
+                    return TRUE;
                 // Open
                 case ID_RMENU_OPEN:
                     ShowWindowFront(hWnd, SW_SHOW);
                     UpdateStatus(hWnd, NULL, NULL, NULL);
-                    break;
+                    return TRUE;
                 // View logs
                 case IDC_BTN_VIEWLOGS:
                 case ID_RMENU_VIEWLOGS:
                     ShellExecute(NULL, L"open", szLogfile, NULL, NULL, SW_SHOWNORMAL);
-                    break;
+                    return TRUE;
                 // New ticket
                 case IDC_BTN_NEWTICKET:
                     EndDialog(hWnd, NULL);
@@ -671,12 +671,12 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     }
                     else
                         LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SERVER, IDS_ERROR, MB_OK | MB_ICONERROR);
-                    break;
+                    return TRUE;
                 // Exit
                 case ID_RMENU_EXIT:
                     // wParam and lParam are randomly chosen values
                     PostMessage(hWnd, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
-                    break;
+                    return TRUE;
             }
             break;
         }
@@ -701,7 +701,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case NIN_SELECT:
                     ShowWindowFront(hWnd, SW_SHOW);
                     UpdateStatus(hWnd, NULL, NULL, NULL);
-                    break;
+                    return TRUE;
                 // Right click
                 case WM_CONTEXTMENU:
                 {
@@ -743,7 +743,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                         DestroyMenu(hMenu);
                     }
-                    break;
+                    return TRUE;
                 }
             }
             break;
@@ -757,8 +757,10 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         case WM_ENDSESSION:
         {
-            if (lParam == ENDSESSION_CLOSEAPP && wParam == TRUE)
+            if (lParam == ENDSESSION_CLOSEAPP && wParam == TRUE) {
                 PostMessage(hWnd, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
+                return TRUE;
+            }
             break;
         }
         case WM_CLOSE:
@@ -768,7 +770,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DestroyWindow(hWnd);
             else
                 EndDialog(hWnd, NULL);
-            break;
+            return TRUE;
         }
         case WM_DESTROY:
         {
@@ -781,8 +783,8 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Shell_NotifyIcon(NIM_DELETE, &nid);
 
             PostQuitMessage(0);
-            break;
+            return TRUE;
         }
     }
-    return 0;
+    return FALSE;
 }
