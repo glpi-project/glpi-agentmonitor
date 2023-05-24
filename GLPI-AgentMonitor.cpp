@@ -751,8 +751,10 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // Restart Manager
         case WM_QUERYENDSESSION:
         {
-            if(lParam == ENDSESSION_CLOSEAPP)
+            if (lParam == ENDSESSION_CLOSEAPP) {
+                SetWindowLongPtr(hWnd, DWLP_MSGRESULT, TRUE);
                 return TRUE;
+            }
             break;
         }
         case WM_ENDSESSION:
