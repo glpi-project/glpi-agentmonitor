@@ -1,7 +1,7 @@
 Revision history for GLPI Agent Monitor
 
 
-New features for future release
+1.1.0
 
 * "New ticket" button added on main window and right-click menu
   This button opens the "New ticket" page using the URL obtained
