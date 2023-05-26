@@ -64,6 +64,9 @@
 #define IDS_STARTSVC                    252
 #define IDS_STOPSVC                     253
 #define IDS_RESUMESVC                   254
+#define IDS_WAIT                        255
+#define IDS_ERR_SCHANDLE                256
+#define IDS_ERR_SVCHANDLE               257
 #define IDC_BTN_VIEWLOGS                400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402
@@ -76,6 +79,7 @@
 #define IDC_STARTTYPE                   607
 #define IDC_PCLOGO                      609
 #define IDT_UPDSTATUS                   610
+#define IDT_UPDSVCSTATUS                611
 #define IDC_STATIC_AGENTVER             1004
 #define IDC_STATIC_SERVICESTATUS        1005
 #define IDC_STATIC_STARTTYPE            1006

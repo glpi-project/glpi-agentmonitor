@@ -75,8 +75,11 @@ HINSTANCE hInst;
 HINTERNET hSession, hConn;
 
 // Runtime variables
+BOOL bAgentInstalled = true;
 BOOL glpiAgentOk = true;
+SC_HANDLE hAgentSvc;
 SERVICE_STATUS svcStatus;
+SERVICE_STATUS lastSvcStatus = {};
 
 // GDI+ related
 Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -217,8 +220,6 @@ VOID GetAgentStatus(HWND hWnd, LPWSTR szAgStatus, DWORD dwAgStatusLen)
         }
         WinHttpCloseHandle(hReq);
     }
-    else
-        LoadString(hInst, IDS_ERR_NOTRUNNING, szAgStatus, dwAgStatusLen);
 }
 
 // Requests an inventory via HTTP
@@ -259,16 +260,118 @@ VOID ForceInventory(HWND hWnd)
         LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_NOTRUNNING, IDS_ERROR, MB_OK | MB_ICONERROR);
 }
 
+// Updates service related statuses
+VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime) {
+    WCHAR szBtnString[32];
+    DWORD dwBtnStringLen = sizeof(szBtnString) / sizeof(WCHAR);
+    BOOL bQuerySvcOk = QueryServiceStatus(hAgentSvc, &svcStatus);
+    BOOL bSvcChangedState = FALSE;
+
+    if (!bQuerySvcOk || !bAgentInstalled) {
+        if (IsWindowVisible(hWnd)) {
+            LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
+            LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
+            colorSvcStatus = RGB(255, 0, 0);
+            SetDlgItemText(hWnd, IDC_SERVICESTATUS, szBuffer);
+            SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
+            EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), FALSE);
+        }
+        
+        LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
+        LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
+        Shell_NotifyIcon(NIM_MODIFY, &nid);
+        glpiAgentOk = false;
+    }
+    else if (bQuerySvcOk) {
+        bSvcChangedState = svcStatus.dwCurrentState != lastSvcStatus.dwCurrentState;
+    }
+
+    if (bSvcChangedState)
+    {
+        BOOL bEnableButton = FALSE;
+        switch (svcStatus.dwCurrentState)
+        {
+            case SERVICE_STOPPED:
+                LoadString(hInst, IDS_SVC_STOPPED, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 0, 0);
+                bEnableButton = TRUE;
+                break;
+            case SERVICE_RUNNING:
+                LoadString(hInst, IDS_SVC_RUNNING, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(0, 127, 0);
+                bEnableButton = TRUE;
+                break;
+            case SERVICE_PAUSED:
+                LoadString(hInst, IDS_SVC_PAUSED, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 165, 0);
+                bEnableButton = TRUE;
+                break;
+            case SERVICE_CONTINUE_PENDING:
+                LoadString(hInst, IDS_SVC_CONTINUEPENDING, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 165, 0);
+                break;
+            case SERVICE_PAUSE_PENDING:
+                LoadString(hInst, IDS_SVC_PAUSEPENDING, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 165, 0);
+                break;
+            case SERVICE_START_PENDING:
+                LoadString(hInst, IDS_SVC_STARTPENDING, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 165, 0);
+                break;
+            case SERVICE_STOP_PENDING:
+                LoadString(hInst, IDS_SVC_STOPPENDING, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 165, 0);
+                break;
+            default:
+                LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
+                LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
+                colorSvcStatus = RGB(255, 0, 0);
+                break;
+        }
+        SetDlgItemText(hWnd, IDC_SERVICESTATUS, szBuffer);
+        SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
+
+        LoadString(hInst, (svcStatus.dwCurrentState == SERVICE_STOPPED ? IDS_ERR_NOTRUNNING : IDS_WAIT), szBuffer, dwBufferLen);
+        SetDlgItemText(hWnd, IDC_AGENTSTATUS, szBuffer);
+
+        EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), bEnableButton);
+
+        // Taskbar icon routine
+        if (svcStatus.dwCurrentState != SERVICE_RUNNING)
+        {
+            if (glpiAgentOk)
+            {
+                LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
+                LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
+                Shell_NotifyIcon(NIM_MODIFY, &nid);
+                glpiAgentOk = false;
+            }
+        }
+        else
+        {
+            if (!glpiAgentOk)
+            {
+                LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIOK), LIM_LARGE, &nid.hIcon);
+                LoadString(hInst, IDS_GLPINOTIFY, nid.szTip, ARRAYSIZE(nid.szTip));
+                Shell_NotifyIcon(NIM_MODIFY, &nid);
+                glpiAgentOk = true;
+            }
+        }
+
+        lastSvcStatus.dwCurrentState = svcStatus.dwCurrentState;
+    }
+}
+
 // Updates the main window statuses
 VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
 {
-    SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SERVICE_QUERY_STATUS);
-    SC_HANDLE hSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
-    BOOL querySvcOk = QueryServiceStatus(hSvc, &svcStatus);
-    if (!querySvcOk) {
-        svcStatus.dwCurrentState = SERVICE_ERROR_CRITICAL;
-    }
-
     if (IsWindowVisible(hWnd))
     {
         // Agent version
@@ -286,11 +389,12 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
             if (lRes != ERROR_SUCCESS) {
                 LoadString(hInst, IDS_ERR_AGENTNOTFOUND, szBuffer, dwBufferLen);
                 SetDlgItemText(hWnd, IDC_AGENTVER, szBuffer);
+                bAgentInstalled = false;
             }
         }
         if (lRes == ERROR_SUCCESS)
         {
-            WCHAR szValue[128];
+            WCHAR szValue[128] = {};
             DWORD szValueLen = sizeof(szValue);
             lRes = RegQueryValueEx(hk, L"Version", 0, NULL, (LPBYTE)szValue, &szValueLen);
             if (lRes != ERROR_SUCCESS)
@@ -298,6 +402,7 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
             else
                 wsprintf(szBuffer, L"GLPI Agent %s", szValue);
             SetDlgItemText(hWnd, IDC_AGENTVER, szBuffer);
+            bAgentInstalled = true;
         }
 
 
@@ -349,100 +454,15 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
             SetDlgItemText(hWnd, IDC_STARTTYPE, szBuffer);
         }
 
-
-        BOOL bEnableButton = FALSE;
-        WCHAR szBtnString[32];
-        DWORD dwBtnStringLen = sizeof(szBtnString) / sizeof(WCHAR);
-        // Service running status
-        if (querySvcOk) {
-            switch (svcStatus.dwCurrentState)
-            {
-                case SERVICE_STOPPED:
-                    LoadString(hInst, IDS_SVC_STOPPED, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 0, 0);
-                    bEnableButton = TRUE;
-                    break;
-                case SERVICE_RUNNING:
-                    LoadString(hInst, IDS_SVC_RUNNING, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(0, 127, 0);
-                    bEnableButton = TRUE;
-                    break;
-                case SERVICE_PAUSED:
-                    LoadString(hInst, IDS_SVC_PAUSED, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 165, 0);
-                    bEnableButton = TRUE;
-                    break;
-                case SERVICE_CONTINUE_PENDING:
-                    LoadString(hInst, IDS_SVC_CONTINUEPENDING, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 165, 0);
-                    break;
-                case SERVICE_PAUSE_PENDING:
-                    LoadString(hInst, IDS_SVC_PAUSEPENDING, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 165, 0);
-                    break;
-                case SERVICE_START_PENDING:
-                    LoadString(hInst, IDS_SVC_STARTPENDING, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 165, 0);
-                    break;
-                case SERVICE_STOP_PENDING:
-                    LoadString(hInst, IDS_SVC_STOPPENDING, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 165, 0);
-                    break;
-                default:
-                    LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
-                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
-                    colorSvcStatus = RGB(255, 0, 0);
-                    break;
-            }
-        }
-        else
-        {
-            LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
-            LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
-            colorSvcStatus = RGB(255, 0, 0);
-        }
-        SetDlgItemText(hWnd, IDC_SERVICESTATUS, szBuffer);
-        SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
-        EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), bEnableButton);
-
-        // Agent status
-        WCHAR szAgStatus[128];
-        GetAgentStatus(hWnd, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
-        SetDlgItemText(hWnd, IDC_AGENTSTATUS, szAgStatus);
-    }
-
-
-    // Taskbar icon routine
-    if (svcStatus.dwCurrentState != SERVICE_RUNNING)
-    {
-        if (glpiAgentOk)
-        {
-            LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
-            LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
-            Shell_NotifyIcon(NIM_MODIFY, &nid);
-            glpiAgentOk = false;
+        // Update agent status
+        // If the service is not running, the status will
+        // be replaced by UpdateServiceStatus
+        if (svcStatus.dwCurrentState == SERVICE_RUNNING) {
+            WCHAR szAgStatus[128];
+            GetAgentStatus(hWnd, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
+            SetDlgItemText(hWnd, IDC_AGENTSTATUS, szAgStatus);
         }
     }
-    else
-    {
-        if (!glpiAgentOk)
-        {
-            LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIOK), LIM_LARGE, &nid.hIcon);
-            LoadString(hInst, IDS_GLPINOTIFY, nid.szTip, ARRAYSIZE(nid.szTip));
-            Shell_NotifyIcon(NIM_MODIFY, &nid);
-            glpiAgentOk = true;
-        }
-    }
-
-    CloseServiceHandle(hSvc);
-    CloseServiceHandle(hSc);
 }
 
 
@@ -477,7 +497,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     // Load agent settings
     HKEY hk;
     WCHAR szKey[MAX_PATH];
-    WCHAR szValueBuf[MAX_PATH];
+    WCHAR szValueBuf[MAX_PATH] = {};
     DWORD szValueBufLen = sizeof(szValueBuf);
     DWORD szServerLen = sizeof(szServer);
     DWORD dwPort = 62354;
@@ -623,8 +643,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     //-------------------------------------------------------------------------
 
+    // Open Service Manager and Agent service handle
+    SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
+    if (!hSc) {
+        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR);
+        return -50;
+    }
+    hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
+    if (!hAgentSvc) {
+        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR);
+        return -60;
+    }
+
     UpdateStatus(hWnd, NULL, NULL, NULL);
+    UpdateServiceStatus(hWnd, NULL, NULL, NULL);
     SetTimer(hWnd, IDT_UPDSTATUS, 2000, (TIMERPROC)UpdateStatus);
+    SetTimer(hWnd, IDT_UPDSVCSTATUS, 100, (TIMERPROC)UpdateServiceStatus);
 
     //-------------------------------------------------------------------------
 
@@ -635,6 +669,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+
+    CloseServiceHandle(hSc);
+
     return (int) msg.wParam;
 }
 
@@ -811,6 +848,8 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             WinHttpCloseHandle(hConn);
             WinHttpCloseHandle(hSession);
+
+            CloseServiceHandle(hAgentSvc);
 
             Gdiplus::GdiplusShutdown(gdiplusToken);
 
