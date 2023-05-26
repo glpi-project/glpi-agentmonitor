@@ -76,7 +76,7 @@ HINTERNET hSession, hConn;
 
 // Runtime variables
 BOOL glpiAgentOk = true;
-BOOL running = false;
+SERVICE_STATUS svcStatus;
 
 // GDI+ related
 Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -183,7 +183,7 @@ VOID GetAgentStatus(HWND hWnd, LPWSTR szAgStatus, DWORD dwAgStatusLen)
 
     LoadString(hInst, IDS_ERR_NOTRESPONDING, szAgStatus, dwAgStatusLen);
 
-    if (running)
+    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
     {
         HINTERNET hReq = WinHttpOpenRequest(hConn, L"GET", L"/status", NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
             WINHTTP_FLAG_BYPASS_PROXY_CACHE);
@@ -224,7 +224,7 @@ VOID GetAgentStatus(HWND hWnd, LPWSTR szAgStatus, DWORD dwAgStatusLen)
 // Requests an inventory via HTTP
 VOID ForceInventory(HWND hWnd)
 {
-    if (running)
+    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
     {
         if (glpiAgentOk)
         {
@@ -264,10 +264,10 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
 {
     SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SERVICE_QUERY_STATUS);
     SC_HANDLE hSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
-    SERVICE_STATUS svcStatus;
     BOOL querySvcOk = QueryServiceStatus(hSvc, &svcStatus);
-    if (querySvcOk)
-        running = svcStatus.dwCurrentState == SERVICE_RUNNING;
+    if (!querySvcOk) {
+        svcStatus.dwCurrentState = SERVICE_ERROR_CRITICAL;
+    }
 
     if (IsWindowVisible(hWnd))
     {
@@ -350,40 +350,54 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
         }
 
 
+        BOOL bEnableButton = FALSE;
+        WCHAR szBtnString[32];
+        DWORD dwBtnStringLen = sizeof(szBtnString) / sizeof(WCHAR);
         // Service running status
         if (querySvcOk) {
             switch (svcStatus.dwCurrentState)
             {
                 case SERVICE_STOPPED:
                     LoadString(hInst, IDS_SVC_STOPPED, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 0, 0);
+                    bEnableButton = TRUE;
                     break;
                 case SERVICE_RUNNING:
                     LoadString(hInst, IDS_SVC_RUNNING, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(0, 127, 0);
+                    bEnableButton = TRUE;
                     break;
                 case SERVICE_PAUSED:
                     LoadString(hInst, IDS_SVC_PAUSED, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 165, 0);
+                    bEnableButton = TRUE;
                     break;
                 case SERVICE_CONTINUE_PENDING:
                     LoadString(hInst, IDS_SVC_CONTINUEPENDING, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_RESUMESVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 165, 0);
                     break;
                 case SERVICE_PAUSE_PENDING:
                     LoadString(hInst, IDS_SVC_PAUSEPENDING, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 165, 0);
                     break;
                 case SERVICE_START_PENDING:
                     LoadString(hInst, IDS_SVC_STARTPENDING, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 165, 0);
                     break;
                 case SERVICE_STOP_PENDING:
                     LoadString(hInst, IDS_SVC_STOPPENDING, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STOPSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 165, 0);
                     break;
                 default:
                     LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
+                    LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
                     colorSvcStatus = RGB(255, 0, 0);
                     break;
             }
@@ -391,10 +405,12 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
         else
         {
             LoadString(hInst, IDS_ERR_SERVICE, szBuffer, dwBufferLen);
+            LoadString(hInst, IDS_STARTSVC, szBtnString, dwBtnStringLen);
             colorSvcStatus = RGB(255, 0, 0);
         }
         SetDlgItemText(hWnd, IDC_SERVICESTATUS, szBuffer);
-
+        SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
+        EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), bEnableButton);
 
         // Agent status
         WCHAR szAgStatus[128];
@@ -404,7 +420,7 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
 
 
     // Taskbar icon routine
-    if (!running)
+    if (svcStatus.dwCurrentState != SERVICE_RUNNING)
     {
         if (glpiAgentOk)
         {
@@ -599,6 +615,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     SetDlgItemText(hWnd, IDC_BTN_NEWTICKET, szBuffer);
     LoadString(hInst, IDS_CLOSE, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDC_BTN_CLOSE, szBuffer);
+    LoadString(hInst, IDS_STARTSVC, szBuffer, dwBufferLen);
+    SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBuffer);
+
+    // Set UAC shield
+    SendMessage(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), BCM_SETSHIELD, 0, 1);
 
     //-------------------------------------------------------------------------
 
@@ -625,6 +646,18 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             switch (LOWORD(wParam))
             {
+                // Start/stop/resume service
+                case IDC_BTN_STARTSTOPSVC:
+                    WCHAR szOperation[9];
+                    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
+                        wsprintf(szOperation, L"stop");
+                    else if (svcStatus.dwCurrentState == SERVICE_PAUSED)
+                        wsprintf(szOperation, L"continue");
+                    else
+                        wsprintf(szOperation, L"start");
+                    wsprintf(szBuffer, L"%s %s", szOperation, SERVICE_NAME);
+                    ShellExecute(NULL, L"runas", L"sc.exe", szBuffer, NULL, SW_HIDE);
+                    return TRUE;
                 // Force inventory
                 case IDC_BTN_FORCE:
                 case ID_RMENU_FORCE:

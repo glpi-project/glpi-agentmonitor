@@ -4,7 +4,7 @@
 //
 #define IDC_BTN_FORCE                   101
 #define IDC_BTN_NEWTICKET               102
-#define IDC_BTN_CLOSE					103
+#define IDC_BTN_CLOSE                   103
 #define IDI_GLPIOK                      105
 #define IDR_RMENU                       141
 #define IDI_GLPIERR                     148
@@ -61,6 +61,9 @@
 #define IDS_NEWTICKET                   249
 #define IDS_VIEWLOGS                    250
 #define IDS_RMENU_VIEWLOGS              251
+#define IDS_STARTSVC                    252
+#define IDS_STOPSVC                     253
+#define IDS_RESUMESVC                   254
 #define IDC_BTN_VIEWLOGS                400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402
@@ -76,6 +79,7 @@
 #define IDC_STATIC_AGENTVER             1004
 #define IDC_STATIC_SERVICESTATUS        1005
 #define IDC_STATIC_STARTTYPE            1006
+#define IDC_BTN_STARTSTOPSVC            1009
 #define ID_RMENU_OPEN                   32760
 #define ID_RMENU_FORCE                  32761
 #define ID_RMENU_EXIT                   32762
@@ -91,7 +95,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        154
 #define _APS_NEXT_COMMAND_VALUE         32783
-#define _APS_NEXT_CONTROL_VALUE         1009
+#define _APS_NEXT_CONTROL_VALUE         1010
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
