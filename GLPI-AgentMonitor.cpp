@@ -497,7 +497,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             ControlService(hAgentSvc, SERVICE_CONTROL_STOP, &svcStatus);
         else if (wcsstr(lpCmdLine, L"/continueSvc") != nullptr)
             ControlService(hAgentSvc, SERVICE_CONTROL_CONTINUE, &svcStatus);
-        if (dwErr == NULL) {
+        if (dwErr != NULL) {
             dwErr = GetLastError();
             LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCOPERATION, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
             return dwErr;
