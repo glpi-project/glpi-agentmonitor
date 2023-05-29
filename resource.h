@@ -67,6 +67,7 @@
 #define IDS_WAIT                        255
 #define IDS_ERR_SCHANDLE                256
 #define IDS_ERR_SVCHANDLE               257
+#define IDS_ERR_SVCOPERATION            258
 #define IDC_BTN_VIEWLOGS                400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402

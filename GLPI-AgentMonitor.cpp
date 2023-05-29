@@ -169,11 +169,13 @@ VOID ShowWindowFront(HWND hWnd, int nCmdShow)
 }
 
 // Loads the specified strings from the resources and shows a message box
-VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT titleResId, UINT mbFlags)
+VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT titleResId, UINT mbFlags, UINT optParam = NULL)
 {
     WCHAR szBuf[256], szTitleBuf[128];
     LoadString(hIns, msgResId, szBuf, sizeof(szBuf) / sizeof(WCHAR));
     LoadString(hIns, titleResId, szTitleBuf, sizeof(szTitleBuf) / sizeof(WCHAR));
+    if (optParam != NULL)
+        wsprintf(szBuf, L"%s\n\n0x%08x", szBuf, optParam);
     MessageBox(hWn, szBuf, szTitleBuf, mbFlags);
 }
 
@@ -472,6 +474,38 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
     hInst = hInstance;
+    DWORD dwErr = NULL;
+
+    // Process service operations
+    if (wcsstr(lpCmdLine, L"/startSvc") != nullptr || wcsstr(lpCmdLine, L"/stopSvc") != nullptr ||
+        wcsstr(lpCmdLine, L"/continueSvc") != nullptr) {
+        SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT);
+        if (!hSc) {
+            dwErr = GetLastError();
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+            return dwErr;
+        }
+        hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_START | SERVICE_PAUSE_CONTINUE | SERVICE_STOP);
+        if (!hAgentSvc) {
+            dwErr = GetLastError();
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+            return dwErr;
+        }
+        if (wcsstr(lpCmdLine, L"/startSvc") != nullptr)
+            StartService(hAgentSvc, NULL, NULL);
+        else if (wcsstr(lpCmdLine, L"/stopSvc") != nullptr)
+            ControlService(hAgentSvc, SERVICE_CONTROL_STOP, &svcStatus);
+        else if (wcsstr(lpCmdLine, L"/continueSvc") != nullptr)
+            ControlService(hAgentSvc, SERVICE_CONTROL_CONTINUE, &svcStatus);
+        if (dwErr == NULL) {
+            dwErr = GetLastError();
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCOPERATION, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+            return dwErr;
+        }
+        CloseServiceHandle(hAgentSvc);
+        CloseServiceHandle(hSc);
+        return 0;
+    }
 
     // Create app mutex to keep only one instance running
     CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
@@ -685,15 +719,23 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             {
                 // Start/stop/resume service
                 case IDC_BTN_STARTSTOPSVC:
-                    WCHAR szOperation[9];
-                    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
-                        wsprintf(szOperation, L"stop");
-                    else if (svcStatus.dwCurrentState == SERVICE_PAUSED)
-                        wsprintf(szOperation, L"continue");
-                    else
-                        wsprintf(szOperation, L"start");
-                    wsprintf(szBuffer, L"%s %s", szOperation, SERVICE_NAME);
-                    ShellExecute(NULL, L"runas", L"sc.exe", szBuffer, NULL, SW_HIDE);
+                    WCHAR szFilename[MAX_PATH];
+                    WCHAR szOperation[16];
+                    GetModuleFileName(NULL, szFilename, MAX_PATH);
+                    switch(svcStatus.dwCurrentState) {
+                        case SERVICE_RUNNING:
+                            wsprintf(szOperation, L"/stopSvc");
+                            break;
+                        case SERVICE_PAUSED:
+                            wsprintf(szOperation, L"/continueSvc");
+                            break;
+                        case SERVICE_STOPPED:
+                            wsprintf(szOperation, L"/startSvc");
+                            break;
+                        default:
+                            return FALSE;
+                    }
+                    ShellExecute(hWnd, L"runas", szFilename, szOperation, NULL, SW_HIDE);
                     return TRUE;
                 // Force inventory
                 case IDC_BTN_FORCE:
