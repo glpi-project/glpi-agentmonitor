@@ -3,6 +3,16 @@ Revision history for GLPI Agent Monitor
 
 1.1.0
 
+* Agent service control button added on main window
+  This button controls the Agent service status. It is a single button
+  that stops the service if it's running, starts if it's stopped
+  and resumes the service if it's paused. Pause support wasn't
+  added as it likely isn't necessary.
+  Windows will ask for elevation to control the Agent service.
+  
+
+1.1.0
+
 * "New ticket" button added on main window and right-click menu
   This button opens the "New ticket" page using the URL obtained
   from the "server" parameter of GLPI Agent. It also takes a

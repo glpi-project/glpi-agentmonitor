@@ -21,15 +21,18 @@ This window shows details such as:
 Also, it displays the current Agent status (as it would be shown on the /status page).
 The status is updated every 2 seconds when the window is open.
 
-You can also force an inventory by right-clicking the system tray icon and
-clicking "Force inventory", or by clicking the "Force inventory" button
-on the tool window.
+Additionaly, you can also:
+  - Send a "Force inventory" request to the Agent
+  - Go directly to the "New ticket" page on the configured GLPI server (with a screenshot automatically captured to the clipboard)
+  - View the Agent logs (with the system default .log viewer)
+
+These features are available either in the main window or the system tray icon's right-click menu.
 
 For future release features, read the [Changelog](CHANGES).
 
 ## Releases
 
-Official releases will be provided by the [glpi-project/glpi-agentmonitor](https://github.com/glpi-project/glpi-agentmonitor) fork.
+Official releases are provided by the [glpi-project/glpi-agentmonitor](https://github.com/glpi-project/glpi-agentmonitor) fork.
 
 ## License
 
