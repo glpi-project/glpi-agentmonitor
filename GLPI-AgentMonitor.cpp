@@ -543,8 +543,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s", SERVICE_NAME);
         lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
         if (lRes != ERROR_SUCCESS) {
-            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_AGENTSETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR);
-            return -10;
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_AGENTSETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+            return lRes;
         }
     }
     if (lRes == ERROR_SUCCESS)
@@ -552,8 +552,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         // Get HTTPD port
         lRes = RegQueryValueEx(hk, L"httpd-port", 0, NULL, (LPBYTE)szValueBuf, &szValueBufLen);
         if (lRes != ERROR_SUCCESS) {
-            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_HTTPDPORT, IDS_ERROR, MB_OK | MB_ICONERROR);
-            return -30;
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_HTTPDPORT, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+            return lRes;
         }
         else
             dwPort = _wtoi(szValueBuf);
@@ -612,8 +612,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     HWND hWnd = CreateDialog(hInst, MAKEINTRESOURCE(IDD_MAIN), NULL, (DLGPROC)DlgProc);
     if (!hWnd) {
-        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_MAINWINDOW, IDS_ERROR, MB_OK | MB_ICONERROR);
-        return -40;
+        dwErr = GetLastError();
+        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_MAINWINDOW, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+        return dwErr;
     }
 
     HICON icon = (HICON)LoadImage(hInst, MAKEINTRESOURCE(IDI_GLPIOK), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR | LR_DEFAULTSIZE);
@@ -680,13 +681,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     // Open Service Manager and Agent service handle
     SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
     if (!hSc) {
-        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR);
-        return -50;
+        dwErr = GetLastError();
+        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+        return dwErr;
     }
     hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
     if (!hAgentSvc) {
-        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR);
-        return -60;
+        dwErr = GetLastError();
+        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+        return dwErr;
     }
 
     UpdateStatus(hWnd, NULL, NULL, NULL);
