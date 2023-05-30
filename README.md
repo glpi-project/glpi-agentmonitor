@@ -13,26 +13,32 @@ from blue to red depending on the Agent status.
 By default, the tool will start minimized to the system tray, but a
 window will be opened if you left-click the icon.
 
-This window shows details such as:
+## Features
+
+Quickly see details such as:
  - Installed GLPI Agent version
  - Agent service status
- - Service startup type
- 
-Also, it displays the current Agent status (as it would be shown on the /status page).
-The status is updated every 2 seconds when the window is open.
+ - Service startup type 
+ - Agent current status (from the /status page, updates every 2 sec.)
 
-Additionaly, you can also:
+You can also:
   - Send a "Force inventory" request to the Agent
   - Go directly to the "New ticket" page on the configured GLPI server (with a screenshot automatically captured to the clipboard)
   - View the Agent logs (with the system default .log viewer)
-
-These features are available either in the main window or the system tray icon's right-click menu.
 
 For future release features, read the [Changelog](CHANGES).
 
 ## Releases
 
 Official releases are provided by the [glpi-project/glpi-agentmonitor](https://github.com/glpi-project/glpi-agentmonitor) fork.
+
+## Available languages
+
+ - English (US)
+ - Portuguese (Brazil)
+ - Italian (thanks [@kintaro1981](https://github.com/kintaro1981))
+
+If you want to translate the project to your language, feel free to fork the [development repository](https://github.com/redddcyclone/glpi-agentmonitor), insert a string table for your language in the `GLPI-AgentMonitor.rc` file (use Visual Studio) and open a pull request with your changes.
 
 ## License
 
