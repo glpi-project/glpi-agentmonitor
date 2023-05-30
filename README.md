@@ -36,7 +36,6 @@ Official releases are provided by the [glpi-project/glpi-agentmonitor](https://g
 
  - English (US)
  - Portuguese (Brazil)
- - Italian (thanks [@kintaro1981](https://github.com/kintaro1981))
 
 If you want to translate the project to your language, feel free to fork the [development repository](https://github.com/redddcyclone/glpi-agentmonitor), insert a string table for your language in the `GLPI-AgentMonitor.rc` file (use Visual Studio) and open a pull request with your changes.
 
