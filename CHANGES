@@ -1,7 +1,7 @@
 Revision history for GLPI Agent Monitor
 
 
-1.1.0
+New features/fixes for the future release
 
 * Agent service control button added on main window
   This button controls the Agent service status. It is a single button
@@ -9,9 +9,13 @@ Revision history for GLPI Agent Monitor
   and resumes the service if it's paused. Pause support wasn't
   added as it likely isn't necessary.
   Windows will ask for elevation to control the Agent service.
+
 * Italian language added
   Thanks Kintaro Oe (@kintaro1981)
-  
+
+* Bugfix (#6): Fixed a bug which causes the Monitor to ignore
+  HTTP URLs when clicking the "New ticket" button
+
 
 1.1.0
 
