@@ -561,7 +561,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         // Get server URL
         lRes = RegQueryValueEx(hk, L"server", 0, NULL, (LPBYTE)szServer, &szServerLen);
         if (lRes == ERROR_SUCCESS) {
-            if (wcsncmp(L"https://", szServer, 8) == 0 || wcsncmp(L"http://", szServer, 8) == 0) {
+            if (wcsncmp(L"https://", szServer, 8) == 0 || wcsncmp(L"http://", szServer, 7) == 0) {
                 // Get only the first URL if more than one is configured
                 LPWSTR szSubstr = wcsstr(szServer, L",http://");
                 if (szSubstr == nullptr)
