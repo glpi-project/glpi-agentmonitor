@@ -423,6 +423,101 @@ END
 #endif    // Italian (Italy) resources
 /////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITU)
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+IDS_APP_TITLE           "GLPI Agent Monitor"
+IDS_GLPINOTIFYERROR     "Agent GLPI - Erreur"
+IDS_GLPINOTIFY          "Agent GLPI"
+IDS_STATIC_INFO         "Information"
+IDS_STATIC_AGENTVER     "Version de l'agent :"
+IDS_STATIC_SERVICESTATUS "Statut du service :"
+IDS_STATIC_STARTTYPE    "Type de démarrage :"
+IDS_ERR_AGENTSETTINGS   "Erreur de chargement des paramètres de l'agent GLPI!\nL'agent doit être ré-installé."
+END
+
+STRINGTABLE
+BEGIN
+IDS_LOADING             "Chargement..."
+IDS_STATIC_AGENTSTATUS  "Statut de l'agent"
+IDS_FORCEINV            "Forcer l'inventaire"
+IDS_CLOSE               "Fermer"
+IDS_ERR_NOTRESPONDING   "L'agent ne répond pas !"
+IDS_ERR_NOTRUNNING      "L'agent n'est pas démarré !"
+IDS_SVCSTART_BOOT       "Au démarrage"
+IDS_SVCSTART_SYSTEM     "Système"
+IDS_SVCSTART_AUTO       "Automatique"
+IDS_SVCSTART_DELAYEDAUTO "Automatique (Début differré)"
+IDS_SVCSTART_MANUAL     "Manuel"
+IDS_SVCSTART_DISABLED   "Désactivé"
+IDS_ERR_UNKSVCSTART     "Type de démarrage inconnu !"
+IDS_ERR_REGFAIL         "Échec d'accès à la base de registre !"
+IDS_ERR_AGENTVERNOTFOUND "Version de l'agent non trouvée !"
+IDS_ERR_AGENTNOTFOUND   "L'agent n'est pas installé !"
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_HTTPDPORT       "Erreur de récupération du port HTTP de l'agent GLPI !\nL'agent doit être ré-installé."
+IDS_SVC_STOPPED         "Arrêté"
+IDS_SVC_RUNNING         "Démarré"
+IDS_SVC_PAUSED          "En pause"
+IDS_SVC_CONTINUEPENDING "Reprise..."
+IDS_SVC_PAUSEPENDING    "Mise en pause..."
+IDS_SVC_STARTPENDING    "Démarrage..."
+IDS_SVC_STOPPENDING     "Arrêt en cours..."
+IDS_ERR_SERVICE         "Échec d'accès au service !"
+IDS_OK                  "OK"
+IDS_ERROR               "Erreur"
+IDS_ERR_FORCEINV_NORESPONSE
+                        "Erreur de forçage de l'inventaire :\nL'agent n'a pas donné de réponse."
+IDS_ERR_FORCEINV_NOTALLOWED
+                        "Erreur de forçage de l'inventaire :\nAction non autorisée."
+IDS_MSG_FORCEINV_OK     "La requête de forçage de l'inventaire a été envoyée avec succès à l'agent GLPI."
+IDS_ERR_AGENTERR        "L'agent a une ou plusieurs erreurs !\nVous devriez vérifier la fenêtre de GLPI Agent Monitor."
+IDS_RMENU_OPEN          "Ouvrir"
+END
+
+STRINGTABLE
+BEGIN
+IDS_RMENU_FORCE         "Forcer l'inventaire"
+IDS_RMENU_EXIT          "Quitter"
+IDS_FILE                "Fichier"
+IDS_DIR                 "Dossier"
+IDS_ERR_MAINWINDOW      "Erreur de création de la fenêtre principale de GLPI Agent Monitor !"
+IDS_RMENU_NEWTICKET     "Nouveau ticket..."
+IDS_ERR_SERVER          "Erreur de récupération de l'URL du serveur GLPI !\nL'agent doit être ré-installé."
+IDS_NOTIF_NEWTICKET_TITLE "Une capture d'écran a été prise"
+IDS_NOTIF_NEWTICKET     "Appuyez sur CTRL+V dans le cadre de la description du nouveau ticket pour l'inclure au ticket."
+IDS_NEWTICKET           "Nouveau ticket..."
+IDS_VIEWLOGS            "Voir le journal de l'agent"
+IDS_RMENU_VIEWLOGS      "Voir le journal de l'agent"
+IDS_STARTSVC            " Démarrer le service"
+IDS_STOPSVC             " Arrêter le service"
+IDS_RESUMESVC           " Sortir le service de pause"
+IDS_WAIT                "Veuillez attendre..."
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_SCHANDLE        "Erreur de connexion au gestionnaire de contrôle Windows Service !"
+IDS_ERR_SVCHANDLE       "Erreur d'ouverture du service de l'agent GLPI !"
+IDS_ERR_SVCOPERATION    "Erreur en tentant de gérer le service de l'agent GLPI !"
+END
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
