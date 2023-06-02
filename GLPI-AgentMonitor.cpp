@@ -278,7 +278,7 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
             SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
             EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), FALSE);
         }
-        
+
         LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
         LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
         Shell_NotifyIcon(NIM_MODIFY, &nid);
@@ -907,3 +907,4 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return FALSE;
 }
+

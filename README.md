@@ -18,7 +18,7 @@ window will be opened if you left-click the icon.
 Quickly see details such as:
  - Installed GLPI Agent version
  - Agent service status
- - Service startup type 
+ - Service startup type
  - Agent current status (from the /status page, updates every 2 sec.)
 
 You can also:
