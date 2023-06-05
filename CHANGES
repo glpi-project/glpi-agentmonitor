@@ -10,11 +10,14 @@ New features/fixes for the future release
   added as it likely isn't necessary.
   Windows will ask for elevation to control the Agent service.
 
-* Italian language added
+* Italian translation added
   Thanks Kintaro Oe (@kintaro1981)
 
 * Bugfix (#6): Fixed a bug which causes the Monitor to ignore
   HTTP URLs when clicking the "New ticket" button
+
+* French translation added
+  Thanks Guillaume Bougard (@g-bougard)
 
 
 1.1.0
