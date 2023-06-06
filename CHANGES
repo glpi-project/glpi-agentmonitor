@@ -1,7 +1,7 @@
 Revision history for GLPI Agent Monitor
 
 
-New features/fixes for the future release
+1.2.0
 
 * Agent service control button added on main window
   This button controls the Agent service status. It is a single button
