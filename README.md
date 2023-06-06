@@ -25,6 +25,7 @@ You can also:
   - Send a "Force inventory" request to the Agent
   - Go directly to the "New ticket" page on the configured GLPI server (with a screenshot automatically captured to the clipboard)
   - View the Agent logs (with the system default .log viewer)
+  - Start, stop or resume the service
 
 For future release features, read the [Changelog](CHANGES).
 
@@ -36,6 +37,8 @@ Official releases are provided by the [glpi-project/glpi-agentmonitor](https://g
 
  - English (US)
  - Portuguese (Brazil)
+ - Italian (by [Kintaro Oe](https://github.com/kintaro1981))
+ - French (by [Guillaume Bougard](https://github.com/g-bougard))
 
 If you want to translate the project to your language, feel free to fork the [development repository](https://github.com/redddcyclone/glpi-agentmonitor), insert a string table for your language in the `GLPI-AgentMonitor.rc` file (use Visual Studio) and open a pull request with your changes.
 
