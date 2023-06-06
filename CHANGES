@@ -1,6 +1,14 @@
 Revision history for GLPI Agent Monitor
 
 
+Future release
+
+* Bugfix: Fixed a bug which causes the monitor to display the
+  "Screenshot taken" notification every time the systray icon
+  changes color if the "New ticket" button was clicked at
+  least once in the process' lifetime.
+
+
 1.2.0
 
 * Agent service control button added on main window

@@ -281,6 +281,7 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
 
         LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
         LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
+        nid.szInfo[0] = '\0';
         Shell_NotifyIcon(NIM_MODIFY, &nid);
         glpiAgentOk = false;
     }
@@ -352,6 +353,7 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
             {
                 LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
                 LoadString(hInst, IDS_GLPINOTIFYERROR, nid.szTip, ARRAYSIZE(nid.szTip));
+                nid.szInfo[0] = '\0';
                 Shell_NotifyIcon(NIM_MODIFY, &nid);
                 glpiAgentOk = false;
             }
@@ -362,6 +364,7 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
             {
                 LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIOK), LIM_LARGE, &nid.hIcon);
                 LoadString(hInst, IDS_GLPINOTIFY, nid.szTip, ARRAYSIZE(nid.szTip));
+                nid.szInfo[0] = '\0';
                 Shell_NotifyIcon(NIM_MODIFY, &nid);
                 glpiAgentOk = true;
             }
@@ -778,8 +781,6 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                         // Notify user that a screenshot is in the clipboard
                         nid.uFlags |= NIF_INFO;
-                        nid.uTimeout = 10000;
-                        //nid.dwInfoFlags = NULL;
                         LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
                         LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
                         Shell_NotifyIcon(NIM_MODIFY, &nid);
