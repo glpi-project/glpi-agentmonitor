@@ -1,5 +1,8 @@
 Revision history for GLPI Agent Monitor
 
+1.2.2
+
+* Build: Don't sign generated code with an expired code-signing certificate
 
 1.2.1
 
