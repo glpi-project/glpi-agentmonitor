@@ -42,6 +42,10 @@ Official releases are provided by the [glpi-project/glpi-agentmonitor](https://g
 
 If you want to translate the project to your language, feel free to fork the [development repository](https://github.com/redddcyclone/glpi-agentmonitor), insert a string table for your language in the `GLPI-AgentMonitor.rc` file (use Visual Studio) and open a pull request with your changes.
 
+## Screenshots
+
+![Screenshot](screenshot.png)
+
 ## License
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
