@@ -1,5 +1,10 @@
 Revision history for GLPI Agent Monitor
 
+Future release
+
+* Russian translation added
+  Thanks Fedorov Nikolay (kofe88)
+
 1.2.2
 
 * Build: Don't sign generated code with an expired code-signing certificate
