@@ -522,7 +522,7 @@ END
 // Russian (Russia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITU)
-LANGUAGE LANG_RUSSIAN, SUBLANG_RUSSIAN
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
 /////////////////////////////////////////////////////////////////////////////
 //
