@@ -518,6 +518,101 @@ END
 #endif    // French (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////
+// Russian (Russia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITU)
+LANGUAGE LANG_RUSSIAN, SUBLANG_RUSSIAN
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+IDS_APP_TITLE           "GLPI Agent Monitor"
+IDS_GLPINOTIFYERROR     "Agent GLPI - Ошибка"
+IDS_GLPINOTIFY          "Agent GLPI"
+IDS_STATIC_INFO         "Информация"
+IDS_STATIC_AGENTVER     "Версия агента :"
+IDS_STATIC_SERVICESTATUS "Статус службы :"
+IDS_STATIC_STARTTYPE    "Тип запуска :"
+IDS_ERR_AGENTSETTINGS   "Ошибка загрузки настроек GLPI Agent!\nПереустановите GLPI Agent."
+END
+
+STRINGTABLE
+BEGIN
+IDS_LOADING             "Загрузка..."
+IDS_STATIC_AGENTSTATUS  "Статус агента"
+IDS_FORCEINV            "Инвентаризация"
+IDS_CLOSE               "Закрыть"
+IDS_ERR_NOTRESPONDING   "Агент не отвечает!"
+IDS_ERR_NOTRUNNING      "Агент не запущен!"
+IDS_SVCSTART_BOOT       "При загрузке"
+IDS_SVCSTART_SYSTEM     "С системой"
+IDS_SVCSTART_AUTO       "Автоматически"
+IDS_SVCSTART_DELAYEDAUTO "Автоматически (отложенный запуск)"
+IDS_SVCSTART_MANUAL     "Вручную"
+IDS_SVCSTART_DISABLED   "Отключен"
+IDS_ERR_UNKSVCSTART     "Неизвестный тип запуска!"
+IDS_ERR_REGFAIL         "Сбой запроса к реестру!"
+IDS_ERR_AGENTVERNOTFOUND "Версия агента не найдена!"
+IDS_ERR_AGENTNOTFOUND   "Агент не установлен!"
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_HTTPDPORT       "Ошибка получения HTTP порта GLPI Agent!\nПереустановите GLPI Agent."
+IDS_SVC_STOPPED         "Остановлена"
+IDS_SVC_RUNNING         "Запущена"
+IDS_SVC_PAUSED          "Приостановлен"
+IDS_SVC_CONTINUEPENDING "Возобновляется..."
+IDS_SVC_PAUSEPENDING    "Приостанавливается..."
+IDS_SVC_STARTPENDING    "Запускается..."
+IDS_SVC_STOPPENDING     "Останавливается..."
+IDS_ERR_SERVICE         "Ошибка запроса к службе!"
+IDS_OK                  "OK"
+IDS_ERROR               "Ошибка"
+IDS_ERR_FORCEINV_NORESPONSE
+                        "Ошибка инвентаризации:\nАгент не отвечает."
+IDS_ERR_FORCEINV_NOTALLOWED
+                        "Ошибка инвентаризации:\nОперация не разрешена."
+IDS_MSG_FORCEINV_OK     "Запрос инвентаризации успешно отправлен в GLPI Agent."
+IDS_ERR_AGENTERR        "У агента одна или несколько ошибок !\nПожалуйста проверьте окно GLPI Agent Monitor."
+IDS_RMENU_OPEN          "Открыть"
+END
+
+STRINGTABLE
+BEGIN
+IDS_RMENU_FORCE         "Инвентаризация"
+IDS_RMENU_EXIT          "Выход"
+IDS_FILE                "Файл"
+IDS_DIR                 "Директория"
+IDS_ERR_MAINWINDOW      "Ошибка создания главного окна GLPI Agent Monitor!"
+IDS_RMENU_NEWTICKET     "Новая заявка..."
+IDS_ERR_SERVER          "Ошибка получения URL адреса GLPI сервера!\nПереустановите GLPI Agent."
+IDS_NOTIF_NEWTICKET_TITLE "Сделан снимок экрана"
+IDS_NOTIF_NEWTICKET     "Нажмите CTRL+V в окне описания новой заявки, чтобы прикрепить его к заявке."
+IDS_NEWTICKET           "Новая заявка..."
+IDS_VIEWLOGS            "Открыть логи"
+IDS_RMENU_VIEWLOGS      "Открыть логи"
+IDS_STARTSVC            " Запустить службу"
+IDS_STOPSVC             " Остановить службу"
+IDS_RESUMESVC           " Возобновить службу"
+IDS_WAIT                "Пожалуйста подождите..."
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_SCHANDLE        "Ошибка подключения к Диспетчеру управления службами Windows(WSCM)!"
+IDS_ERR_SVCHANDLE       "Ошибка открытия службы GLPI agent!"
+IDS_ERR_SVCOPERATION    "Ошибка управления службой GLPI agent!"
+END
+
+#endif    // Russian (Russia) resources
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
