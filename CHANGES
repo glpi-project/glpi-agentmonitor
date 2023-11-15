@@ -1,12 +1,16 @@
 Revision history for GLPI Agent Monitor
 
-Future release
+1.2.3
 
 * Russian translation added
   Thanks Fedorov Nikolay (@kofe88)
 
 * Spanish (Uruguay) translation added
   Thanks Luis Giordano (@Iruxos)
+
+* Bugfix:  Strip quotes when getting server URL from registry
+  This removes quotes from the server URL setting, even though the server URL
+  should not have any quotes at all.
 
 1.2.2
 
