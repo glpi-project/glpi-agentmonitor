@@ -58,7 +58,6 @@
 #include <shellapi.h>
 #include <CommCtrl.h>
 #include <gdiplus.h>
-#include <system_error>
 #include "framework.h"
 #include "resource.h"
 
