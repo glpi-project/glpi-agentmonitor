@@ -1,5 +1,12 @@
 Revision history for GLPI Agent Monitor
 
+Future release
+
+* Better error message handling
+  The Monitor now displays the error message when displaying error codes.
+  The messages are retrieved from Windows in the user's language.
+  Also, "GLPI Agent Monitor" is displayed on the error message captions.
+
 1.2.3
 
 * Russian translation added
