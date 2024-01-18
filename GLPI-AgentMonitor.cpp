@@ -58,6 +58,7 @@
 #include <shellapi.h>
 #include <CommCtrl.h>
 #include <gdiplus.h>
+#include <system_error>
 #include "framework.h"
 #include "resource.h"
 
@@ -170,13 +171,19 @@ VOID ShowWindowFront(HWND hWnd, int nCmdShow)
 }
 
 // Loads the specified strings from the resources and shows a message box
-VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT titleResId, UINT mbFlags, UINT optParam = NULL)
+VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT titleResId, UINT mbFlags, UINT errCode = NULL)
 {
     WCHAR szBuf[256], szTitleBuf[128];
     LoadString(hIns, msgResId, szBuf, sizeof(szBuf) / sizeof(WCHAR));
     LoadString(hIns, titleResId, szTitleBuf, sizeof(szTitleBuf) / sizeof(WCHAR));
-    if (optParam != NULL)
-        wsprintf(szBuf, L"%s\n\n0x%08x", szBuf, optParam);
+    if (errCode != NULL)
+    {
+        LPWSTR errMsgBuf = nullptr;
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL, errCode, GetUserDefaultUILanguage(), (LPWSTR)&errMsgBuf, 0, NULL);
+        wsprintf(szBuf, L"%s\n\n0x%08x - %s", szBuf, errCode, errMsgBuf);
+        LocalFree(errMsgBuf);
+    }
     MessageBox(hWn, szBuf, szTitleBuf, mbFlags);
 }
 

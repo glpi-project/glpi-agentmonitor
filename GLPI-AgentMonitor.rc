@@ -1,5 +1,7 @@
-﻿// Microsoft Visual C++ generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
+#pragma code_page(65001)
+
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
@@ -16,6 +18,101 @@
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russo (Rússia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "Agent GLPI - Ошибка"
+    IDS_GLPINOTIFY          "Agent GLPI"
+    IDS_STATIC_INFO         "Информация"
+    IDS_STATIC_AGENTVER     "Версия агента :"
+    IDS_STATIC_SERVICESTATUS "Статус службы :"
+    IDS_STATIC_STARTTYPE    "Тип запуска :"
+    IDS_ERR_AGENTSETTINGS   "Ошибка загрузки настроек GLPI Agent!\nПереустановите GLPI Agent."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Загрузка..."
+    IDS_STATIC_AGENTSTATUS  "Статус агента"
+    IDS_FORCEINV            "Инвентаризация"
+    IDS_CLOSE               "Закрыть"
+    IDS_ERR_NOTRESPONDING   "Агент не отвечает!"
+    IDS_ERR_NOTRUNNING      "Агент не запущен!"
+    IDS_SVCSTART_BOOT       "При загрузке"
+    IDS_SVCSTART_SYSTEM     "С системой"
+    IDS_SVCSTART_AUTO       "Автоматически"
+    IDS_SVCSTART_DELAYEDAUTO "Автоматически (отложенный запуск)"
+    IDS_SVCSTART_MANUAL     "Вручную"
+    IDS_SVCSTART_DISABLED   "Отключен"
+    IDS_ERR_UNKSVCSTART     "Неизвестный тип запуска!"
+    IDS_ERR_REGFAIL         "Сбой запроса к реестру!"
+    IDS_ERR_AGENTVERNOTFOUND "Версия агента не найдена!"
+    IDS_ERR_AGENTNOTFOUND   "Агент не установлен!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Ошибка получения HTTP порта GLPI Agent!\nПереустановите GLPI Agent."
+    IDS_SVC_STOPPED         "Остановлена"
+    IDS_SVC_RUNNING         "Запущена"
+    IDS_SVC_PAUSED          "Приостановлен"
+    IDS_SVC_CONTINUEPENDING "Возобновляется..."
+    IDS_SVC_PAUSEPENDING    "Приостанавливается..."
+    IDS_SVC_STARTPENDING    "Запускается..."
+    IDS_SVC_STOPPENDING     "Останавливается..."
+    IDS_ERR_SERVICE         "Ошибка запроса к службе!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Ошибка"
+    IDS_ERR_FORCEINV_NORESPONSE "Ошибка инвентаризации:\nАгент не отвечает."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Ошибка инвентаризации:\nОперация не разрешена."
+    IDS_MSG_FORCEINV_OK     "Запрос инвентаризации успешно отправлен в GLPI Agent."
+    IDS_ERR_AGENTERR        "У агента одна или несколько ошибок !\nПожалуйста проверьте окно GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Открыть"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Инвентаризация"
+    IDS_RMENU_EXIT          "Выход"
+    IDS_FILE                "Файл"
+    IDS_DIR                 "Директория"
+    IDS_ERR_MAINWINDOW      "Ошибка создания главного окна GLPI Agent Monitor!"
+    IDS_RMENU_NEWTICKET     "Новая заявка..."
+    IDS_ERR_SERVER          "Ошибка получения URL адреса GLPI сервера!\nПереустановите GLPI Agent."
+    IDS_NOTIF_NEWTICKET_TITLE "Сделан снимок экрана"
+    IDS_NOTIF_NEWTICKET     "Нажмите CTRL+V в окне описания новой заявки, чтобы прикрепить его к заявке."
+    IDS_NEWTICKET           "Новая заявка..."
+    IDS_VIEWLOGS            "Открыть логи"
+    IDS_RMENU_VIEWLOGS      "Открыть логи"
+    IDS_STARTSVC            " Запустить службу"
+    IDS_STOPSVC             " Остановить службу"
+    IDS_RESUMESVC           " Возобновить службу"
+    IDS_WAIT                "Пожалуйста подождите..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Ошибка подключения к Диспетчеру управления службами Windows(WSCM)!"
+    IDS_ERR_SVCHANDLE       "Ошибка открытия службы GLPI agent!"
+    IDS_ERR_SVCOPERATION    "Ошибка управления службой GLPI agent!"
+END
+
+#endif    // Russo (Rússia) resources
+/////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Inglês (Estados Unidos) resources
@@ -72,7 +169,7 @@ BEGIN
     IDS_SVC_STOPPENDING     "Stopping..."
     IDS_ERR_SERVICE         "Service query failure!"
     IDS_OK                  "OK"
-    IDS_ERROR               "Error"
+    IDS_ERROR               "GLPI Agent Monitor - Error"
     IDS_ERR_FORCEINV_NORESPONSE 
                             "Force inventory error:\nThe agent did not respond to the request."
     IDS_ERR_FORCEINV_NOTALLOWED 
@@ -110,6 +207,198 @@ BEGIN
 END
 
 #endif    // Inglês (Estados Unidos) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Francês (França) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "Agent GLPI - Erreur"
+    IDS_GLPINOTIFY          "Agent GLPI"
+    IDS_STATIC_INFO         "Information"
+    IDS_STATIC_AGENTVER     "Version de l'agent :"
+    IDS_STATIC_SERVICESTATUS "Statut du service :"
+    IDS_STATIC_STARTTYPE    "Type de démarrage :"
+    IDS_ERR_AGENTSETTINGS   "Erreur de chargement des paramètres de l'agent GLPI!\nL'agent doit être ré-installé."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Chargement..."
+    IDS_STATIC_AGENTSTATUS  "Statut de l'agent"
+    IDS_FORCEINV            "Forcer l'inventaire"
+    IDS_CLOSE               "Fermer"
+    IDS_ERR_NOTRESPONDING   "L'agent ne répond pas !"
+    IDS_ERR_NOTRUNNING      "L'agent n'est pas démarré !"
+    IDS_SVCSTART_BOOT       "Au démarrage"
+    IDS_SVCSTART_SYSTEM     "Système"
+    IDS_SVCSTART_AUTO       "Automatique"
+    IDS_SVCSTART_DELAYEDAUTO "Automatique (Début differré)"
+    IDS_SVCSTART_MANUAL     "Manuel"
+    IDS_SVCSTART_DISABLED   "Désactivé"
+    IDS_ERR_UNKSVCSTART     "Type de démarrage inconnu !"
+    IDS_ERR_REGFAIL         "Échec d'accès à la base de registre !"
+    IDS_ERR_AGENTVERNOTFOUND "Version de l'agent non trouvée !"
+    IDS_ERR_AGENTNOTFOUND   "L'agent n'est pas installé !"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Erreur de récupération du port HTTP de l'agent GLPI !\nL'agent doit être ré-installé."
+    IDS_SVC_STOPPED         "Arrêté"
+    IDS_SVC_RUNNING         "Démarré"
+    IDS_SVC_PAUSED          "En pause"
+    IDS_SVC_CONTINUEPENDING "Reprise..."
+    IDS_SVC_PAUSEPENDING    "Mise en pause..."
+    IDS_SVC_STARTPENDING    "Démarrage..."
+    IDS_SVC_STOPPENDING     "Arrêt en cours..."
+    IDS_ERR_SERVICE         "Échec d'accès au service !"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Erreur"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Erreur de forçage de l'inventaire :\nL'agent n'a pas donné de réponse."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Erreur de forçage de l'inventaire :\nAction non autorisée."
+    IDS_MSG_FORCEINV_OK     "La requête de forçage de l'inventaire a été envoyée avec succès à l'agent GLPI."
+    IDS_ERR_AGENTERR        "L'agent a une ou plusieurs erreurs !\nVous devriez vérifier la fenêtre de GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Ouvrir"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Forcer l'inventaire"
+    IDS_RMENU_EXIT          "Quitter"
+    IDS_FILE                "Fichier"
+    IDS_DIR                 "Dossier"
+    IDS_ERR_MAINWINDOW      "Erreur de création de la fenêtre principale de GLPI Agent Monitor !"
+    IDS_RMENU_NEWTICKET     "Nouveau ticket..."
+    IDS_ERR_SERVER          "Erreur de récupération de l'URL du serveur GLPI !\nL'agent doit être ré-installé."
+    IDS_NOTIF_NEWTICKET_TITLE "Une capture d'écran a été prise"
+    IDS_NOTIF_NEWTICKET     "Appuyez sur CTRL+V dans le cadre de la description du nouveau ticket pour l'inclure au ticket."
+    IDS_NEWTICKET           "Nouveau ticket..."
+    IDS_VIEWLOGS            "Journal de l'agent"
+    IDS_RMENU_VIEWLOGS      "Journal de l'agent"
+    IDS_STARTSVC            " Démarrer le service"
+    IDS_STOPSVC             " Arrêter le service"
+    IDS_RESUMESVC           " Sortir le service de pause"
+    IDS_WAIT                "Veuillez attendre..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Erreur de connexion au gestionnaire de contrôle Windows Service !"
+    IDS_ERR_SVCHANDLE       "Erreur d'ouverture du service de l'agent GLPI !"
+    IDS_ERR_SVCOPERATION    "Erreur en tentant de gérer le service de l'agent GLPI !"
+END
+
+#endif    // Francês (França) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Italiano (Itália) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITA)
+LANGUAGE LANG_ITALIAN, SUBLANG_ITALIAN
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
+    IDS_GLPINOTIFY          "Agente GLPI"
+    IDS_STATIC_INFO         "Informazioni"
+    IDS_STATIC_AGENTVER     "Versione Agent:"
+    IDS_STATIC_SERVICESTATUS "Stato del servizio:"
+    IDS_STATIC_STARTTYPE    "Tipo di avvio:"
+    IDS_ERR_AGENTSETTINGS   "Errore nel caricamento dei settaggi dell'Agente GLPI!\nL'agente deve essere reinstallato."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Caricamento..."
+    IDS_STATIC_AGENTSTATUS  "Stato Agente"
+    IDS_FORCEINV            "Forza Inventario"
+    IDS_CLOSE               "Chiudi"
+    IDS_ERR_NOTRESPONDING   "L'agente non risponde!"
+    IDS_ERR_NOTRUNNING      "L'agente non è attivo!"
+    IDS_SVCSTART_BOOT       "Avvio"
+    IDS_SVCSTART_SYSTEM     "Sistema"
+    IDS_SVCSTART_AUTO       "Automatico"
+    IDS_SVCSTART_DELAYEDAUTO "Automatic (Avvio ritardato)"
+    IDS_SVCSTART_MANUAL     "Manuale"
+    IDS_SVCSTART_DISABLED   "Disabilitato"
+    IDS_ERR_UNKSVCSTART     "Tipo di avvio Sconosciuto!"
+    IDS_ERR_REGFAIL         "Query al registro fallita!"
+    IDS_ERR_AGENTVERNOTFOUND "Versione Agente non trovata!"
+    IDS_ERR_AGENTNOTFOUND   "L'agente non è installato!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Errore nel verificare la porta HTTP dell'Agente GLPI!\nL'agente deve essere reinstallato."
+    IDS_SVC_STOPPED         "Fermato"
+    IDS_SVC_RUNNING         "Avviato"
+    IDS_SVC_PAUSED          "In Pausa"
+    IDS_SVC_CONTINUEPENDING "Avviando..."
+    IDS_SVC_PAUSEPENDING    "Andando in pausa..."
+    IDS_SVC_STARTPENDING    "Avviando..."
+    IDS_SVC_STOPPENDING     "Fermando..."
+    IDS_ERR_SERVICE         "Query al servizio fallita!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Errore"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Errore inventario forzato:\nL'agente non risponde alla richiesta."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Errore inventario forzato:\nOperazione non permessa."
+    IDS_MSG_FORCEINV_OK     "La richiesta d'inventario forzato è stata inviata correttamente all'agente GLPI."
+    IDS_ERR_AGENTERR        "L'agente ha uno o più errori!\nPer favore controlla la finestra del GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Apri"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Forza Inventario"
+    IDS_RMENU_EXIT          "Esci"
+    IDS_FILE                "File"
+    IDS_DIR                 "Cartella"
+    IDS_ERR_MAINWINDOW      "Errore nella creazione della finestra principale del GLPI Agent Monitor!"
+    IDS_RMENU_NEWTICKET     "Nuovo ticket..."
+    IDS_ERR_SERVER          "Errore nel recuperare l'URL del GLPI server!\nL'agente deve essere reinstallato."
+    IDS_NOTIF_NEWTICKET_TITLE "E' stato salvato uno screenshot"
+    IDS_NOTIF_NEWTICKET     "Premi CTRL+V nel campo descrizione del nuovo ticket per allegarlo."
+    IDS_NEWTICKET           "Nuovo ticket..."
+    IDS_VIEWLOGS            "Visualizza log agente"
+    IDS_RMENU_VIEWLOGS      "Visualizza log agente"
+    IDS_STARTSVC            " Avvia il servizio"
+    IDS_STOPSVC             " Ferma il servizio"
+    IDS_RESUMESVC           " Riattiva il servizio"
+    IDS_WAIT                "Attendere prego..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Errore nella connessione al Windows Service Control Manager!"
+    IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
+    IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
+END
+
+#endif    // Italiano (Itália) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -288,7 +577,7 @@ BEGIN
     IDS_SVC_STOPPENDING     "Parando..."
     IDS_ERR_SERVICE         "Falha ao consultar o serviço!"
     IDS_OK                  "OK"
-    IDS_ERROR               "Erro"
+    IDS_ERROR               "GLPI Agent Monitor - Erro"
     IDS_ERR_FORCEINV_NORESPONSE 
                             "Erro ao forçar o inventário:\nO agente não respondeu à requisição."
     IDS_ERR_FORCEINV_NOTALLOWED 
@@ -328,295 +617,11 @@ END
 #endif    // Português (Brasil) resources
 /////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////
-// Italian (Italy) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITU)
-LANGUAGE LANG_ITALIAN, SUBLANG_ITALIAN
 
 /////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
+// Espanhol (Uruguai) resources
 
-STRINGTABLE
-BEGIN
-IDS_APP_TITLE           "GLPI Agent Monitor"
-IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
-IDS_GLPINOTIFY          "Agente GLPI"
-IDS_STATIC_INFO         "Informazioni"
-IDS_STATIC_AGENTVER     "Versione Agent:"
-IDS_STATIC_SERVICESTATUS "Stato del servizio:"
-IDS_STATIC_STARTTYPE    "Tipo di avvio:"
-IDS_ERR_AGENTSETTINGS   "Errore nel caricamento dei settaggi dell'Agente GLPI!\nL'agente deve essere reinstallato."
-END
-
-STRINGTABLE
-BEGIN
-IDS_LOADING             "Caricamento..."
-IDS_STATIC_AGENTSTATUS  "Stato Agente"
-IDS_FORCEINV            "Forza Inventario"
-IDS_CLOSE               "Chiudi"
-IDS_ERR_NOTRESPONDING   "L'agente non risponde!"
-IDS_ERR_NOTRUNNING      "L'agente non è attivo!"
-IDS_SVCSTART_BOOT       "Avvio"
-IDS_SVCSTART_SYSTEM     "Sistema"
-IDS_SVCSTART_AUTO       "Automatico"
-IDS_SVCSTART_DELAYEDAUTO "Automatic (Avvio ritardato)"
-IDS_SVCSTART_MANUAL     "Manuale"
-IDS_SVCSTART_DISABLED   "Disabilitato"
-IDS_ERR_UNKSVCSTART     "Tipo di avvio Sconosciuto!"
-IDS_ERR_REGFAIL         "Query al registro fallita!"
-IDS_ERR_AGENTVERNOTFOUND "Versione Agente non trovata!"
-IDS_ERR_AGENTNOTFOUND   "L'agente non è installato!"
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_HTTPDPORT       "Errore nel verificare la porta HTTP dell'Agente GLPI!\nL'agente deve essere reinstallato."
-IDS_SVC_STOPPED         "Fermato"
-IDS_SVC_RUNNING         "Avviato"
-IDS_SVC_PAUSED          "In Pausa"
-IDS_SVC_CONTINUEPENDING "Avviando..."
-IDS_SVC_PAUSEPENDING    "Andando in pausa..."
-IDS_SVC_STARTPENDING    "Avviando..."
-IDS_SVC_STOPPENDING     "Fermando..."
-IDS_ERR_SERVICE         "Query al servizio fallita!"
-IDS_OK                  "OK"
-IDS_ERROR               "Errore"
-IDS_ERR_FORCEINV_NORESPONSE
-"Errore inventario forzato:\nL'agente non risponde alla richiesta."
-IDS_ERR_FORCEINV_NOTALLOWED
-"Errore inventario forzato:\nOperazione non permessa."
-IDS_MSG_FORCEINV_OK     "La richiesta d'inventario forzato è stata inviata correttamente all'agente GLPI."
-IDS_ERR_AGENTERR        "L'agente ha uno o più errori!\nPer favore controlla la finestra del GLPI Agent Monitor."
-IDS_RMENU_OPEN          "Apri"
-END
-
-STRINGTABLE
-BEGIN
-IDS_RMENU_FORCE         "Forza Inventario"
-IDS_RMENU_EXIT          "Esci"
-IDS_FILE                "File"
-IDS_DIR                 "Cartella"
-IDS_ERR_MAINWINDOW      "Errore nella creazione della finestra principale del GLPI Agent Monitor!"
-IDS_RMENU_NEWTICKET     "Nuovo ticket..."
-IDS_ERR_SERVER          "Errore nel recuperare l'URL del GLPI server!\nL'agente deve essere reinstallato."
-IDS_NOTIF_NEWTICKET_TITLE "E' stato salvato uno screenshot"
-IDS_NOTIF_NEWTICKET     "Premi CTRL+V nel campo descrizione del nuovo ticket per allegarlo."
-IDS_NEWTICKET           "Nuovo ticket..."
-IDS_VIEWLOGS            "Visualizza log agente"
-IDS_RMENU_VIEWLOGS      "Visualizza log agente"
-IDS_STARTSVC            " Avvia il servizio"
-IDS_STOPSVC             " Ferma il servizio"
-IDS_RESUMESVC           " Riattiva il servizio"
-IDS_WAIT                "Attendere prego..."
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_SCHANDLE        "Errore nella connessione al Windows Service Control Manager!"
-IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
-IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
-END
-
-#endif    // Italian (Italy) resources
-/////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////
-// French (France) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ITU)
-LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE
-BEGIN
-IDS_APP_TITLE           "GLPI Agent Monitor"
-IDS_GLPINOTIFYERROR     "Agent GLPI - Erreur"
-IDS_GLPINOTIFY          "Agent GLPI"
-IDS_STATIC_INFO         "Information"
-IDS_STATIC_AGENTVER     "Version de l'agent :"
-IDS_STATIC_SERVICESTATUS "Statut du service :"
-IDS_STATIC_STARTTYPE    "Type de démarrage :"
-IDS_ERR_AGENTSETTINGS   "Erreur de chargement des paramètres de l'agent GLPI!\nL'agent doit être ré-installé."
-END
-
-STRINGTABLE
-BEGIN
-IDS_LOADING             "Chargement..."
-IDS_STATIC_AGENTSTATUS  "Statut de l'agent"
-IDS_FORCEINV            "Forcer l'inventaire"
-IDS_CLOSE               "Fermer"
-IDS_ERR_NOTRESPONDING   "L'agent ne répond pas !"
-IDS_ERR_NOTRUNNING      "L'agent n'est pas démarré !"
-IDS_SVCSTART_BOOT       "Au démarrage"
-IDS_SVCSTART_SYSTEM     "Système"
-IDS_SVCSTART_AUTO       "Automatique"
-IDS_SVCSTART_DELAYEDAUTO "Automatique (Début differré)"
-IDS_SVCSTART_MANUAL     "Manuel"
-IDS_SVCSTART_DISABLED   "Désactivé"
-IDS_ERR_UNKSVCSTART     "Type de démarrage inconnu !"
-IDS_ERR_REGFAIL         "Échec d'accès à la base de registre !"
-IDS_ERR_AGENTVERNOTFOUND "Version de l'agent non trouvée !"
-IDS_ERR_AGENTNOTFOUND   "L'agent n'est pas installé !"
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_HTTPDPORT       "Erreur de récupération du port HTTP de l'agent GLPI !\nL'agent doit être ré-installé."
-IDS_SVC_STOPPED         "Arrêté"
-IDS_SVC_RUNNING         "Démarré"
-IDS_SVC_PAUSED          "En pause"
-IDS_SVC_CONTINUEPENDING "Reprise..."
-IDS_SVC_PAUSEPENDING    "Mise en pause..."
-IDS_SVC_STARTPENDING    "Démarrage..."
-IDS_SVC_STOPPENDING     "Arrêt en cours..."
-IDS_ERR_SERVICE         "Échec d'accès au service !"
-IDS_OK                  "OK"
-IDS_ERROR               "Erreur"
-IDS_ERR_FORCEINV_NORESPONSE
-                        "Erreur de forçage de l'inventaire :\nL'agent n'a pas donné de réponse."
-IDS_ERR_FORCEINV_NOTALLOWED
-                        "Erreur de forçage de l'inventaire :\nAction non autorisée."
-IDS_MSG_FORCEINV_OK     "La requête de forçage de l'inventaire a été envoyée avec succès à l'agent GLPI."
-IDS_ERR_AGENTERR        "L'agent a une ou plusieurs erreurs !\nVous devriez vérifier la fenêtre de GLPI Agent Monitor."
-IDS_RMENU_OPEN          "Ouvrir"
-END
-
-STRINGTABLE
-BEGIN
-IDS_RMENU_FORCE         "Forcer l'inventaire"
-IDS_RMENU_EXIT          "Quitter"
-IDS_FILE                "Fichier"
-IDS_DIR                 "Dossier"
-IDS_ERR_MAINWINDOW      "Erreur de création de la fenêtre principale de GLPI Agent Monitor !"
-IDS_RMENU_NEWTICKET     "Nouveau ticket..."
-IDS_ERR_SERVER          "Erreur de récupération de l'URL du serveur GLPI !\nL'agent doit être ré-installé."
-IDS_NOTIF_NEWTICKET_TITLE "Une capture d'écran a été prise"
-IDS_NOTIF_NEWTICKET     "Appuyez sur CTRL+V dans le cadre de la description du nouveau ticket pour l'inclure au ticket."
-IDS_NEWTICKET           "Nouveau ticket..."
-IDS_VIEWLOGS            "Journal de l'agent"
-IDS_RMENU_VIEWLOGS      "Journal de l'agent"
-IDS_STARTSVC            " Démarrer le service"
-IDS_STOPSVC             " Arrêter le service"
-IDS_RESUMESVC           " Sortir le service de pause"
-IDS_WAIT                "Veuillez attendre..."
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_SCHANDLE        "Erreur de connexion au gestionnaire de contrôle Windows Service !"
-IDS_ERR_SVCHANDLE       "Erreur d'ouverture du service de l'agent GLPI !"
-IDS_ERR_SVCOPERATION    "Erreur en tentant de gérer le service de l'agent GLPI !"
-END
-
-#endif    // French (France) resources
-/////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////
-// Russian (Russia) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
-LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE
-BEGIN
-IDS_APP_TITLE           "GLPI Agent Monitor"
-IDS_GLPINOTIFYERROR     "Agent GLPI - Ошибка"
-IDS_GLPINOTIFY          "Agent GLPI"
-IDS_STATIC_INFO         "Информация"
-IDS_STATIC_AGENTVER     "Версия агента :"
-IDS_STATIC_SERVICESTATUS "Статус службы :"
-IDS_STATIC_STARTTYPE    "Тип запуска :"
-IDS_ERR_AGENTSETTINGS   "Ошибка загрузки настроек GLPI Agent!\nПереустановите GLPI Agent."
-END
-
-STRINGTABLE
-BEGIN
-IDS_LOADING             "Загрузка..."
-IDS_STATIC_AGENTSTATUS  "Статус агента"
-IDS_FORCEINV            "Инвентаризация"
-IDS_CLOSE               "Закрыть"
-IDS_ERR_NOTRESPONDING   "Агент не отвечает!"
-IDS_ERR_NOTRUNNING      "Агент не запущен!"
-IDS_SVCSTART_BOOT       "При загрузке"
-IDS_SVCSTART_SYSTEM     "С системой"
-IDS_SVCSTART_AUTO       "Автоматически"
-IDS_SVCSTART_DELAYEDAUTO "Автоматически (отложенный запуск)"
-IDS_SVCSTART_MANUAL     "Вручную"
-IDS_SVCSTART_DISABLED   "Отключен"
-IDS_ERR_UNKSVCSTART     "Неизвестный тип запуска!"
-IDS_ERR_REGFAIL         "Сбой запроса к реестру!"
-IDS_ERR_AGENTVERNOTFOUND "Версия агента не найдена!"
-IDS_ERR_AGENTNOTFOUND   "Агент не установлен!"
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_HTTPDPORT       "Ошибка получения HTTP порта GLPI Agent!\nПереустановите GLPI Agent."
-IDS_SVC_STOPPED         "Остановлена"
-IDS_SVC_RUNNING         "Запущена"
-IDS_SVC_PAUSED          "Приостановлен"
-IDS_SVC_CONTINUEPENDING "Возобновляется..."
-IDS_SVC_PAUSEPENDING    "Приостанавливается..."
-IDS_SVC_STARTPENDING    "Запускается..."
-IDS_SVC_STOPPENDING     "Останавливается..."
-IDS_ERR_SERVICE         "Ошибка запроса к службе!"
-IDS_OK                  "OK"
-IDS_ERROR               "Ошибка"
-IDS_ERR_FORCEINV_NORESPONSE
-                        "Ошибка инвентаризации:\nАгент не отвечает."
-IDS_ERR_FORCEINV_NOTALLOWED
-                        "Ошибка инвентаризации:\nОперация не разрешена."
-IDS_MSG_FORCEINV_OK     "Запрос инвентаризации успешно отправлен в GLPI Agent."
-IDS_ERR_AGENTERR        "У агента одна или несколько ошибок !\nПожалуйста проверьте окно GLPI Agent Monitor."
-IDS_RMENU_OPEN          "Открыть"
-END
-
-STRINGTABLE
-BEGIN
-IDS_RMENU_FORCE         "Инвентаризация"
-IDS_RMENU_EXIT          "Выход"
-IDS_FILE                "Файл"
-IDS_DIR                 "Директория"
-IDS_ERR_MAINWINDOW      "Ошибка создания главного окна GLPI Agent Monitor!"
-IDS_RMENU_NEWTICKET     "Новая заявка..."
-IDS_ERR_SERVER          "Ошибка получения URL адреса GLPI сервера!\nПереустановите GLPI Agent."
-IDS_NOTIF_NEWTICKET_TITLE "Сделан снимок экрана"
-IDS_NOTIF_NEWTICKET     "Нажмите CTRL+V в окне описания новой заявки, чтобы прикрепить его к заявке."
-IDS_NEWTICKET           "Новая заявка..."
-IDS_VIEWLOGS            "Открыть логи"
-IDS_RMENU_VIEWLOGS      "Открыть логи"
-IDS_STARTSVC            " Запустить службу"
-IDS_STOPSVC             " Остановить службу"
-IDS_RESUMESVC           " Возобновить службу"
-IDS_WAIT                "Пожалуйста подождите..."
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_SCHANDLE        "Ошибка подключения к Диспетчеру управления службами Windows(WSCM)!"
-IDS_ERR_SVCHANDLE       "Ошибка открытия службы GLPI agent!"
-IDS_ERR_SVCOPERATION    "Ошибка управления службой GLPI agent!"
-END
-
-#endif    // Russian (Russia) resources
-/////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////
-// Español (Uruguay) resources
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESN)
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ESY)
 LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_URUGUAY
 
 /////////////////////////////////////////////////////////////////////////////
@@ -626,85 +631,88 @@ LANGUAGE LANG_SPANISH, SUBLANG_SPANISH_URUGUAY
 
 STRINGTABLE
 BEGIN
-IDS_APP_TITLE           "GLPI Agent Monitor"
-IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
-IDS_GLPINOTIFY          "GLPI Agent"
-IDS_STATIC_INFO         "Información"
-IDS_STATIC_AGENTVER     "Versión del agente:"
-IDS_STATIC_SERVICESTATUS "Estado del servicio:"
-IDS_STATIC_STARTTYPE    "Tipo de inicio:"
-IDS_ERR_AGENTSETTINGS   "Error al cargar la configuración del agente de GLPI\nDeberá reinstalar el agente."
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
+    IDS_GLPINOTIFY          "GLPI Agent"
+    IDS_STATIC_INFO         "Información"
+    IDS_STATIC_AGENTVER     "Versión del agente:"
+    IDS_STATIC_SERVICESTATUS "Estado del servicio:"
+    IDS_STATIC_STARTTYPE    "Tipo de inicio:"
+    IDS_ERR_AGENTSETTINGS   "Error al cargar la configuración del agente de GLPI\nDeberá reinstalar el agente."
 END
 
 STRINGTABLE
 BEGIN
-IDS_LOADING             "Cargando..."
-IDS_STATIC_AGENTSTATUS  "Estado del agente"
-IDS_FORCEINV            "Forzar inventario"
-IDS_CLOSE               "Cerrar"
-IDS_ERR_NOTRESPONDING   "El agente no responde"
-IDS_ERR_NOTRUNNING      "El agente no se está ejecutando"
-IDS_SVCSTART_BOOT       "Iniciar"
-IDS_SVCSTART_SYSTEM     "Sistema"
-IDS_SVCSTART_AUTO       "Automático"
-IDS_SVCSTART_DELAYEDAUTO "Automático (Inicio retrasado)"
-IDS_SVCSTART_MANUAL     "Manual"
-IDS_SVCSTART_DISABLED   "Deshabilitado"
-IDS_ERR_UNKSVCSTART     "Tipo de inicio desconocido"
-IDS_ERR_REGFAIL         "Error de consulta de registro"
-IDS_ERR_AGENTVERNOTFOUND "No se encuentra la versión del agente"
-IDS_ERR_AGENTNOTFOUND   "El agente no está instalado"
+    IDS_LOADING             "Cargando..."
+    IDS_STATIC_AGENTSTATUS  "Estado del agente"
+    IDS_FORCEINV            "Forzar inventario"
+    IDS_CLOSE               "Cerrar"
+    IDS_ERR_NOTRESPONDING   "El agente no responde"
+    IDS_ERR_NOTRUNNING      "El agente no se está ejecutando"
+    IDS_SVCSTART_BOOT       "Iniciar"
+    IDS_SVCSTART_SYSTEM     "Sistema"
+    IDS_SVCSTART_AUTO       "Automático"
+    IDS_SVCSTART_DELAYEDAUTO "Automático (Inicio retrasado)"
+    IDS_SVCSTART_MANUAL     "Manual"
+    IDS_SVCSTART_DISABLED   "Deshabilitado"
+    IDS_ERR_UNKSVCSTART     "Tipo de inicio desconocido"
+    IDS_ERR_REGFAIL         "Error de consulta de registro"
+    IDS_ERR_AGENTVERNOTFOUND "No se encuentra la versión del agente"
+    IDS_ERR_AGENTNOTFOUND   "El agente no está instalado"
 END
 
 STRINGTABLE
 BEGIN
-IDS_ERR_HTTPDPORT       "Error al obtener el puerto HTTP del Agente\nDeberá reinstalar el agente."
-IDS_SVC_STOPPED         "Detenido"
-IDS_SVC_RUNNING         "En ejecución"
-IDS_SVC_PAUSED          "En pausa"
-IDS_SVC_CONTINUEPENDING "Resumiendo..."
-IDS_SVC_PAUSEPENDING    "Pausando..."
-IDS_SVC_STARTPENDING    "Iniciando..."
-IDS_SVC_STOPPENDING     "Deteniendo..."
-IDS_ERR_SERVICE         "Error en consulta del servicio"
-IDS_OK                  "OK"
-IDS_ERROR               "Error"
-IDS_ERR_FORCEINV_NORESPONSE "Error al forzar inventario:\nEl agente no respondió a la solicitud."
-IDS_ERR_FORCEINV_NOTALLOWED "Error al forzar inventario:\nOperación no permitida."
-IDS_MSG_FORCEINV_OK     "Solicitud de registro forzado enviada correctamente."
-IDS_ERR_AGENTERR        "El agente presentó uno o más errores\nPor favor verifique la ventana de GLPI Agent Monitor."
-IDS_RMENU_OPEN          "Abrir"
+    IDS_ERR_HTTPDPORT       "Error al obtener el puerto HTTP del Agente\nDeberá reinstalar el agente."
+    IDS_SVC_STOPPED         "Detenido"
+    IDS_SVC_RUNNING         "En ejecución"
+    IDS_SVC_PAUSED          "En pausa"
+    IDS_SVC_CONTINUEPENDING "Resumiendo..."
+    IDS_SVC_PAUSEPENDING    "Pausando..."
+    IDS_SVC_STARTPENDING    "Iniciando..."
+    IDS_SVC_STOPPENDING     "Deteniendo..."
+    IDS_ERR_SERVICE         "Error en consulta del servicio"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Error"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Error al forzar inventario:\nEl agente no respondió a la solicitud."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Error al forzar inventario:\nOperación no permitida."
+    IDS_MSG_FORCEINV_OK     "Solicitud de registro forzado enviada correctamente."
+    IDS_ERR_AGENTERR        "El agente presentó uno o más errores\nPor favor verifique la ventana de GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Abrir"
 END
 
 STRINGTABLE
 BEGIN
-IDS_RMENU_FORCE         "Forzar inventario"
-IDS_RMENU_EXIT          "Salir"
-IDS_FILE                "Archivo"
-IDS_DIR                 "Directorio"
-IDS_ERR_MAINWINDOW      "Error al crear la ventana principal de GLPI Agent Monitor"
-IDS_RMENU_NEWTICKET     "Crear Ticket..."
-IDS_ERR_SERVER          "Error al obtener la URL del servidor de GLPI\nDeberá reinstalar el agente."
-IDS_NOTIF_NEWTICKET_TITLE "Se tomó captura de pantalla"
-IDS_NOTIF_NEWTICKET     "Presionar CTRL+V en la ventana de nuevo ticket, o adjuntar la captura como archivo en el formulario."
-IDS_NEWTICKET           "Crear ticket..."
-IDS_VIEWLOGS            "Ver registros"
-IDS_RMENU_VIEWLOGS      "Ver registros"
-IDS_STARTSVC            " Iniciar servicio"
-IDS_STOPSVC             " Detener servicio"
-IDS_RESUMESVC           " Resumir servicio"
-IDS_WAIT                "Por favor, espere..."
+    IDS_RMENU_FORCE         "Forzar inventario"
+    IDS_RMENU_EXIT          "Salir"
+    IDS_FILE                "Archivo"
+    IDS_DIR                 "Directorio"
+    IDS_ERR_MAINWINDOW      "Error al crear la ventana principal de GLPI Agent Monitor"
+    IDS_RMENU_NEWTICKET     "Crear Ticket..."
+    IDS_ERR_SERVER          "Error al obtener la URL del servidor de GLPI\nDeberá reinstalar el agente."
+    IDS_NOTIF_NEWTICKET_TITLE "Se tomó captura de pantalla"
+    IDS_NOTIF_NEWTICKET     "Presionar CTRL+V en la ventana de nuevo ticket, o adjuntar la captura como archivo en el formulario."
+    IDS_NEWTICKET           "Crear ticket..."
+    IDS_VIEWLOGS            "Ver registros"
+    IDS_RMENU_VIEWLOGS      "Ver registros"
+    IDS_STARTSVC            " Iniciar servicio"
+    IDS_STOPSVC             " Detener servicio"
+    IDS_RESUMESVC           " Resumir servicio"
+    IDS_WAIT                "Por favor, espere..."
 END
 
 STRINGTABLE
 BEGIN
-IDS_ERR_SCHANDLE        "Error al conectar al Administrador de Servicios de Windows!"
-IDS_ERR_SVCHANDLE       "Error al abrir el servicio de GLPI Agent"
-IDS_ERR_SVCOPERATION    "Error al tomar el control del servicio de GLPI Agent"
+    IDS_ERR_SCHANDLE        "Error al conectar al Administrador de Servicios de Windows!"
+    IDS_ERR_SVCHANDLE       "Error al abrir el servicio de GLPI Agent"
+    IDS_ERR_SVCOPERATION    "Error al tomar el control del servicio de GLPI Agent"
 END
 
-#endif    // Español (Uruguay) resources
+#endif    // Espanhol (Uruguai) resources
 /////////////////////////////////////////////////////////////////////////////
+
 
 
 #ifndef APSTUDIO_INVOKED
