@@ -10,6 +10,9 @@ Future release
 * Settings dialog added
   Currently, the only setting available is "New ticket page URL", for
   changing the URL used to create new tickets (i.e. when using Form Creator)
+  
+* Main window now handles Tab and Esc key pressing
+  This is a helpful feature for keyboard-only navigation
 
 1.2.3
 

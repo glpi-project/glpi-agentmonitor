@@ -301,7 +301,9 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
             colorSvcStatus = RGB(255, 0, 0);
             SetDlgItemText(hWnd, IDC_SERVICESTATUS, szBuffer);
             SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBtnString);
-            EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), FALSE);
+            HWND hWndSvcButton = GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC);
+            EnableWindow(hWndSvcButton, FALSE);
+            SetFocus(hWndSvcButton);
         }
 
         LoadIconMetric(hInst, MAKEINTRESOURCE(IDI_GLPIERR), LIM_LARGE, &nid.hIcon);
@@ -369,7 +371,9 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
         LoadString(hInst, (svcStatus.dwCurrentState == SERVICE_STOPPED ? IDS_ERR_NOTRUNNING : IDS_WAIT), szBuffer, dwBufferLen);
         SetDlgItemText(hWnd, IDC_AGENTSTATUS, szBuffer);
 
-        EnableWindow(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), bEnableButton);
+        HWND hWndSvcButton = GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC);
+        EnableWindow(hWndSvcButton, bEnableButton);
+        SetFocus(hWndSvcButton);
 
         // Taskbar icon routine
         if (svcStatus.dwCurrentState != SERVICE_RUNNING)
@@ -841,8 +845,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0))
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        if (!IsDialogMessage(hWnd, &msg)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
     }
 
     CloseServiceHandle(hSc);
@@ -976,6 +982,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     ForceInventory(hWnd);
                     return TRUE;
                 // Close
+                case IDCANCEL:  // This handles ESC key pressing via IsDialogMessage
                 case IDC_BTN_CLOSE:
                     EndDialog(hWnd, NULL);
                     return TRUE;
