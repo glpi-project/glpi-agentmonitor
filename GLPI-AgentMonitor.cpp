@@ -484,6 +484,8 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
             SetDlgItemText(hWnd, IDC_STARTTYPE, szBuffer);
         }
 
+        RegCloseKey(hk);
+
         // Update agent status
         // If the service is not running, the status will
         // be replaced by UpdateServiceStatus
@@ -638,7 +640,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             return lRes;
         }
     }
-    if (lRes == ERROR_SUCCESS)
+    else
     {   
         // Get HTTPD port
         lRes = RegQueryValueEx(hk, L"httpd-port", 0, NULL, (LPBYTE)szValueBuf, &szValueBufLen);
@@ -719,6 +721,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
         }
     }
+
+    RegCloseKey(hk);
 
     // Create WinHTTP handles
     WCHAR szUserAgent[64];
