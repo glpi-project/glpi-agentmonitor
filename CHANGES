@@ -7,6 +7,10 @@ Future release
   The messages are retrieved from Windows in the user's language.
   Also, "GLPI Agent Monitor" is displayed on the error message captions.
 
+* Settings dialog added
+  Currently, the only setting available is "New ticket page URL", for
+  changing the URL used to create new tickets (i.e. when using Form Creator)
+
 1.2.3
 
 * Russian translation added
@@ -15,7 +19,7 @@ Future release
 * Spanish (Uruguay) translation added
   Thanks Luis Giordano (@Iruxos)
 
-* Bugfix:  Strip quotes when getting server URL from registry
+* Bugfix: Strip quotes when getting server URL from registry
   This removes quotes from the server URL setting, even though the server URL
   should not have any quotes at all.
 

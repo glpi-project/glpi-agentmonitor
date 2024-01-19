@@ -40,6 +40,7 @@
 #pragma comment(lib, "gdiplus.lib")
 #pragma comment(lib, "version.lib")
 #pragma comment(lib, "Winhttp.lib")
+#pragma comment(lib, "Shlwapi.lib")
 
 
 //-[DEFINES]-------------------------------------------------------------------
@@ -58,6 +59,9 @@
 #include <shellapi.h>
 #include <CommCtrl.h>
 #include <gdiplus.h>
+#include <Shlwapi.h>
+#include <Tlhelp32.h>
+#include <ShlObj.h>
 #include "framework.h"
 #include "resource.h"
 
@@ -68,9 +72,20 @@ using namespace std;
 
 // Main window message processing callback
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
+// Settings dialog message processing callback
+LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 // App instance
 HINSTANCE hInst;
+
+// App mutex (to prevent multiple instances)
+HANDLE hMutex;
+
+// EnumWindows callback data
+struct EnumWindowsData {
+    DWORD dwSearchPID;
+    HWND hWndFound;
+};
 
 // WinHTTP connection and session handles
 HINTERNET hSession, hConn;
@@ -97,6 +112,9 @@ COLORREF colorSvcStatus = RGB(0, 0, 0);
 // GLPI server URL
 WCHAR szServer[256];
 BOOL bFoundBaseURL = false;
+
+// New ticket URL
+WCHAR szNewTicketURL[300];
 
 // Agent logfile
 WCHAR szLogfile[MAX_PATH];
@@ -477,6 +495,22 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
     }
 }
 
+// EnumWindows callback
+// (called by EnumWindows to find the hWnd for the running GLPI Agent Monitor instance)
+BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+{
+    EnumWindowsData& ed = *(EnumWindowsData*)lParam;
+    DWORD dwPID = 0x0;
+    GetWindowThreadProcessId(hWnd, &dwPID);
+    if (ed.dwSearchPID == dwPID)
+    {
+        ed.hWndFound = hWnd;
+        SetLastError(ERROR_SUCCESS);
+        return FALSE;
+    }
+    return TRUE;
+}
+
 
 //-[MAIN FUNCTIONS]------------------------------------------------------------
 
@@ -517,10 +551,57 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         return 0;
     }
 
+    // Process elevation request (kill previous process)
+    if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
+    {
+        // Get GLPI Agent Monitor executable name
+        WCHAR szFilePath[MAX_PATH];
+        GetModuleFileName(NULL, szFilePath, MAX_PATH);
+        LPWSTR szFileName = PathFindFileName(szFilePath);
+
+        // Look through processes, try to get it's hWnd when the process is found
+        // and then send a WM_CLOSE message to stop it gracefully
+        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+        PROCESSENTRY32 pEntry{};
+        pEntry.dwSize = sizeof(pEntry);
+        BOOL hRes = Process32First(hSnapshot, &pEntry);
+        while (hRes)
+        {
+            if (lstrcmp(pEntry.szExeFile, szFileName) == 0)
+            {
+                // Don't close itself
+                if(pEntry.th32ProcessID != GetCurrentProcessId())
+                {
+                    EnumWindowsData ed = { 
+                        pEntry.th32ProcessID,
+                        NULL
+                    };
+                    if (!EnumWindows(EnumWindowsProc, (LPARAM) &ed) && (GetLastError() == ERROR_SUCCESS)) {
+                        SendMessage(ed.hWndFound, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
+                    }
+                }
+            }
+            hRes = Process32Next(hSnapshot, &pEntry);
+        }
+        CloseHandle(hSnapshot);
+    }
+
+
     // Create app mutex to keep only one instance running
-    CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
+    hMutex = CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
-        return 0;
+    {
+        // Wait for mutex to be available if trying to elevate
+        // as the other Monitor instance may not close instantly
+        if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
+        {
+            do {
+                hMutex = CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
+            } while (WaitForSingleObject(hMutex, 500) != WAIT_OBJECT_0);
+        }
+        else
+            return 0;
+    }
 
 
     // Read app version
@@ -615,6 +696,28 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         lRes = RegQueryValueEx(hk, L"logfile", 0, NULL, (LPBYTE)szLogfile, &szLogfileLen);
         if (lRes != ERROR_SUCCESS)
             szLogfile[0] = '\0';
+
+
+        // Load GLPI Agent Monitor settings from registry
+        wsprintf(szKey, L"SOFTWARE\\%s\\Installer", SERVICE_NAME);
+        LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
+        if (lRes != ERROR_SUCCESS)
+        {
+            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Installer", SERVICE_NAME);
+            lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
+        }
+
+        // Here I won't check if the key could be opened, as
+        // this is already checked when RegQueryValueEx below
+        // does not return ERROR_SUCCESS.
+        
+        // Get new ticket URL
+        DWORD szNewTicketURLLen = sizeof(szNewTicketURL);
+        lRes = RegQueryValueEx(hk, L"AgentMonitor-NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
+        if (lRes != ERROR_SUCCESS) {
+            // Default value if not found
+            wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
+        }
     }
 
     // Create WinHTTP handles
@@ -684,13 +787,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     SetDlgItemText(hWnd, IDC_BTN_VIEWLOGS, szBuffer);
     LoadString(hInst, IDS_NEWTICKET, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDC_BTN_NEWTICKET, szBuffer);
+    LoadString(hInst, IDS_BTN_SETTINGS, szBuffer, dwBufferLen);
+    SetDlgItemText(hWnd, IDC_BTN_SETTINGS, szBuffer);
     LoadString(hInst, IDS_CLOSE, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDC_BTN_CLOSE, szBuffer);
     LoadString(hInst, IDS_STARTSVC, szBuffer, dwBufferLen);
     SetDlgItemText(hWnd, IDC_BTN_STARTSTOPSVC, szBuffer);
 
-    // Set UAC shield
+    // Set UAC shields
     SendMessage(GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC), BCM_SETSHIELD, 0, 1);
+    SendMessage(GetDlgItem(hWnd, IDC_BTN_SETTINGS), BCM_SETSHIELD, 0, 1);
 
     //-------------------------------------------------------------------------
 
@@ -715,6 +821,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     //-------------------------------------------------------------------------
 
+    // Show window if elevation request was made
+    if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
+    {
+        ShowWindowFront(hWnd, SW_SHOW);
+        UpdateStatus(hWnd, NULL, NULL, NULL);
+
+        // Show settings dialog immediately if requested
+        if (wcsstr(lpCmdLine, L"/openSettings") != nullptr) {
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_DLG_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc);
+        }
+    }
+
     // Main message loop
     MSG msg;
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -726,6 +844,98 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     CloseServiceHandle(hSc);
 
     return (int) msg.wParam;
+}
+
+LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+        case WM_INITDIALOG:
+        {
+            // Initialize dialog strings
+            LoadString(hInst, IDS_SETTINGS, szBuffer, dwBufferLen);
+            SetWindowText(hWnd, szBuffer);
+            LoadString(hInst, IDS_SETTINGS_NEWTICKETURL, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_GROUPBOX_NEWTICKETURL, szBuffer);
+            LoadString(hInst, IDS_CANCEL, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_BTN_CANCEL, szBuffer);
+            LoadString(hInst, IDS_SAVE, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_BTN_SAVE, szBuffer);
+
+            // Fill values
+            SendDlgItemMessage(hWnd, IDC_SETTINGS_EDIT_NEWTICKETURL, WM_SETTEXT, 0, (LPARAM)szNewTicketURL);
+
+            return TRUE;
+        }
+        case WM_COMMAND:
+        {
+            switch (LOWORD(wParam))
+            {
+                case IDC_SETTINGS_EDIT_NEWTICKETURL:
+                    // Prevent closing the dialog when clicking the text box
+                    return TRUE;
+                case IDC_BTN_SAVE:
+                {
+                    HKEY hk;
+                    LONG lRes;
+                    WCHAR szKey[MAX_PATH];
+
+                    // Get settings from dialog
+                    WCHAR szTempNewTicketURL[300];
+                    LRESULT copiedChars = SendMessage(GetDlgItem(hWnd, IDC_SETTINGS_EDIT_NEWTICKETURL), WM_GETTEXT,
+                        sizeof(szTempNewTicketURL), (LPARAM)szTempNewTicketURL);
+                    szTempNewTicketURL[copiedChars] = '\0';
+
+                    // Save settings in registry
+                    wsprintf(szKey, L"SOFTWARE\\%s\\Installer", SERVICE_NAME);
+                    lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_WRITE | KEY_WOW64_64KEY, &hk);
+                    if (lRes != ERROR_SUCCESS)
+                    {
+                        if (lRes == ERROR_FILE_NOT_FOUND)
+                        {
+                            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Installer", SERVICE_NAME);
+                            lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_WRITE | KEY_WOW64_64KEY, &hk);
+                            if (lRes != ERROR_SUCCESS)
+                            {
+                                LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                                return FALSE;
+                            }
+                        }
+                        else {
+                            LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                            return FALSE;
+                        }
+                    }
+                    // Save new ticket URL
+                    size_t szTempNewTicketURLLen = wcslen(szTempNewTicketURL) * sizeof(WCHAR);
+                    lRes = RegSetValueEx(hk, L"AgentMonitor-NewTicket-URL", 0, REG_SZ, 
+                                        (LPBYTE)szTempNewTicketURL, (DWORD)szTempNewTicketURLLen);
+                    if (lRes != ERROR_SUCCESS)
+                    {
+                        LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                        return FALSE;
+                    }
+
+                    RegCloseKey(hk);
+
+                    // Store new ticket URL in memory
+                    wcscpy_s(szNewTicketURL, szTempNewTicketURL);
+
+                    PostMessage(hWnd, WM_CLOSE, 0, 0);
+                    return TRUE;
+                }
+                case IDC_BTN_CANCEL:
+                    PostMessage(hWnd, WM_CLOSE, 0, 0);
+                    return TRUE;
+            }
+        }
+        case WM_CLOSE:
+        {
+            EndDialog(hWnd, NULL);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -781,7 +991,6 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case ID_RMENU_NEWTICKET:
                     if (bFoundBaseURL) {
                         // Take screenshot to clipboard (simulating PrintScreen) and open the ticket URL
-                        WCHAR szTicketURL[256];
                         INPUT ipInput[2] = { 0 };
                         Sleep(300);
                         ipInput[0].type = INPUT_KEYBOARD;
@@ -789,8 +998,7 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         ipInput[1] = ipInput[0];
                         ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
                         SendInput(2, ipInput, sizeof(INPUT));
-                        wsprintf(szTicketURL, L"%s/front/ticket.form.php", szServer);
-                        ShellExecute(NULL, L"open", szTicketURL, NULL, NULL, SW_SHOWNORMAL);
+                        ShellExecute(NULL, L"open", szNewTicketURL, NULL, NULL, SW_SHOWNORMAL);
 
                         // Notify user that a screenshot is in the clipboard
                         nid.uFlags |= NIF_INFO;
@@ -801,6 +1009,27 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     else
                         LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SERVER, IDS_ERROR, MB_OK | MB_ICONERROR);
                     return TRUE;
+                // Settings
+                case ID_RMENU_SETTINGS:
+                case IDC_BTN_SETTINGS:
+                {
+                    if(IsUserAnAdmin()) 
+                    {
+                        if (LOWORD(wParam) == ID_RMENU_SETTINGS)
+                        {
+                            ShowWindowFront(hWnd, SW_SHOW);
+                            UpdateStatus(hWnd, NULL, NULL, NULL);
+                        }
+                        DialogBox(hInst, MAKEINTRESOURCE(IDD_DLG_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc);
+                    }
+                    else
+                    {
+                        WCHAR szFilename[MAX_PATH];
+                        GetModuleFileName(NULL, szFilename, MAX_PATH);
+                        ShellExecute(hWnd, L"runas", szFilename, L"/elevate /openSettings", NULL, SW_SHOWNORMAL);
+                    }
+                    return TRUE;
+                }
                 // Exit
                 case ID_RMENU_EXIT:
                     // wParam and lParam are randomly chosen values
@@ -854,9 +1083,26 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         LoadString(hInst, IDS_RMENU_NEWTICKET, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_NEWTICKET, false, &mi);
+                        LoadString(hInst, IDS_RMENU_SETTINGS, szBuffer, dwBufferLen);
+                        mi.dwTypeData = szBuffer;
+                        SetMenuItemInfo(hMenu, ID_RMENU_SETTINGS, false, &mi);
                         LoadString(hInst, IDS_RMENU_EXIT, szBuffer, dwBufferLen);
                         mi.dwTypeData = szBuffer;
                         SetMenuItemInfo(hMenu, ID_RMENU_EXIT, false, &mi);
+
+                        // Set UAC shield (a bit ugly, especially in Windows 11)
+                        int cx = GetSystemMetrics(SM_CXSMICON);
+                        int cy = GetSystemMetrics(SM_CYSMICON);
+                        HICON hShield = NULL;
+                        HRESULT hr = LoadIconWithScaleDown(NULL, IDI_SHIELD, cx, cy, &hShield);
+                        if (SUCCEEDED(hr))
+                        {
+                            ICONINFO iconInfo;
+                            GetIconInfo(hShield, &iconInfo);
+                            HBITMAP bitmap = (HBITMAP)CopyImage(iconInfo.hbmColor, IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
+                            SetMenuItemBitmaps(hMenu, ID_RMENU_SETTINGS, MF_BYCOMMAND, bitmap, bitmap);
+                            DestroyIcon(hShield);
+                        }
 
                         HMENU hSubMenu = GetSubMenu(hMenu, 0);
                         if (hSubMenu)
@@ -914,6 +1160,10 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             // Remove taskbar icon
             Shell_NotifyIcon(NIM_DELETE, &nid);
+
+            // Release mutex
+            ReleaseMutex(hMutex);
+            CloseHandle(hMutex);
 
             PostQuitMessage(0);
             return TRUE;

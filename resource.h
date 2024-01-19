@@ -5,10 +5,13 @@
 #define IDC_BTN_FORCE                   101
 #define IDC_BTN_NEWTICKET               102
 #define IDC_BTN_CLOSE                   103
+#define IDC_BTN_SETTINGS                104
 #define IDI_GLPIOK                      105
 #define IDR_RMENU                       141
 #define IDI_GLPIERR                     148
 #define IDB_LOGO                        152
+#define IDD_DIALOG2                     154
+#define IDD_DLG_SETTINGS                154
 #define IDS_APP_TITLE                   200
 #define IDS_GLPINOTIFYERROR             201
 #define IDS_GLPINOTIFY                  202
@@ -68,6 +71,14 @@
 #define IDS_ERR_SCHANDLE                256
 #define IDS_ERR_SVCHANDLE               257
 #define IDS_ERR_SVCOPERATION            258
+#define IDS_SETTINGS                    259
+#define IDS_SETTINGS_NEWTICKETURL       260
+#define IDS_CHECKBOX_NEWTICKET_DEFAULTURL 261
+#define IDS_ERR_SAVE_SETTINGS           261
+#define IDS_CANCEL                      262
+#define IDS_SAVE                        263
+#define IDS_BTN_SETTINGS                264
+#define IDS_RMENU_SETTINGS              265
 #define IDC_BTN_VIEWLOGS                400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402
@@ -85,22 +96,30 @@
 #define IDC_STATIC_SERVICESTATUS        1005
 #define IDC_STATIC_STARTTYPE            1006
 #define IDC_BTN_STARTSTOPSVC            1009
+#define IDC_SETTINGS_EDIT_NEWTICKETURL  1010
+#define IDC_CHECK1                      1011
+#define IDC_CHECKBOX_NEWTICKET_DEFAULTURL 1011
+#define IDC_BTN_CANCEL                  1013
+#define IDC_BTN_SAVE                    1014
 #define ID_RMENU_OPEN                   32760
 #define ID_RMENU_FORCE                  32761
 #define ID_RMENU_EXIT                   32762
 #define ID_RMENU_NEWTICKET              32781
 #define ID_RMENU_VIEWLOGS               32782
+#define ID_GLPIAGENT_IDS                32783
+#define ID_RMENU_SETTINGS               32784
 #define IDC_STATIC                      -1
 #define IDC_STATIC_TITLE                -1
+#define IDC_GROUPBOX_NEWTICKETURL       -1
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        154
-#define _APS_NEXT_COMMAND_VALUE         32783
-#define _APS_NEXT_CONTROL_VALUE         1010
+#define _APS_NEXT_RESOURCE_VALUE        155
+#define _APS_NEXT_COMMAND_VALUE         32785
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
