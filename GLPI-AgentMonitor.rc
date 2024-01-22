@@ -108,6 +108,13 @@ BEGIN
     IDS_ERR_SCHANDLE        "Ошибка подключения к Диспетчеру управления службами Windows(WSCM)!"
     IDS_ERR_SVCHANDLE       "Ошибка открытия службы GLPI agent!"
     IDS_ERR_SVCOPERATION    "Ошибка управления службой GLPI agent!"
+    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
+    IDS_CANCEL              "Cancel"
+    IDS_SAVE                "Save"
+    IDS_BTN_SETTINGS        " Settings"
+    IDS_RMENU_SETTINGS      "Settings"
 END
 
 #endif    // Russo (Rússia) resources
@@ -307,6 +314,13 @@ BEGIN
     IDS_ERR_SCHANDLE        "Erreur de connexion au gestionnaire de contrôle Windows Service !"
     IDS_ERR_SVCHANDLE       "Erreur d'ouverture du service de l'agent GLPI !"
     IDS_ERR_SVCOPERATION    "Erreur en tentant de gérer le service de l'agent GLPI !"
+    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
+    IDS_CANCEL              "Cancel"
+    IDS_SAVE                "Save"
+    IDS_BTN_SETTINGS        " Settings"
+    IDS_RMENU_SETTINGS      "Settings"
 END
 
 #endif    // Francês (França) resources
@@ -403,6 +417,13 @@ BEGIN
     IDS_ERR_SCHANDLE        "Errore nella connessione al Windows Service Control Manager!"
     IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
     IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
+    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
+    IDS_CANCEL              "Cancel"
+    IDS_SAVE                "Save"
+    IDS_BTN_SETTINGS        " Settings"
+    IDS_RMENU_SETTINGS      "Settings"
 END
 
 #endif    // Italiano (Itália) resources
@@ -496,7 +517,7 @@ BEGIN
     RTEXT           "IDS_LOADING",IDC_STARTTYPE,100,157,128,8
     CONTROL         "",IDC_PCLOGO,"Static",SS_BITMAP,94,9,15,13
     DEFPUSHBUTTON   "IDS_STARTSVC",IDC_BTN_STARTSTOPSVC,82,177,86,16
-    PUSHBUTTON   	"IDS_FORCEINV",IDC_BTN_FORCE,44,248,72,16
+    PUSHBUTTON      "IDS_FORCEINV",IDC_BTN_FORCE,44,248,72,16
     PUSHBUTTON      "IDS_NEWTICKET",IDC_BTN_NEWTICKET,132,248,72,16
     PUSHBUTTON      "IDS_VIEWLOGS",IDC_BTN_VIEWLOGS,44,272,72,16
     PUSHBUTTON      "IDS_BTN_SETTINGS",IDC_BTN_SETTINGS,132,272,72,16
@@ -510,8 +531,8 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     GROUPBOX        "IDS_SETTINGS_NEWTICKETURL",IDC_GROUPBOX_NEWTICKETURL,7,7,343,35
     EDITTEXT        IDC_SETTINGS_EDIT_NEWTICKETURL,14,20,329,14,ES_AUTOHSCROLL
-	PUSHBUTTON      "IDS_CANCEL",IDC_BTN_CANCEL,241,48,50,14
-	DEFPUSHBUTTON   "IDS_SAVE",IDC_BTN_SAVE,300,48,50,14
+    PUSHBUTTON      "IDS_CANCEL",IDC_BTN_CANCEL,241,48,50,14
+    DEFPUSHBUTTON   "IDS_SAVE",IDC_BTN_SAVE,300,48,50,14
 END
 
 
@@ -743,6 +764,13 @@ BEGIN
     IDS_ERR_SCHANDLE        "Error al conectar al Administrador de Servicios de Windows!"
     IDS_ERR_SVCHANDLE       "Error al abrir el servicio de GLPI Agent"
     IDS_ERR_SVCOPERATION    "Error al tomar el control del servicio de GLPI Agent"
+    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
+    IDS_CANCEL              "Cancel"
+    IDS_SAVE                "Save"
+    IDS_BTN_SETTINGS        " Settings"
+    IDS_RMENU_SETTINGS      "Settings"
 END
 
 #endif    // Espanhol (Uruguai) resources
