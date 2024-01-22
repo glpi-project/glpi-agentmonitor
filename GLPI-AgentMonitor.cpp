@@ -705,11 +705,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 
         // Load GLPI Agent Monitor settings from registry
-        wsprintf(szKey, L"SOFTWARE\\%s\\Installer", SERVICE_NAME);
+        wsprintf(szKey, L"SOFTWARE\\%s\\Monitor", SERVICE_NAME);
         LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
         if (lRes != ERROR_SUCCESS)
         {
-            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Installer", SERVICE_NAME);
+            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Monitor", SERVICE_NAME);
             lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
         }
 
@@ -719,7 +719,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         
         // Get new ticket URL
         DWORD szNewTicketURLLen = sizeof(szNewTicketURL);
-        lRes = RegQueryValueEx(hk, L"AgentMonitor-NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
+        lRes = RegQueryValueEx(hk, L"NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
         if (lRes != ERROR_SUCCESS) {
             // Default value if not found
             wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
@@ -886,7 +886,7 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     return TRUE;
                 case IDC_BTN_SAVE:
                 {
-                    HKEY hk;
+                    HKEY hk, hkMonitor;
                     LONG lRes;
                     WCHAR szKey[MAX_PATH];
 
@@ -897,13 +897,13 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     szTempNewTicketURL[copiedChars] = '\0';
 
                     // Save settings in registry
-                    wsprintf(szKey, L"SOFTWARE\\%s\\Installer", SERVICE_NAME);
+                    wsprintf(szKey, L"SOFTWARE\\%s", SERVICE_NAME);
                     lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_WRITE | KEY_WOW64_64KEY, &hk);
                     if (lRes != ERROR_SUCCESS)
                     {
                         if (lRes == ERROR_FILE_NOT_FOUND)
                         {
-                            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Installer", SERVICE_NAME);
+                            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s", SERVICE_NAME);
                             lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_WRITE | KEY_WOW64_64KEY, &hk);
                             if (lRes != ERROR_SUCCESS)
                             {
@@ -916,16 +916,30 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                             return FALSE;
                         }
                     }
-                    // Save new ticket URL
-                    size_t szTempNewTicketURLLen = wcslen(szTempNewTicketURL) * sizeof(WCHAR);
-                    lRes = RegSetValueEx(hk, L"AgentMonitor-NewTicket-URL", 0, REG_SZ, 
-                                        (LPBYTE)szTempNewTicketURL, (DWORD)szTempNewTicketURLLen);
+                    wsprintf(szKey, L"%s\\Monitor", szKey);
+                    lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_WRITE | KEY_WOW64_64KEY, &hkMonitor);
                     if (lRes != ERROR_SUCCESS)
                     {
-                        LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
-                        return FALSE;
+                        lRes = RegCreateKeyEx(hk, L"Monitor", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkMonitor, NULL);
+                        if (lRes != ERROR_SUCCESS)
+                        {
+                            LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                            return FALSE;
+                        }
+                    }
+                    // Save new ticket URL if it was changed
+                    if (wcscmp(szTempNewTicketURL, szNewTicketURL) != 0) {
+                        size_t szTempNewTicketURLLen = wcslen(szTempNewTicketURL) * sizeof(WCHAR);
+                        lRes = RegSetValueEx(hkMonitor, L"NewTicket-URL", 0, REG_SZ,
+                            (LPBYTE)szTempNewTicketURL, (DWORD)szTempNewTicketURLLen);
+                        if (lRes != ERROR_SUCCESS)
+                        {
+                            LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                            return FALSE;
+                        }
                     }
 
+                    RegCloseKey(hkMonitor);
                     RegCloseKey(hk);
 
                     // Store new ticket URL in memory
