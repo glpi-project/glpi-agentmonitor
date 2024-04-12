@@ -291,8 +291,21 @@ VOID ForceInventory(HWND hWnd)
 VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime) {
     WCHAR szBtnString[32];
     DWORD dwBtnStringLen = sizeof(szBtnString) / sizeof(WCHAR);
-    BOOL bQuerySvcOk = QueryServiceStatus(hAgentSvc, &svcStatus);
+    BOOL bQuerySvcOk = FALSE;
     BOOL bSvcChangedState = FALSE;
+
+    // Open Service Manager and Agent service handle and query Agent service status
+    SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
+    if (hSc != NULL) {
+        hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
+
+        if (hAgentSvc != NULL) {
+            bQuerySvcOk = QueryServiceStatus(hAgentSvc, &svcStatus);
+            CloseServiceHandle(hAgentSvc);
+        }
+
+        CloseServiceHandle(hSc);
+    }
 
     if (!bQuerySvcOk || !bAgentInstalled) {
         if (IsWindowVisible(hWnd)) {
@@ -808,24 +821,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     //-------------------------------------------------------------------------
 
-    // Open Service Manager and Agent service handle
-    SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
-    if (!hSc) {
-        dwErr = GetLastError();
-        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
-        return dwErr;
-    }
-    hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
-    if (!hAgentSvc) {
-        dwErr = GetLastError();
-        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
-        return dwErr;
-    }
-
     UpdateStatus(hWnd, NULL, NULL, NULL);
     UpdateServiceStatus(hWnd, NULL, NULL, NULL);
     SetTimer(hWnd, IDT_UPDSTATUS, 2000, (TIMERPROC)UpdateStatus);
-    SetTimer(hWnd, IDT_UPDSVCSTATUS, 100, (TIMERPROC)UpdateServiceStatus);
+    SetTimer(hWnd, IDT_UPDSVCSTATUS, 500, (TIMERPROC)UpdateServiceStatus);
 
     //-------------------------------------------------------------------------
 
@@ -850,8 +849,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             DispatchMessage(&msg);
         }
     }
-
-    CloseServiceHandle(hSc);
 
     return (int) msg.wParam;
 }
@@ -1178,8 +1175,6 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             WinHttpCloseHandle(hConn);
             WinHttpCloseHandle(hSession);
-
-            CloseServiceHandle(hAgentSvc);
 
             Gdiplus::GdiplusShutdown(gdiplusToken);
 

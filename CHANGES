@@ -13,6 +13,11 @@ Future release
   
 * Main window now handles Tab and Esc key pressing
   This is a helpful feature for keyboard-only navigation
+  
+* Bugfix: Don't keep service manager handle and Agent service handle open
+  all the time
+  This solves a problem that happens when the Monitor is running and GLPI Agent
+  uninstaller is executed under the Local System account.
 
 1.2.3
 
