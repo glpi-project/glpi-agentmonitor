@@ -418,12 +418,12 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
     IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
     IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
-    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
-    IDS_CANCEL              "Cancel"
-    IDS_SAVE                "Save"
-    IDS_BTN_SETTINGS        " Settings"
-    IDS_RMENU_SETTINGS      "Settings"
+    IDS_SETTINGS_NEWTICKETURL "URL pagina Nuovo ticket"
+    IDS_ERR_SAVE_SETTINGS   "Errore salvando le impostazioni di GLPI Agent Monitor!"
+    IDS_CANCEL              "Annulla"
+    IDS_SAVE                "Salva"
+    IDS_BTN_SETTINGS        " Impostazioni"
+    IDS_RMENU_SETTINGS      "Impostazioni"
 END
 
 #endif    // Italiano (Itália) resources
