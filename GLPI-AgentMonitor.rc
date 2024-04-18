@@ -417,7 +417,7 @@ BEGIN
     IDS_ERR_SCHANDLE        "Errore nella connessione al Windows Service Control Manager!"
     IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
     IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
-    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS            "Impostazioni GLPI Agent Monitor"
     IDS_SETTINGS_NEWTICKETURL "URL pagina Nuovo ticket"
     IDS_ERR_SAVE_SETTINGS   "Errore salvando le impostazioni di GLPI Agent Monitor!"
     IDS_CANCEL              "Annulla"
