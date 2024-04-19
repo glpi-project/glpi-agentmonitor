@@ -215,7 +215,7 @@ VOID CloseWinHttpRequest(HINTERNET hInternet) {
 }
 
 // Callback called by the asynchronous WinHTTP request
-VOID WinHttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInfo, DWORD dwStatusInfoLength)
+VOID CALLBACK WinHttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInfo, DWORD dwStatusInfoLength)
 {
     switch (dwInternetStatus)
     {
