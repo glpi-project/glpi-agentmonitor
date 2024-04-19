@@ -93,9 +93,12 @@ HINTERNET hSession, hConn;
 // Runtime variables
 BOOL bAgentInstalled = true;
 BOOL glpiAgentOk = true;
-SC_HANDLE hAgentSvc;
 SERVICE_STATUS svcStatus;
 SERVICE_STATUS lastSvcStatus = {};
+WCHAR szAgStatus[128];
+
+// WinHTTP request handle
+HINTERNET hReq = NULL;
 
 // GDI+ related
 Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -204,52 +207,85 @@ VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT title
     MessageBox(hWn, szBuf, szTitleBuf, mbFlags);
 }
 
-// Requests GLPI Agent status via HTTP and stores it on a wide-char string
-VOID GetAgentStatus(HWND hWnd, LPWSTR szAgStatus, DWORD dwAgStatusLen)
+// Unsets the asynchronous callback and close the WinHttp handle
+VOID CloseWinHttpRequest(HINTERNET hInternet) {
+    WinHttpSetStatusCallback(hInternet, NULL, NULL, NULL);
+    WinHttpCloseHandle(hInternet);
+    hReq = NULL;
+}
+
+// Callback called by the asynchronous WinHTTP request
+VOID WinHttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInfo, DWORD dwStatusInfoLength)
 {
-    DWORD dwSize = 0;
-    DWORD dwDownloaded;
-    vector<BYTE> responseBody;
-
-    LoadString(hInst, IDS_ERR_NOTRESPONDING, szAgStatus, dwAgStatusLen);
-
-    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
+    switch (dwInternetStatus)
     {
-        HINTERNET hReq = WinHttpOpenRequest(hConn, L"GET", L"/status", NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
-            WINHTTP_FLAG_BYPASS_PROXY_CACHE);
+        // Request is sent, receive response
+        case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
+            if (!WinHttpReceiveResponse(hInternet, NULL)) {
+                CloseWinHttpRequest(hInternet);
+            }
+            break;
 
-        WinHttpSendRequest(hReq, WINHTTP_NO_ADDITIONAL_HEADERS, NULL, WINHTTP_NO_REQUEST_DATA, NULL, NULL, NULL);
+        // Response headers are available, query for data
+        case WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE:
+            if (!WinHttpQueryDataAvailable(hInternet, NULL)) {
+                CloseWinHttpRequest(hInternet);
+            }
+            break;
 
-        if (WinHttpReceiveResponse(hReq, NULL)) {
-            do {
-                dwSize = 0;
+        // Data is available, read it
+        case WINHTTP_CALLBACK_STATUS_DATA_AVAILABLE: {
+            DWORD dwSize = *(LPDWORD)lpvStatusInfo;
+            DWORD dwDownloaded;
+            CHAR szResponse[128] = "";
 
-                if (!WinHttpQueryDataAvailable(hReq, &dwSize))
-                    break;
-                if (dwSize == 0)
-                    break;
+            if (dwSize == 0 || !WinHttpReadData(hInternet, &szResponse, dwSize, &dwDownloaded)) {
+                CloseWinHttpRequest(hInternet);
+                break;
+            }
 
-                size_t dwOffset = responseBody.size();
-                responseBody.resize(dwOffset + dwSize);
+            // Set last character to null
+            szResponse[dwDownloaded] = '\0';
 
-                if (!WinHttpReadData(hReq, &responseBody[dwOffset], dwSize, &dwDownloaded))
-                    break;
-                if (dwDownloaded == 0)
-                    break;
-                
-                dwSize -= dwDownloaded;
-            } while (dwSize > 0);
-
-            size_t respSize = responseBody.size() + 1;
             size_t cnvChars = 0;
-            // Must remove "status: " from the string (respSize - 8)
-            mbstowcs_s(&cnvChars, szAgStatus, respSize - 8, (LPCSTR)&responseBody[8], _TRUNCATE);
+
+            // Must remove "status: " from the string (dwDownloaded - 7, szResponse[8])
+            mbstowcs_s(&cnvChars, szAgStatus, (size_t)dwDownloaded - 7, (LPCSTR)&szResponse[8], _TRUNCATE);
+            SetDlgItemText((HWND)dwContext, IDC_AGENTSTATUS, szAgStatus);
+            break;
         }
-        WinHttpCloseHandle(hReq);
+
+        // Set "Agent not responding" string on error and close the WinHTTP handle (on both error and read complete)
+        case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
+            LoadString(hInst, IDS_ERR_NOTRESPONDING, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
+            SetDlgItemText((HWND)dwContext, IDC_AGENTSTATUS, szAgStatus);
+        case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
+            CloseWinHttpRequest(hInternet);
+            break;
     }
 }
 
-// Requests an inventory via HTTP
+// Requests GLPI Agent status via HTTP (asynchronous)
+VOID GetAgentStatus(HWND hWnd)
+{
+    if (svcStatus.dwCurrentState == SERVICE_RUNNING)
+    {
+        // Only do another request if the previous one is closed
+        if (hReq == NULL)
+        {
+            hReq = WinHttpOpenRequest(hConn, L"GET", L"/status", NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES,
+                WINHTTP_FLAG_BYPASS_PROXY_CACHE);
+
+            // Callback is set for this request only, not for the entire WinHTTP session,
+            // as "Force Inventory" is synchronous
+            WinHttpSetStatusCallback(hReq, WinHttpCallback, WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS, NULL);
+
+            WinHttpSendRequest(hReq, WINHTTP_NO_ADDITIONAL_HEADERS, NULL, WINHTTP_NO_REQUEST_DATA, NULL, NULL, (DWORD_PTR)hWnd);
+        }
+    }
+}
+
+// Requests an inventory via HTTP (synchronous)
 VOID ForceInventory(HWND hWnd)
 {
     if (svcStatus.dwCurrentState == SERVICE_RUNNING)
@@ -297,7 +333,7 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
     // Open Service Manager and Agent service handle and query Agent service status
     SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
     if (hSc != NULL) {
-        hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
+        SC_HANDLE hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_QUERY_STATUS);
 
         if (hAgentSvc != NULL) {
             bQuerySvcOk = QueryServiceStatus(hAgentSvc, &svcStatus);
@@ -507,9 +543,7 @@ VOID CALLBACK UpdateStatus(HWND hWnd, UINT message, UINT idTimer, DWORD dwTime)
         // If the service is not running, the status will
         // be replaced by UpdateServiceStatus
         if (svcStatus.dwCurrentState == SERVICE_RUNNING) {
-            WCHAR szAgStatus[128];
-            GetAgentStatus(hWnd, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
-            SetDlgItemText(hWnd, IDC_AGENTSTATUS, szAgStatus);
+            GetAgentStatus(hWnd);
         }
     }
 }
@@ -548,7 +582,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
             return dwErr;
         }
-        hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_START | SERVICE_PAUSE_CONTINUE | SERVICE_STOP);
+        SC_HANDLE hAgentSvc = OpenService(hSc, SERVICE_NAME, SERVICE_START | SERVICE_PAUSE_CONTINUE | SERVICE_STOP);
         if (!hAgentSvc) {
             dwErr = GetLastError();
             LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
@@ -745,7 +779,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     WCHAR szUserAgent[64];
     wsprintf(szUserAgent, L"%s/%d.%d.%d", USERAGENT_NAME, dwVerMaj, dwVerMin, dwVerRev);
 
-    hSession = WinHttpOpen(szUserAgent, WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, NULL);
+    hSession = WinHttpOpen(szUserAgent, WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, WINHTTP_FLAG_ASYNC);
+    WinHttpSetTimeouts(hSession, 100, 10000, 10000, 10000);
     hConn = WinHttpConnect(hSession, L"127.0.0.1", (INTERNET_PORT)dwPort, 0);
 
     //-------------------------------------------------------------------------

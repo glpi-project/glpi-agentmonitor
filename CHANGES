@@ -14,6 +14,11 @@ Future release
 * Main window now handles Tab and Esc key pressing
   This is a helpful feature for keyboard-only navigation
   
+* Changed agent status querying to asynchronous
+  The WinHttp calls made to query the agent status were changed to asynchronous.
+  This fixes the lagging that can happen sometimes on the Monitor's main window,
+  especially when opening it for the first time.
+  
 * Bugfix: Don't keep service manager handle and Agent service handle open
   all the time
   This solves a problem that happens when the Monitor is running and GLPI Agent
