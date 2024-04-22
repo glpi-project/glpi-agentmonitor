@@ -238,8 +238,25 @@ VOID CALLBACK WinHttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dw
             DWORD dwSize = *(LPDWORD)lpvStatusInfo;
             DWORD dwDownloaded;
             CHAR szResponse[128] = "";
+            DWORD dwResponseLen = sizeof(szResponse);
+
+            // If the response size is greater than expected, set "Agent not responding" string and close the WinHTTP handle
+            if (dwSize >= dwResponseLen) {
+                LoadString(hInst, IDS_ERR_NOTRESPONDING, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
+                SetDlgItemText((HWND)dwContext, IDC_AGENTSTATUS, szAgStatus);
+                CloseWinHttpRequest(hInternet);
+                break;
+            }
 
             if (dwSize == 0 || !WinHttpReadData(hInternet, &szResponse, dwSize, &dwDownloaded)) {
+                CloseWinHttpRequest(hInternet);
+                break;
+            }
+
+            // If the number of downloaded bytes is equal or greater than expected, set "Agent not responding" string and close the WinHTTP handle
+            if(dwDownloaded >= dwResponseLen) {
+                LoadString(hInst, IDS_ERR_NOTRESPONDING, szAgStatus, sizeof(szAgStatus) / sizeof(WCHAR));
+                SetDlgItemText((HWND)dwContext, IDC_AGENTSTATUS, szAgStatus);
                 CloseWinHttpRequest(hInternet);
                 break;
             }
