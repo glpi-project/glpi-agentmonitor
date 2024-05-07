@@ -784,8 +784,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         // Get new ticket URL
         DWORD szNewTicketURLLen = sizeof(szNewTicketURL);
         lRes = RegQueryValueEx(hk, L"NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
-        if (lRes != ERROR_SUCCESS) {
-            // Default value if not found
+        if (lRes != ERROR_SUCCESS || !wcscmp(szNewTicketURL, L"")) {
+            // Default value if not found or empty
             wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
         }
     }
@@ -991,8 +991,14 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                     RegCloseKey(hkMonitor);
                     RegCloseKey(hk);
 
-                    // Store new ticket URL in memory
-                    wcscpy_s(szNewTicketURL, szTempNewTicketURL);
+                    // Use the default new ticket URL if the provided one is empty
+                    if (!wcscmp(szTempNewTicketURL, L"")) {
+                        wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
+                    }
+                    else {
+                        // Store new ticket URL in memory
+                        wcscpy_s(szNewTicketURL, szTempNewTicketURL);
+                    }
 
                     PostMessage(hWnd, WM_CLOSE, 0, 0);
                     return TRUE;
