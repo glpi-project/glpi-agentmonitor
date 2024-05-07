@@ -1,6 +1,6 @@
 Revision history for GLPI Agent Monitor
 
-Future release
+1.3.0
 
 * Better error message handling
   The Monitor now displays the error message when displaying error codes.

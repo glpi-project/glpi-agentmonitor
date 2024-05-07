@@ -16,8 +16,8 @@ VS_VERSION_INFO VERSIONINFO
  FILEVERSION VI_VERSIONDEF
  PRODUCTVERSION VI_VERSIONDEF
 #else
- FILEVERSION 1,2,3,0
- PRODUCTVERSION 1,2,3,0
+ FILEVERSION 1,3,0,0
+ PRODUCTVERSION 1,3,0,0
 #endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -37,7 +37,7 @@ BEGIN
 #ifdef VI_VERSIONSTRING
             VALUE "FileVersion", VI_VERSIONSTRING
 #else
-            VALUE "FileVersion", "1.2.3.0"
+            VALUE "FileVersion", "1.3.0.0"
 #endif
 #ifdef VI_FILENAME
             VALUE "InternalName", VI_FILENAME
@@ -54,7 +54,7 @@ BEGIN
 #ifdef VI_VERSIONSTRING
             VALUE "ProductVersion", VI_VERSIONSTRING
 #else
-            VALUE "ProductVersion", "1.2.3.0"
+            VALUE "ProductVersion", "1.3.0.0"
 #endif
         END
     END
