@@ -147,7 +147,7 @@ jobs:
     - name: Download x64 Artifact
       uses: actions/download-artifact@v4
       with:
-        name: GLPI-AgentMonitor-Build-*
+        pattern: GLPI-AgentMonitor-Build-*
         merge-multiple: true
     - name: Get sha256 sums
       id: sha256
