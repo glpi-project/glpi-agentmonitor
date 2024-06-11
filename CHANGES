@@ -1,5 +1,10 @@
 Revision history for GLPI Agent Monitor
 
+1.3.1
+
+* Handle empty value for the NewTicket-URL setting
+
+
 1.3.0
 
 * Better error message handling
@@ -10,19 +15,20 @@ Revision history for GLPI Agent Monitor
 * Settings dialog added
   Currently, the only setting available is "New ticket page URL", for
   changing the URL used to create new tickets (i.e. when using Form Creator)
-  
+
 * Main window now handles Tab and Esc key pressing
   This is a helpful feature for keyboard-only navigation
-  
+
 * Changed agent status querying to asynchronous
   The WinHttp calls made to query the agent status were changed to asynchronous.
   This fixes the lagging that can happen sometimes on the Monitor's main window,
   especially when opening it for the first time.
-  
+
 * Bugfix: Don't keep service manager handle and Agent service handle open
   all the time
   This solves a problem that happens when the Monitor is running and GLPI Agent
   uninstaller is executed under the Local System account.
+
 
 1.2.3
 
@@ -36,9 +42,11 @@ Revision history for GLPI Agent Monitor
   This removes quotes from the server URL setting, even though the server URL
   should not have any quotes at all.
 
+
 1.2.2
 
 * Build: Don't sign generated code with an expired code-signing certificate
+
 
 1.2.1
 
