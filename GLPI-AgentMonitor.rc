@@ -776,7 +776,107 @@ END
 #endif    // Espanhol (Uruguai) resources
 /////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////
+// Dutch resources
 
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
+LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+IDS_APP_TITLE           "GLPI Agent Monitor"
+IDS_GLPINOTIFYERROR     "GLPI Agent - Fout"
+IDS_GLPINOTIFY          "GLPI Agent"
+IDS_STATIC_INFO         "Info"
+IDS_STATIC_AGENTVER     "Agent versie:"
+IDS_STATIC_SERVICESTATUS "Service status:"
+IDS_STATIC_STARTTYPE    "Opstart type:"
+IDS_ERR_AGENTSETTINGS   "GLPI Agent instellingen kon niet worden geladen!\nHerinstalleer de GLPI Agent."
+END
+
+STRINGTABLE
+BEGIN
+IDS_LOADING             "Laden..."
+IDS_STATIC_AGENTSTATUS  "Agent status"
+IDS_FORCEINV            "Forceer Inventory"
+IDS_CLOSE               "Sluiten"
+IDS_ERR_NOTRESPONDING   "Agent reageert niet!"
+IDS_ERR_NOTRUNNING      "Agent is niet actief!"
+IDS_SVCSTART_BOOT       "Boot"
+IDS_SVCSTART_SYSTEM     "Systeem"
+IDS_SVCSTART_AUTO       "Automatisch"
+IDS_SVCSTART_DELAYEDAUTO "Automatisch (Delayed start)"
+IDS_SVCSTART_MANUAL     "Handmatig"
+IDS_SVCSTART_DISABLED   "Uitgeschakeld"
+IDS_ERR_UNKSVCSTART     "Opstart type onbekend!"
+IDS_ERR_REGFAIL         "Registry query fout!"
+IDS_ERR_AGENTVERNOTFOUND "Agent versie niet gevonden!"
+IDS_ERR_AGENTNOTFOUND   "Agent is niet geinstalleerd!"
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_HTTPDPORT       "Fout bij het ophalen van de GLPI Agent HTTP-poort!\nHerinstalleer de GLPI Agent."
+IDS_SVC_STOPPED         "Gestopt"
+IDS_SVC_RUNNING         "Actief"
+IDS_SVC_PAUSED          "Gepauzeerd"
+IDS_SVC_CONTINUEPENDING "Hervatten..."
+IDS_SVC_PAUSEPENDING    "Pauzeren..."
+IDS_SVC_STARTPENDING    "Word gestart..."
+IDS_SVC_STOPPENDING     "Word gestopt..."
+IDS_ERR_SERVICE         "Service query fout!"
+IDS_OK                  "OK"
+IDS_ERROR               "GLPI Agent Monitor - Fout"
+IDS_ERR_FORCEINV_NORESPONSE
+                        "Forceer Inventory error:\nDe agent reageerde niet op het verzoek."
+IDS_ERR_FORCEINV_NOTALLOWED
+                        "Forceer Inventory error:\nBewerking niet toegestaan."
+IDS_MSG_FORCEINV_OK     "Force Inventory verzoek succesvol verzonden naar GLPI Agent."
+IDS_ERR_AGENTERR        "De Agent heeft een of meer fouten!\nControleer het GLPI Agent Monitor-venster."
+IDS_RMENU_OPEN          "Openen"
+END
+
+STRINGTABLE
+BEGIN
+IDS_RMENU_FORCE         "Forceer Inventory"
+IDS_RMENU_EXIT          "Sluiten"
+IDS_FILE                "Bestand"
+IDS_DIR                 "Folder"
+IDS_ERR_MAINWINDOW      "Fout bij het maken van het hoofdvenster van GLPI Agent Monitor!"
+IDS_RMENU_NEWTICKET     "Nieuwe ticket..."
+IDS_ERR_SERVER          "Fout bij ophalen van GLPI-server-URL!\nHerinstalleer de GLPI Agent."
+IDS_NOTIF_NEWTICKET_TITLE "Er is een schermopname gemaakt"
+IDS_NOTIF_NEWTICKET     "Druk op CTRL+V in het nieuwe beschrijvings veld om het aan het ticket te koppelen."
+IDS_NEWTICKET           "Nieuwe ticket..."
+IDS_VIEWLOGS            "View agent logs"
+IDS_RMENU_VIEWLOGS      "View agent logs"
+IDS_STARTSVC            " Start service"
+IDS_STOPSVC             " Stop service"
+IDS_RESUMESVC           " Hervat service"
+IDS_WAIT                "Een ogenblik geduld..."
+END
+
+STRINGTABLE
+BEGIN
+IDS_ERR_SCHANDLE        "Fout bij het verbinden met Windows Service Control Manager!"
+IDS_ERR_SVCHANDLE       "Fout bij het openen van de GLPI Agent-service!"
+IDS_ERR_SVCOPERATION    "Fout bij het controleren van de GLPI Agent-service!"
+IDS_SETTINGS            "GLPI Agent Monitor instellingen"
+IDS_SETTINGS_NEWTICKETURL "Nieuwe ticketpagina-URL"
+IDS_ERR_SAVE_SETTINGS   "Fout bij opslaan van GLPI Agent Monitor-instellingen!"
+IDS_CANCEL              "Annuleren"
+IDS_SAVE                "Opslaan"
+IDS_BTN_SETTINGS        " Instellingen"
+IDS_RMENU_SETTINGS      "Instellingen"
+END
+
+#endif    // Dutch resources
+/////////////////////////////////////////////////////////////////////////////
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
