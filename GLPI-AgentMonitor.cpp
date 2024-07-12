@@ -581,6 +581,45 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
     return TRUE;
 }
 
+// Get running Monitor process' hWnd
+HWND GetRunningMonitorHwnd() {
+
+    // Get GLPI Agent Monitor executable name
+    WCHAR szFilePath[MAX_PATH];
+    GetModuleFileName(NULL, szFilePath, MAX_PATH);
+    LPWSTR szFileName = PathFindFileName(szFilePath);
+
+    // Look through processes, try to get it's hWnd when the process is found
+    // and then send a WM_CLOSE message to stop it gracefully
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
+    PROCESSENTRY32 pEntry{};
+    pEntry.dwSize = sizeof(pEntry);
+    BOOL hRes = Process32First(hSnapshot, &pEntry);
+    while (hRes)
+    {
+        if (lstrcmp(pEntry.szExeFile, szFileName) == 0)
+        {
+            // Don't close itself
+            if (pEntry.th32ProcessID != GetCurrentProcessId())
+            {
+                EnumWindowsData ed = {
+                    pEntry.th32ProcessID,
+                    NULL
+                };
+
+                if (!EnumWindows(EnumWindowsProc, (LPARAM)&ed) && (GetLastError() == ERROR_SUCCESS)) {
+                    CloseHandle(hSnapshot);
+                    return ed.hWndFound;
+                }
+            }
+        }
+        hRes = Process32Next(hSnapshot, &pEntry);
+    }
+    CloseHandle(hSnapshot);
+
+    return NULL;
+}
+
 
 //-[MAIN FUNCTIONS]------------------------------------------------------------
 
@@ -624,36 +663,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     // Process elevation request (kill previous process)
     if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
     {
-        // Get GLPI Agent Monitor executable name
-        WCHAR szFilePath[MAX_PATH];
-        GetModuleFileName(NULL, szFilePath, MAX_PATH);
-        LPWSTR szFileName = PathFindFileName(szFilePath);
-
-        // Look through processes, try to get it's hWnd when the process is found
-        // and then send a WM_CLOSE message to stop it gracefully
-        HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);
-        PROCESSENTRY32 pEntry{};
-        pEntry.dwSize = sizeof(pEntry);
-        BOOL hRes = Process32First(hSnapshot, &pEntry);
-        while (hRes)
-        {
-            if (lstrcmp(pEntry.szExeFile, szFileName) == 0)
-            {
-                // Don't close itself
-                if(pEntry.th32ProcessID != GetCurrentProcessId())
-                {
-                    EnumWindowsData ed = { 
-                        pEntry.th32ProcessID,
-                        NULL
-                    };
-                    if (!EnumWindows(EnumWindowsProc, (LPARAM) &ed) && (GetLastError() == ERROR_SUCCESS)) {
-                        SendMessage(ed.hWndFound, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
-                    }
-                }
-            }
-            hRes = Process32Next(hSnapshot, &pEntry);
+        HWND runningMonitorHwnd = GetRunningMonitorHwnd();
+        if (runningMonitorHwnd != NULL) {
+            SendMessage(runningMonitorHwnd, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
         }
-        CloseHandle(hSnapshot);
     }
 
 
@@ -669,8 +682,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                 hMutex = CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
             } while (WaitForSingleObject(hMutex, 500) != WAIT_OBJECT_0);
         }
-        else
+        else {
+            // Show running agent window
+            HWND runningMonitorHwnd = GetRunningMonitorHwnd();
+            if (runningMonitorHwnd != NULL) {
+                ShowWindowFront(runningMonitorHwnd, SW_SHOW);
+                UpdateStatus(runningMonitorHwnd, NULL, NULL, NULL);
+            }
             return 0;
+        }
     }
 
 
