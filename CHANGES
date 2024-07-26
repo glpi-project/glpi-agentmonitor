@@ -9,6 +9,13 @@ Future release
   executable) and another instance is already running, the running Monitor's
   window will now be shown. (This won't work if the Monitor's running instance
   is elevated)
+  
+* Disabled the check for "http://" or "https://" on the GLPI Agent server URL
+  parameter, because the URL may be valid without them.
+
+* Fixed a bug where "New Ticket" showed an error if the server URL didn't start
+  with "http://" or "https://". This error persisted even after setting a custom
+  new ticket URL and the Monitor wasn't closed and reopened after this.
 
 
 1.3.1

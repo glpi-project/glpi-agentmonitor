@@ -1,7 +1,7 @@
 /*
  *  ---------------------------------------------------------------------------
  *  GLPI-AgentMonitor.cpp
- *  Copyright (C) 2023 Leonardo Bernardes (redddcyclone)
+ *  Copyright (C) 2023, 2024 Leonardo Bernardes (redddcyclone)
  *  ---------------------------------------------------------------------------
  * 
  *  LICENSE
@@ -114,7 +114,6 @@ COLORREF colorSvcStatus = RGB(0, 0, 0);
 
 // GLPI server URL
 WCHAR szServer[256];
-BOOL bFoundBaseURL = false;
 
 // New ticket URL
 WCHAR szNewTicketURL[300];
@@ -748,11 +747,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             strServer.erase(remove(strServer.begin(), strServer.end(), '\"'), strServer.end());
             wcscpy_s(szServer, strServer.c_str());
 
-            if (wcsncmp(L"https://", szServer, 8) == 0 || wcsncmp(L"http://", szServer, 7) == 0) {
+            if (wcscmp(L"", szServer) != 0) {
                 // Get only the first URL if more than one is configured
-                LPWSTR szSubstr = wcsstr(szServer, L",http://");
-                if (szSubstr == nullptr)
-                    szSubstr = wcsstr(szServer, L",https://");
+                LPWSTR szSubstr = wcsstr(szServer, L",");
                 if (szSubstr != nullptr)
                     szSubstr[0] = '\0';
                 // Get GLPI server base URL (as GLPI may be located in a subfolder,
@@ -777,7 +774,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                 }
                 // In case we didn't find the substrings, assume the "server" value
                 // in the registry is the base GLPI url itself.
-                bFoundBaseURL = true;
             }
         }
 
@@ -806,7 +802,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         lRes = RegQueryValueEx(hk, L"NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
         if (lRes != ERROR_SUCCESS || !wcscmp(szNewTicketURL, L"")) {
             // Default value if not found or empty
-            wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
+            if (wcsncmp(L"https://", szServer, 8) != 0 && wcsncmp(L"http://", szServer, 7) != 0) {
+                // Place an "http://" before the URL so that it is at least opened by the system's
+                // default browser instead of doing nothing or unexpected behavior, even if
+                // for some reason the Agent's "server" parameter is empty
+                wsprintf(szNewTicketURL, L"http://%s/front/ticket.form.php", szServer);
+            }
+            else {
+                wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
+            }
         }
     }
 
@@ -1088,27 +1092,24 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 // New ticket
                 case IDC_BTN_NEWTICKET:
                     EndDialog(hWnd, NULL);
-                case ID_RMENU_NEWTICKET:
-                    if (bFoundBaseURL) {
-                        // Take screenshot to clipboard (simulating PrintScreen) and open the ticket URL
-                        INPUT ipInput[2] = { 0 };
-                        Sleep(300);
-                        ipInput[0].type = INPUT_KEYBOARD;
-                        ipInput[0].ki.wVk = VK_SNAPSHOT;
-                        ipInput[1] = ipInput[0];
-                        ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
-                        SendInput(2, ipInput, sizeof(INPUT));
-                        ShellExecute(NULL, L"open", szNewTicketURL, NULL, NULL, SW_SHOWNORMAL);
+                case ID_RMENU_NEWTICKET: {
+                    // Take screenshot to clipboard (simulating PrintScreen) and open the ticket URL
+                    INPUT ipInput[2] = { 0 };
+                    Sleep(300);
+                    ipInput[0].type = INPUT_KEYBOARD;
+                    ipInput[0].ki.wVk = VK_SNAPSHOT;
+                    ipInput[1] = ipInput[0];
+                    ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
+                    SendInput(2, ipInput, sizeof(INPUT));
+                    ShellExecute(NULL, L"open", szNewTicketURL, NULL, NULL, SW_SHOWNORMAL);
 
-                        // Notify user that a screenshot is in the clipboard
-                        nid.uFlags |= NIF_INFO;
-                        LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
-                        LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
-                        Shell_NotifyIcon(NIM_MODIFY, &nid);
-                    }
-                    else
-                        LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SERVER, IDS_ERROR, MB_OK | MB_ICONERROR);
+                    // Notify user that a screenshot is in the clipboard
+                    nid.uFlags |= NIF_INFO;
+                    LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
+                    LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
+                    Shell_NotifyIcon(NIM_MODIFY, &nid);
                     return TRUE;
+                }
                 // Settings
                 case ID_RMENU_SETTINGS:
                 case IDC_BTN_SETTINGS:
