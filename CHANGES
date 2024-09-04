@@ -16,6 +16,9 @@ Future release
 * Fixed a bug where "New Ticket" showed an error if the server URL didn't start
   with "http://" or "https://". This error persisted even after setting a custom
   new ticket URL and the Monitor wasn't closed and reopened after this.
+  
+* Added a setting to control whether a screenshot is taken when clicking the
+  "New Ticket" button.
 
 
 1.3.1

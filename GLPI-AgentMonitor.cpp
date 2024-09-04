@@ -121,6 +121,9 @@ WCHAR szNewTicketURL[300];
 // Agent logfile
 WCHAR szLogfile[MAX_PATH];
 
+// Enable screenshot capture
+BOOL bNewTicketScreenshot = TRUE;
+
 // Global string buffer
 WCHAR szBuffer[256];
 DWORD dwBufferLen = sizeof(szBuffer) / sizeof(WCHAR);
@@ -812,6 +815,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
                 wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
             }
         }
+
+        // Get new ticket screenshot enable
+        DWORD dwNewTicketScreenshotTmp = NULL;
+        DWORD dwNewTicketScreenshotLen = sizeof(dwNewTicketScreenshotTmp);
+        lRes = RegQueryValueExW(hk, L"NewTicket-Screenshot", 0, NULL, (LPBYTE)&dwNewTicketScreenshotTmp, &dwNewTicketScreenshotLen);
+        if (lRes == ERROR_SUCCESS) {
+            bNewTicketScreenshot = (dwNewTicketScreenshotTmp == 1);
+        }
     }
 
     RegCloseKey(hk);
@@ -938,15 +949,20 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
             // Initialize dialog strings
             LoadString(hInst, IDS_SETTINGS, szBuffer, dwBufferLen);
             SetWindowText(hWnd, szBuffer);
-            LoadString(hInst, IDS_SETTINGS_NEWTICKETURL, szBuffer, dwBufferLen);
-            SetDlgItemText(hWnd, IDC_GROUPBOX_NEWTICKETURL, szBuffer);
+            LoadString(hInst, IDS_SETTINGS_NEWTICKET, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_SETTINGS_GROUPBOX_NEWTICKET, szBuffer);
+            LoadString(hInst, IDS_SETTINGS_NEWTICKET_URL, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_SETTINGS_TEXT_NEWTICKET_URL, szBuffer);
+            LoadString(hInst, IDS_SETTINGS_NEWTICKET_SCREENSHOT, szBuffer, dwBufferLen);
+            SetDlgItemText(hWnd, IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT, szBuffer);
             LoadString(hInst, IDS_CANCEL, szBuffer, dwBufferLen);
-            SetDlgItemText(hWnd, IDC_BTN_CANCEL, szBuffer);
+            SetDlgItemText(hWnd, IDC_SETTINGS_BTN_CANCEL, szBuffer);
             LoadString(hInst, IDS_SAVE, szBuffer, dwBufferLen);
-            SetDlgItemText(hWnd, IDC_BTN_SAVE, szBuffer);
+            SetDlgItemText(hWnd, IDC_SETTINGS_BTN_SAVE, szBuffer);
 
             // Fill values
-            SendDlgItemMessage(hWnd, IDC_SETTINGS_EDIT_NEWTICKETURL, WM_SETTEXT, 0, (LPARAM)szNewTicketURL);
+            SendDlgItemMessage(hWnd, IDC_SETTINGS_EDIT_NEWTICKET_URL, WM_SETTEXT, 0, (LPARAM)szNewTicketURL);
+            SendDlgItemMessage(hWnd, IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT, BM_SETCHECK, (bNewTicketScreenshot ? BST_CHECKED : BST_UNCHECKED), 0);
 
             return TRUE;
         }
@@ -954,10 +970,11 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         {
             switch (LOWORD(wParam))
             {
-                case IDC_SETTINGS_EDIT_NEWTICKETURL:
-                    // Prevent closing the dialog when clicking the text box
+                case IDC_SETTINGS_EDIT_NEWTICKET_URL:
+                case IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT:
+                    // Prevent closing the dialog when clicking these components
                     return TRUE;
-                case IDC_BTN_SAVE:
+                case IDC_SETTINGS_BTN_SAVE:
                 {
                     HKEY hk, hkMonitor;
                     LONG lRes;
@@ -965,9 +982,10 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
                     // Get settings from dialog
                     WCHAR szTempNewTicketURL[300];
-                    LRESULT copiedChars = SendMessage(GetDlgItem(hWnd, IDC_SETTINGS_EDIT_NEWTICKETURL), WM_GETTEXT,
+                    LRESULT copiedChars = SendMessage(GetDlgItem(hWnd, IDC_SETTINGS_EDIT_NEWTICKET_URL), WM_GETTEXT,
                         sizeof(szTempNewTicketURL), (LPARAM)szTempNewTicketURL);
                     szTempNewTicketURL[copiedChars] = '\0';
+                    BOOL bTempNewTicketScreenshot = IsDlgButtonChecked(hWnd, IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT);
 
                     // Save settings in registry
                     wsprintf(szKey, L"SOFTWARE\\%s", SERVICE_NAME);
@@ -1000,11 +1018,25 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                             return FALSE;
                         }
                     }
+
                     // Save new ticket URL if it was changed
-                    if (wcscmp(szTempNewTicketURL, szNewTicketURL) != 0) {
+                    if (wcscmp(szTempNewTicketURL, szNewTicketURL) != 0)
+                    {
                         size_t szTempNewTicketURLLen = wcslen(szTempNewTicketURL) * sizeof(WCHAR);
-                        lRes = RegSetValueEx(hkMonitor, L"NewTicket-URL", 0, REG_SZ,
-                            (LPBYTE)szTempNewTicketURL, (DWORD)szTempNewTicketURLLen);
+                        lRes = RegSetValueEx(hkMonitor, L"NewTicket-URL", 0, REG_SZ, (LPBYTE)szTempNewTicketURL, (DWORD)szTempNewTicketURLLen);
+                        if (lRes != ERROR_SUCCESS)
+                        {
+                            LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
+                            return FALSE;
+                        }
+                    }
+
+                    // Save new ticket screenshot setting if it was changed
+                    // Save new ticket URL if it was changed
+                    if (bTempNewTicketScreenshot != bNewTicketScreenshot)
+                    {
+                        lRes = RegSetValueEx(hkMonitor, L"NewTicket-Screenshot", 0, REG_DWORD,
+                            (LPBYTE)&bTempNewTicketScreenshot, sizeof(bTempNewTicketScreenshot));
                         if (lRes != ERROR_SUCCESS)
                         {
                             LoadStringAndMessageBox(hInst, hWnd, IDS_ERR_SAVE_SETTINGS, IDS_ERROR, MB_OK | MB_ICONERROR, lRes);
@@ -1023,11 +1055,12 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
                         // Store new ticket URL in memory
                         wcscpy_s(szNewTicketURL, szTempNewTicketURL);
                     }
+                    bNewTicketScreenshot = bTempNewTicketScreenshot;
 
                     PostMessage(hWnd, WM_CLOSE, 0, 0);
                     return TRUE;
                 }
-                case IDC_BTN_CANCEL:
+                case IDC_SETTINGS_BTN_CANCEL:
                     PostMessage(hWnd, WM_CLOSE, 0, 0);
                     return TRUE;
             }
@@ -1093,21 +1126,27 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 case IDC_BTN_NEWTICKET:
                     EndDialog(hWnd, NULL);
                 case ID_RMENU_NEWTICKET: {
-                    // Take screenshot to clipboard (simulating PrintScreen) and open the ticket URL
-                    INPUT ipInput[2] = { 0 };
-                    Sleep(300);
-                    ipInput[0].type = INPUT_KEYBOARD;
-                    ipInput[0].ki.wVk = VK_SNAPSHOT;
-                    ipInput[1] = ipInput[0];
-                    ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
-                    SendInput(2, ipInput, sizeof(INPUT));
+                    if (bNewTicketScreenshot) {
+                        // Take screenshot to clipboard (simulating PrintScreen)
+                        INPUT ipInput[2] = { 0 };
+                        Sleep(300);
+                        ipInput[0].type = INPUT_KEYBOARD;
+                        ipInput[0].ki.wVk = VK_SNAPSHOT;
+                        ipInput[1] = ipInput[0];
+                        ipInput[1].ki.dwFlags |= KEYEVENTF_KEYUP;
+                        SendInput(2, ipInput, sizeof(INPUT));
+                    }
+                    // Open the new ticket URL
                     ShellExecute(NULL, L"open", szNewTicketURL, NULL, NULL, SW_SHOWNORMAL);
 
-                    // Notify user that a screenshot is in the clipboard
-                    nid.uFlags |= NIF_INFO;
-                    LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
-                    LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
-                    Shell_NotifyIcon(NIM_MODIFY, &nid);
+                    if (bNewTicketScreenshot) {
+                        // Notify user that a screenshot is in the clipboard
+                        nid.uFlags |= NIF_INFO;
+                        LoadString(hInst, IDS_NOTIF_NEWTICKET_TITLE, nid.szInfoTitle, sizeof(nid.szInfoTitle) / sizeof(WCHAR));
+                        LoadString(hInst, IDS_NOTIF_NEWTICKET, nid.szInfo, sizeof(nid.szInfo) / sizeof(WCHAR));
+                        Shell_NotifyIcon(NIM_MODIFY, &nid);
+                    }
+
                     return TRUE;
                 }
                 // Settings

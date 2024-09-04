@@ -73,12 +73,15 @@
 #define IDS_ERR_SVCOPERATION            258
 #define IDS_SETTINGS                    259
 #define IDS_SETTINGS_NEWTICKETURL       260
+#define IDS_SETTINGS_NEWTICKET_URL      260
 #define IDS_CHECKBOX_NEWTICKET_DEFAULTURL 261
 #define IDS_ERR_SAVE_SETTINGS           261
 #define IDS_CANCEL                      262
 #define IDS_SAVE                        263
 #define IDS_BTN_SETTINGS                264
 #define IDS_RMENU_SETTINGS              265
+#define IDS_SETTINGS_NEWTICKET          266
+#define IDS_SETTINGS_NEWTICKET_SCREENSHOT 267
 #define IDC_BTN_VIEWLOGS                400
 #define IDD_DIALOG1                     401
 #define IDD_MAIN                        402
@@ -97,10 +100,15 @@
 #define IDC_STATIC_STARTTYPE            1006
 #define IDC_BTN_STARTSTOPSVC            1009
 #define IDC_SETTINGS_EDIT_NEWTICKETURL  1010
+#define IDC_SETTINGS_EDIT_NEWTICKET_URL 1010
 #define IDC_CHECK1                      1011
 #define IDC_CHECKBOX_NEWTICKET_DEFAULTURL 1011
+#define IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT 1011
 #define IDC_BTN_CANCEL                  1013
+#define IDC_SETTINGS_BTN_CANCEL         1013
 #define IDC_BTN_SAVE                    1014
+#define IDC_SETTINGS_BTN_SAVE           1014
+#define IDC_SETTINGS_GROUPBOX_NEWTICKET 1015
 #define ID_RMENU_OPEN                   32760
 #define ID_RMENU_FORCE                  32761
 #define ID_RMENU_EXIT                   32762
@@ -111,6 +119,7 @@
 #define IDC_STATIC                      -1
 #define IDC_STATIC_TITLE                -1
 #define IDC_GROUPBOX_NEWTICKETURL       -1
+#define IDC_SETTINGS_TEXT_NEWTICKET_URL -1
 
 // Next default values for new objects
 // 
@@ -119,7 +128,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        155
 #define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1015
+#define _APS_NEXT_CONTROL_VALUE         1016
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

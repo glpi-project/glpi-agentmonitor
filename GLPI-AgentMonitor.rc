@@ -109,7 +109,7 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Ошибка открытия службы GLPI agent!"
     IDS_ERR_SVCOPERATION    "Ошибка управления службой GLPI agent!"
     IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
     IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
     IDS_CANCEL              "Cancel"
     IDS_SAVE                "Save"
@@ -212,12 +212,15 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Error opening the GLPI Agent service!"
     IDS_ERR_SVCOPERATION    "Error trying to control the GLPI Agent service!"
     IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
     IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
     IDS_CANCEL              "Cancel"
     IDS_SAVE                "Save"
     IDS_BTN_SETTINGS        " Settings"
     IDS_RMENU_SETTINGS      "Settings"
+    IDS_SETTINGS_NEWTICKET  "New ticket"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Enable screen capture when clicking the ""New ticket"" button"
 END
 
 #endif    // Inglês (Estados Unidos) resources
@@ -315,7 +318,7 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Erreur d'ouverture du service de l'agent GLPI !"
     IDS_ERR_SVCOPERATION    "Erreur en tentant de gérer le service de l'agent GLPI !"
     IDS_SETTINGS            "Paramètres de GLPI Agent Monitor"
-    IDS_SETTINGS_NEWTICKETURL "URL de nouveau ticket"
+    IDS_SETTINGS_NEWTICKET_URL "URL de nouveau ticket"
     IDS_ERR_SAVE_SETTINGS   "Erreur durant l'enregistrement des paramètres de GLPI Agent Monitor !"
     IDS_CANCEL              "Annuler"
     IDS_SAVE                "Enregistrer"
@@ -418,7 +421,7 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Errore nell'apertura del servizio GLPI Agent!"
     IDS_ERR_SVCOPERATION    "Errore provando a controllare il servizio GLPI Agent!"
     IDS_SETTINGS            "Impostazioni GLPI Agent Monitor"
-    IDS_SETTINGS_NEWTICKETURL "URL pagina Nuovo ticket"
+    IDS_SETTINGS_NEWTICKET_URL "URL pagina Nuovo ticket"
     IDS_ERR_SAVE_SETTINGS   "Errore salvando le impostazioni di GLPI Agent Monitor!"
     IDS_CANCEL              "Annulla"
     IDS_SAVE                "Salva"
@@ -427,6 +430,109 @@ BEGIN
 END
 
 #endif    // Italiano (Itália) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Holandês (Países Baixos) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
+LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "GLPI Agent - Fout"
+    IDS_GLPINOTIFY          "GLPI Agent"
+    IDS_STATIC_INFO         "Info"
+    IDS_STATIC_AGENTVER     "Agent versie:"
+    IDS_STATIC_SERVICESTATUS "Service status:"
+    IDS_STATIC_STARTTYPE    "Opstart type:"
+    IDS_ERR_AGENTSETTINGS   "GLPI Agent instellingen kon niet worden geladen!\nHerinstalleer de GLPI Agent."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Laden..."
+    IDS_STATIC_AGENTSTATUS  "Agent status"
+    IDS_FORCEINV            "Forceer Inventory"
+    IDS_CLOSE               "Sluiten"
+    IDS_ERR_NOTRESPONDING   "Agent reageert niet!"
+    IDS_ERR_NOTRUNNING      "Agent is niet actief!"
+    IDS_SVCSTART_BOOT       "Boot"
+    IDS_SVCSTART_SYSTEM     "Systeem"
+    IDS_SVCSTART_AUTO       "Automatisch"
+    IDS_SVCSTART_DELAYEDAUTO "Automatisch (Uitgesteld opstarten)"
+    IDS_SVCSTART_MANUAL     "Handmatig"
+    IDS_SVCSTART_DISABLED   "Uitgeschakeld"
+    IDS_ERR_UNKSVCSTART     "Opstart type onbekend!"
+    IDS_ERR_REGFAIL         "Registry query fout!"
+    IDS_ERR_AGENTVERNOTFOUND "Agent versie niet gevonden!"
+    IDS_ERR_AGENTNOTFOUND   "Agent is niet geinstalleerd!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Fout bij het ophalen van de GLPI Agent HTTP-poort!\nHerinstalleer de GLPI Agent."
+    IDS_SVC_STOPPED         "Gestopt"
+    IDS_SVC_RUNNING         "Actief"
+    IDS_SVC_PAUSED          "Gepauzeerd"
+    IDS_SVC_CONTINUEPENDING "Hervatten..."
+    IDS_SVC_PAUSEPENDING    "Pauzeren..."
+    IDS_SVC_STARTPENDING    "Word gestart..."
+    IDS_SVC_STOPPENDING     "Word gestopt..."
+    IDS_ERR_SERVICE         "Service query fout!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Fout"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Forceer Inventory error:\nDe agent reageerde niet op het verzoek."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Forceer Inventory error:\nBewerking niet toegestaan."
+    IDS_MSG_FORCEINV_OK     "Force Inventory verzoek succesvol verzonden naar GLPI Agent."
+    IDS_ERR_AGENTERR        "De Agent heeft een of meer fouten!\nControleer het GLPI Agent Monitor-venster."
+    IDS_RMENU_OPEN          "Openen"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Forceer Inventory"
+    IDS_RMENU_EXIT          "Sluiten"
+    IDS_FILE                "Bestand"
+    IDS_DIR                 "Folder"
+    IDS_ERR_MAINWINDOW      "Fout bij het maken van het hoofdvenster van GLPI Agent Monitor!"
+    IDS_RMENU_NEWTICKET     "Nieuwe ticket..."
+    IDS_ERR_SERVER          "Fout bij ophalen van GLPI-server-URL!\nHerinstalleer de GLPI Agent."
+    IDS_NOTIF_NEWTICKET_TITLE "Er is een schermopname gemaakt"
+    IDS_NOTIF_NEWTICKET     "Druk op CTRL+V in het nieuwe beschrijvings veld om het aan het ticket te koppelen."
+    IDS_NEWTICKET           "Nieuwe ticket..."
+    IDS_VIEWLOGS            "Bekijk agent logs"
+    IDS_RMENU_VIEWLOGS      "Bekijk agent logs"
+    IDS_STARTSVC            " Start service"
+    IDS_STOPSVC             " Stop service"
+    IDS_RESUMESVC           " Hervat service"
+    IDS_WAIT                "Een ogenblik geduld..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Fout bij het verbinden met Windows Service Control Manager!"
+    IDS_ERR_SVCHANDLE       "Fout bij het openen van de GLPI Agent-service!"
+    IDS_ERR_SVCOPERATION    "Fout bij het controleren van de GLPI Agent-service!"
+    IDS_SETTINGS            "GLPI Agent Monitor instellingen"
+    IDS_SETTINGS_NEWTICKET_URL "Nieuwe ticketpagina-URL"
+    IDS_ERR_SAVE_SETTINGS   "Fout bij opslaan van GLPI Agent Monitor-instellingen!"
+    IDS_CANCEL              "Annuleren"
+    IDS_SAVE                "Opslaan"
+    IDS_BTN_SETTINGS        " Instellingen"
+    IDS_RMENU_SETTINGS      "Instellingen"
+END
+
+#endif    // Holandês (Países Baixos) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -457,7 +563,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 350
         TOPMARGIN, 7
-        BOTTOMMARGIN, 62
+        BOTTOMMARGIN, 90
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -524,15 +630,18 @@ BEGIN
     PUSHBUTTON      "IDS_CLOSE",IDC_BTN_CLOSE,88,296,72,16
 END
 
-IDD_DLG_SETTINGS DIALOGEX 0, 0, 357, 69
+IDD_DLG_SETTINGS DIALOGEX 0, 0, 357, 97
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "IDS_SETTINGS"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    GROUPBOX        "IDS_SETTINGS_NEWTICKETURL",IDC_GROUPBOX_NEWTICKETURL,7,7,343,35
-    EDITTEXT        IDC_SETTINGS_EDIT_NEWTICKETURL,14,20,329,14,ES_AUTOHSCROLL
-    PUSHBUTTON      "IDS_CANCEL",IDC_BTN_CANCEL,241,48,50,14
-    DEFPUSHBUTTON   "IDS_SAVE",IDC_BTN_SAVE,300,48,50,14
+    GROUPBOX        "IDS_SETTINGS_NEWTICKET",IDC_SETTINGS_GROUPBOX_NEWTICKET,7,7,343,63
+    EDITTEXT        IDC_SETTINGS_EDIT_NEWTICKET_URL,14,32,329,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "IDS_CANCEL",IDC_SETTINGS_BTN_CANCEL,241,76,50,14
+    DEFPUSHBUTTON   "IDS_SAVE",IDC_SETTINGS_BTN_SAVE,300,76,50,14
+    CONTROL         "IDS_SETTINGS_NEWTICKET_SCREENSHOT",IDC_SETTINGS_CHECKBOX_NEWTICKET_SCREENSHOT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,52,326,10
+    LTEXT           "IDS_SETTINGS_NEWTICKET_URL",IDC_SETTINGS_TEXT_NEWTICKET_URL,16,20,325,8
 END
 
 
@@ -662,12 +771,15 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Erro ao abrir o serviço do GLPI Agent!"
     IDS_ERR_SVCOPERATION    "Erro ao tentar controlar o serviço do GLPI Agent!"
     IDS_SETTINGS            "Configurações do GLPI Agent Monitor"
-    IDS_SETTINGS_NEWTICKETURL "URL da página de abertura de chamados"
+    IDS_SETTINGS_NEWTICKET_URL "URL da página de abertura de chamados"
     IDS_ERR_SAVE_SETTINGS   "Erro ao tentar salvar as configurações do GLPI Agent Monitor!"
     IDS_CANCEL              "Cancelar"
     IDS_SAVE                "Salvar"
     IDS_BTN_SETTINGS        " Configurações"
     IDS_RMENU_SETTINGS      "Configurações"
+    IDS_SETTINGS_NEWTICKET  "Abrir chamado"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Habilitar captura de tela ao clicar no botão ""Abrir chamado"""
 END
 
 #endif    // Português (Brasil) resources
@@ -765,7 +877,7 @@ BEGIN
     IDS_ERR_SVCHANDLE       "Error al abrir el servicio de GLPI Agent"
     IDS_ERR_SVCOPERATION    "Error al tomar el control del servicio de GLPI Agent"
     IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKETURL "New ticket page URL"
+    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
     IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
     IDS_CANCEL              "Cancel"
     IDS_SAVE                "Save"
@@ -776,107 +888,7 @@ END
 #endif    // Espanhol (Uruguai) resources
 /////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////
-// Dutch resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NLD)
-LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE
-BEGIN
-IDS_APP_TITLE           "GLPI Agent Monitor"
-IDS_GLPINOTIFYERROR     "GLPI Agent - Fout"
-IDS_GLPINOTIFY          "GLPI Agent"
-IDS_STATIC_INFO         "Info"
-IDS_STATIC_AGENTVER     "Agent versie:"
-IDS_STATIC_SERVICESTATUS "Service status:"
-IDS_STATIC_STARTTYPE    "Opstart type:"
-IDS_ERR_AGENTSETTINGS   "GLPI Agent instellingen kon niet worden geladen!\nHerinstalleer de GLPI Agent."
-END
-
-STRINGTABLE
-BEGIN
-IDS_LOADING             "Laden..."
-IDS_STATIC_AGENTSTATUS  "Agent status"
-IDS_FORCEINV            "Forceer Inventory"
-IDS_CLOSE               "Sluiten"
-IDS_ERR_NOTRESPONDING   "Agent reageert niet!"
-IDS_ERR_NOTRUNNING      "Agent is niet actief!"
-IDS_SVCSTART_BOOT       "Boot"
-IDS_SVCSTART_SYSTEM     "Systeem"
-IDS_SVCSTART_AUTO       "Automatisch"
-IDS_SVCSTART_DELAYEDAUTO "Automatisch (Uitgesteld opstarten)"
-IDS_SVCSTART_MANUAL     "Handmatig"
-IDS_SVCSTART_DISABLED   "Uitgeschakeld"
-IDS_ERR_UNKSVCSTART     "Opstart type onbekend!"
-IDS_ERR_REGFAIL         "Registry query fout!"
-IDS_ERR_AGENTVERNOTFOUND "Agent versie niet gevonden!"
-IDS_ERR_AGENTNOTFOUND   "Agent is niet geinstalleerd!"
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_HTTPDPORT       "Fout bij het ophalen van de GLPI Agent HTTP-poort!\nHerinstalleer de GLPI Agent."
-IDS_SVC_STOPPED         "Gestopt"
-IDS_SVC_RUNNING         "Actief"
-IDS_SVC_PAUSED          "Gepauzeerd"
-IDS_SVC_CONTINUEPENDING "Hervatten..."
-IDS_SVC_PAUSEPENDING    "Pauzeren..."
-IDS_SVC_STARTPENDING    "Word gestart..."
-IDS_SVC_STOPPENDING     "Word gestopt..."
-IDS_ERR_SERVICE         "Service query fout!"
-IDS_OK                  "OK"
-IDS_ERROR               "GLPI Agent Monitor - Fout"
-IDS_ERR_FORCEINV_NORESPONSE
-                        "Forceer Inventory error:\nDe agent reageerde niet op het verzoek."
-IDS_ERR_FORCEINV_NOTALLOWED
-                        "Forceer Inventory error:\nBewerking niet toegestaan."
-IDS_MSG_FORCEINV_OK     "Force Inventory verzoek succesvol verzonden naar GLPI Agent."
-IDS_ERR_AGENTERR        "De Agent heeft een of meer fouten!\nControleer het GLPI Agent Monitor-venster."
-IDS_RMENU_OPEN          "Openen"
-END
-
-STRINGTABLE
-BEGIN
-IDS_RMENU_FORCE         "Forceer Inventory"
-IDS_RMENU_EXIT          "Sluiten"
-IDS_FILE                "Bestand"
-IDS_DIR                 "Folder"
-IDS_ERR_MAINWINDOW      "Fout bij het maken van het hoofdvenster van GLPI Agent Monitor!"
-IDS_RMENU_NEWTICKET     "Nieuwe ticket..."
-IDS_ERR_SERVER          "Fout bij ophalen van GLPI-server-URL!\nHerinstalleer de GLPI Agent."
-IDS_NOTIF_NEWTICKET_TITLE "Er is een schermopname gemaakt"
-IDS_NOTIF_NEWTICKET     "Druk op CTRL+V in het nieuwe beschrijvings veld om het aan het ticket te koppelen."
-IDS_NEWTICKET           "Nieuwe ticket..."
-IDS_VIEWLOGS            "Bekijk agent logs"
-IDS_RMENU_VIEWLOGS      "Bekijk agent logs"
-IDS_STARTSVC            " Start service"
-IDS_STOPSVC             " Stop service"
-IDS_RESUMESVC           " Hervat service"
-IDS_WAIT                "Een ogenblik geduld..."
-END
-
-STRINGTABLE
-BEGIN
-IDS_ERR_SCHANDLE        "Fout bij het verbinden met Windows Service Control Manager!"
-IDS_ERR_SVCHANDLE       "Fout bij het openen van de GLPI Agent-service!"
-IDS_ERR_SVCOPERATION    "Fout bij het controleren van de GLPI Agent-service!"
-IDS_SETTINGS            "GLPI Agent Monitor instellingen"
-IDS_SETTINGS_NEWTICKETURL "Nieuwe ticketpagina-URL"
-IDS_ERR_SAVE_SETTINGS   "Fout bij opslaan van GLPI Agent Monitor-instellingen!"
-IDS_CANCEL              "Annuleren"
-IDS_SAVE                "Opslaan"
-IDS_BTN_SETTINGS        " Instellingen"
-IDS_RMENU_SETTINGS      "Instellingen"
-END
-
-#endif    // Dutch resources
-/////////////////////////////////////////////////////////////////////////////
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
