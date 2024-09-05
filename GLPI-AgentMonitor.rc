@@ -888,7 +888,110 @@ END
 #endif    // Espanhol (Uruguai) resources
 /////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////
+// Català (Catalunya,València) resources
 
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_CATALAN, SUBLANG_CATALAN_CA
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
+    IDS_GLPINOTIFY          "GLPI Agent"
+    IDS_STATIC_INFO         "Info"
+    IDS_STATIC_AGENTVER     "Versió de l'Agent:"
+    IDS_STATIC_SERVICESTATUS "Estat del servei:"
+    IDS_STATIC_STARTTYPE    "Mode d'inici:"
+    IDS_ERR_AGENTSETTINGS   "Error carregant la configuració!\nS'ha de reinstal·lar l'Agent."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Carregant..."
+    IDS_STATIC_AGENTSTATUS  "Estat del servei"
+    IDS_FORCEINV            "Forçar Inventari"
+    IDS_CLOSE               "Tancar"
+    IDS_ERR_NOTRESPONDING   "L'Agent no respon!"
+    IDS_ERR_NOTRUNNING      "L'Agent no s'està executant!"
+    IDS_SVCSTART_BOOT       "Boot"
+    IDS_SVCSTART_SYSTEM     "Sistema"
+    IDS_SVCSTART_AUTO       "Automàtic"
+    IDS_SVCSTART_DELAYEDAUTO "Automàtic (Inici desencadenat)"
+    IDS_SVCSTART_MANUAL     "Manual"
+    IDS_SVCSTART_DISABLED   "Deshabilitat"
+    IDS_ERR_UNKSVCSTART     "Mode d'inici desconnegut!"
+    IDS_ERR_REGFAIL         "Obtenció de registre fallat!"
+    IDS_ERR_AGENTVERNOTFOUND "Versió de l'Agent desconneguda!"
+    IDS_ERR_AGENTNOTFOUND   "L'Agent no està instal·lat!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Error getting GLPI Agent HTTP port!\nThe agent must be reinstalled."
+    IDS_SVC_STOPPED         "Stopped"
+    IDS_SVC_RUNNING         "Running"
+    IDS_SVC_PAUSED          "Paused"
+    IDS_SVC_CONTINUEPENDING "Resuming..."
+    IDS_SVC_PAUSEPENDING    "Pausing..."
+    IDS_SVC_STARTPENDING    "Starting..."
+    IDS_SVC_STOPPENDING     "Stopping..."
+    IDS_ERR_SERVICE         "Service query failure!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Error"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Force inventory error:\nThe agent did not respond to the request."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Force inventory error:\nOperation not allowed."
+    IDS_MSG_FORCEINV_OK     "Force inventory request successfully sent to GLPI Agent."
+    IDS_ERR_AGENTERR        "The agent has one or more errors!\nPlease check the GLPI Agent Monitor window."
+    IDS_RMENU_OPEN          "Open"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Force Inventory"
+    IDS_RMENU_EXIT          "Exit"
+    IDS_FILE                "File"
+    IDS_DIR                 "Directory"
+    IDS_ERR_MAINWINDOW      "Error creating GLPI Agent Monitor main window!"
+    IDS_RMENU_NEWTICKET     "New ticket..."
+    IDS_ERR_SERVER          "Error getting GLPI server URL!\nThe agent must be reinstalled."
+    IDS_NOTIF_NEWTICKET_TITLE "A screen capture was taken"
+    IDS_NOTIF_NEWTICKET     "Press CTRL+V in the new ticket description panel to attach it to the ticket."
+    IDS_NEWTICKET           "New ticket..."
+    IDS_VIEWLOGS            "View agent logs"
+    IDS_RMENU_VIEWLOGS      "View agent logs"
+    IDS_STARTSVC            " Start service"
+    IDS_STOPSVC             " Stop service"
+    IDS_RESUMESVC           " Resume service"
+    IDS_WAIT                "Please wait..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Error connecting to the Windows Service Control Manager!"
+    IDS_ERR_SVCHANDLE       "Error opening the GLPI Agent service!"
+    IDS_ERR_SVCOPERATION    "Error trying to control the GLPI Agent service!"
+    IDS_SETTINGS            "GLPI Agent Monitor settings"
+    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
+    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
+    IDS_CANCEL              "Cancel"
+    IDS_SAVE                "Save"
+    IDS_BTN_SETTINGS        " Settings"
+    IDS_RMENU_SETTINGS      "Settings"
+    IDS_SETTINGS_NEWTICKET  "New ticket"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Enable screen capture when clicking the ""New ticket"" button"
+END
+
+#endif    // Català (Catalunya,València) resources
+/////////////////////////////////////////////////////////////////////////////
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
