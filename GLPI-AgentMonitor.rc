@@ -933,64 +933,64 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ERR_HTTPDPORT       "Error getting GLPI Agent HTTP port!\nThe agent must be reinstalled."
-    IDS_SVC_STOPPED         "Stopped"
-    IDS_SVC_RUNNING         "Running"
-    IDS_SVC_PAUSED          "Paused"
-    IDS_SVC_CONTINUEPENDING "Resuming..."
-    IDS_SVC_PAUSEPENDING    "Pausing..."
-    IDS_SVC_STARTPENDING    "Starting..."
-    IDS_SVC_STOPPENDING     "Stopping..."
-    IDS_ERR_SERVICE         "Service query failure!"
+    IDS_ERR_HTTPDPORT       "Hi ha hagut un error en obtenir el port HTTP de l'Agent!\nS'ha de reinstal·lar l'Agent."
+    IDS_SVC_STOPPED         "Aturat"
+    IDS_SVC_RUNNING         "Executant-se"
+    IDS_SVC_PAUSED          "Pausat"
+    IDS_SVC_CONTINUEPENDING "Reprenent..."
+    IDS_SVC_PAUSEPENDING    "Pausant..."
+    IDS_SVC_STARTPENDING    "Iniciant-se..."
+    IDS_SVC_STOPPENDING     "Aturant-se..."
+    IDS_ERR_SERVICE         "Obtenció del servei fallada!"
     IDS_OK                  "OK"
     IDS_ERROR               "GLPI Agent Monitor - Error"
     IDS_ERR_FORCEINV_NORESPONSE 
-                            "Force inventory error:\nThe agent did not respond to the request."
+                            "Hi ha hagut un error forçant l'Inventari:\nL'Agent no ha respost a l'ordre."
     IDS_ERR_FORCEINV_NOTALLOWED 
-                            "Force inventory error:\nOperation not allowed."
-    IDS_MSG_FORCEINV_OK     "Force inventory request successfully sent to GLPI Agent."
-    IDS_ERR_AGENTERR        "The agent has one or more errors!\nPlease check the GLPI Agent Monitor window."
-    IDS_RMENU_OPEN          "Open"
+                            "Hi ha hagut un error forçant l'Inventari:\nOperació no permesa."
+    IDS_MSG_FORCEINV_OK     "Inventari forçat enviat correctament a l'Agent."
+    IDS_ERR_AGENTERR        "Hi ha hagut un o més errors a l'Agent!\nSi us plau, comprova l'estat a la finestra de l'Agent."
+    IDS_RMENU_OPEN          "Obre"
 END
 
 STRINGTABLE
 BEGIN
-    IDS_RMENU_FORCE         "Force Inventory"
-    IDS_RMENU_EXIT          "Exit"
-    IDS_FILE                "File"
-    IDS_DIR                 "Directory"
-    IDS_ERR_MAINWINDOW      "Error creating GLPI Agent Monitor main window!"
-    IDS_RMENU_NEWTICKET     "New ticket..."
-    IDS_ERR_SERVER          "Error getting GLPI server URL!\nThe agent must be reinstalled."
-    IDS_NOTIF_NEWTICKET_TITLE "A screen capture was taken"
-    IDS_NOTIF_NEWTICKET     "Press CTRL+V in the new ticket description panel to attach it to the ticket."
-    IDS_NEWTICKET           "New ticket..."
-    IDS_VIEWLOGS            "View agent logs"
-    IDS_RMENU_VIEWLOGS      "View agent logs"
-    IDS_STARTSVC            " Start service"
-    IDS_STOPSVC             " Stop service"
-    IDS_RESUMESVC           " Resume service"
-    IDS_WAIT                "Please wait..."
+    IDS_RMENU_FORCE         "Forçar Inventari"
+    IDS_RMENU_EXIT          "Sortir"
+    IDS_FILE                "Fitxer"
+    IDS_DIR                 "Directori"
+    IDS_ERR_MAINWINDOW      "Error creant la finestra principal del GLPI Agent Monitor."
+    IDS_RMENU_NEWTICKET     "Obrir tiquet"
+    IDS_ERR_SERVER          "Hi ha hagut un error obtenint l'URL!\nS'ha de reinstal·lar l'Agent."
+    IDS_NOTIF_NEWTICKET_TITLE "S'ha fet una captura de pantalla"
+    IDS_NOTIF_NEWTICKET     "Prem CTRL+V a la nova finestra de la incidència per adjuntar-ho al nou tiquet."
+    IDS_NEWTICKET           "Obrir tiquet..."
+    IDS_VIEWLOGS            "Veure els logs de l'Agent"
+    IDS_RMENU_VIEWLOGS      "Veure els logs de l'Agent"
+    IDS_STARTSVC            " Iniciar service"
+    IDS_STOPSVC             " Aturar servei"
+    IDS_RESUMESVC           " Rependre el servei"
+    IDS_WAIT                "Si us plau, espera..."
 END
 
 STRINGTABLE
 BEGIN
-    IDS_ERR_SCHANDLE        "Error connecting to the Windows Service Control Manager!"
-    IDS_ERR_SVCHANDLE       "Error opening the GLPI Agent service!"
-    IDS_ERR_SVCOPERATION    "Error trying to control the GLPI Agent service!"
-    IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
-    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
-    IDS_CANCEL              "Cancel"
-    IDS_SAVE                "Save"
-    IDS_BTN_SETTINGS        " Settings"
-    IDS_RMENU_SETTINGS      "Settings"
-    IDS_SETTINGS_NEWTICKET  "New ticket"
+    IDS_ERR_SCHANDLE        "Hi ha hagut un error connectant amb el Windows Service Control Manager!"
+    IDS_ERR_SVCHANDLE       "Hi ha hagut un error obrint el servei del GLPI Agent!"
+    IDS_ERR_SVCOPERATION    "Hi ha hagut un error intentnat controlar el servei del GLPI Agent!"
+    IDS_SETTINGS            "Configuració del GLPI Agent Monitor"
+    IDS_SETTINGS_NEWTICKET_URL "URL de la pàgina de Nou Tiquet"
+    IDS_ERR_SAVE_SETTINGS   "Hi ha hagut un error guardant la configuració del GLPI Agent Monitor!"
+    IDS_CANCEL              "Cancelar"
+    IDS_SAVE                "Guardar"
+    IDS_BTN_SETTINGS        " Configuració"
+    IDS_RMENU_SETTINGS      "Configuració"
+    IDS_SETTINGS_NEWTICKET  "Nou tiquet"
     IDS_SETTINGS_NEWTICKET_SCREENSHOT 
-                            "Enable screen capture when clicking the ""New ticket"" button"
+                            "Fer una captura de pantalla quan es premi el botó de ""Nou tiquet"""
 END
 
-#endif    // Català (Catalunya,València) resources
+#endif    // Català (Catalunya, València) resources
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef APSTUDIO_INVOKED
