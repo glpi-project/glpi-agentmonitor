@@ -530,6 +530,9 @@ BEGIN
     IDS_SAVE                "Opslaan"
     IDS_BTN_SETTINGS        " Instellingen"
     IDS_RMENU_SETTINGS      "Instellingen"
+    IDS_SETTINGS_NEWTICKET  "Nieuwe ticket"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Schermopname inschakelen wanneer u op de ""Nieuwe ticket"" knop drukt"
 END
 
 #endif    // Holandês (Países Baixos) resources
