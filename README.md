@@ -42,6 +42,7 @@ Official releases are provided by the [glpi-project/glpi-agentmonitor](https://g
  - Russian (by [Fedorov Nikolay](https://github.com/kofe88))
  - Spanish (Uruguay) (by [Luis Giordano](https://github.com/Iruxos))
  - Dutch (by [Jeffrey Jansma](https://github.com/perplexityjeff))
+ - Catalan (by [Bertu Garangou](https://github.com/bertugarangou))
 
 If you want to translate the project to your language, feel free to fork the [development repository](https://github.com/redddcyclone/glpi-agentmonitor), insert a string table for your language in the `GLPI-AgentMonitor.rc` file (use Visual Studio) and open a pull request with your changes.
 
