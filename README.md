@@ -40,7 +40,7 @@ Official releases are provided by the [glpi-project/glpi-agentmonitor](https://g
  - Italian (by [Kintaro Oe](https://github.com/kintaro1981))
  - French (by [Guillaume Bougard](https://github.com/g-bougard))
  - Russian (by [Fedorov Nikolay](https://github.com/kofe88))
- - Spanish (Uruguay) (by [Luis Giordano](https://github.com/Iruxos))
+ - Spanish (by [Luis Giordano](https://github.com/Iruxos) and [Bertu Garangou](https://github.com/bertugarangou))
  - Dutch (by [Jeffrey Jansma](https://github.com/perplexityjeff))
  - Catalan (by [Bertu Garangou](https://github.com/bertugarangou))
 
