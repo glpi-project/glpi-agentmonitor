@@ -879,13 +879,13 @@ BEGIN
     IDS_ERR_SCHANDLE        "Error al conectar al Administrador de Servicios de Windows!"
     IDS_ERR_SVCHANDLE       "Error al abrir el servicio de GLPI Agent"
     IDS_ERR_SVCOPERATION    "Error al tomar el control del servicio de GLPI Agent"
-    IDS_SETTINGS            "GLPI Agent Monitor settings"
-    IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
-    IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
-    IDS_CANCEL              "Cancel"
-    IDS_SAVE                "Save"
-    IDS_BTN_SETTINGS        " Settings"
-    IDS_RMENU_SETTINGS      "Settings"
+    IDS_SETTINGS            "Configuración de GLPI Agent Monitor"
+    IDS_SETTINGS_NEWTICKET_URL "URL de la página de Crear ticket"
+    IDS_ERR_SAVE_SETTINGS   "Error guardando la configuración de GLPI Agent Monitor!"
+    IDS_CANCEL              "Cancelar"
+    IDS_SAVE                "Guardar"
+    IDS_BTN_SETTINGS        " Configuración"
+    IDS_RMENU_SETTINGS      "Configuración"
 END
 
 #endif    // Espanhol (Uruguai) resources
