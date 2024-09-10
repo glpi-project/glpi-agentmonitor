@@ -886,6 +886,9 @@ BEGIN
     IDS_SAVE                "Guardar"
     IDS_BTN_SETTINGS        " Configuración"
     IDS_RMENU_SETTINGS      "Configuración"
+    IDS_SETTINGS_NEWTICKET  "Crear ticket"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Habilitar la captura pantalla cuando se pulse el botón de ""Crear ticket"""
 END
 
 #endif    // Espanhol (Uruguai) resources
