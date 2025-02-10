@@ -346,14 +346,14 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 STRINGTABLE
 BEGIN
-    IDS_APP_TITLE           "GLPI Agent Monitor"
-    IDS_GLPINOTIFYERROR     "GLPI Agent - Error"
-    IDS_GLPINOTIFY          "GLPI Agent"
+    IDS_APP_TITLE           "Agent Monitor"
+    IDS_GLPINOTIFYERROR     "Agent - Error"
+    IDS_GLPINOTIFY          "Agent"
     IDS_STATIC_INFO         "Info"
     IDS_STATIC_AGENTVER     "Agent version:"
     IDS_STATIC_SERVICESTATUS "Service status:"
     IDS_STATIC_STARTTYPE    "Startup type:"
-    IDS_ERR_AGENTSETTINGS   "Error loading GLPI Agent settings!\nThe agent must be reinstalled."
+    IDS_ERR_AGENTSETTINGS   "Error loading Agent settings!\nThe agent must be reinstalled."
 END
 
 STRINGTABLE
@@ -388,7 +388,7 @@ BEGIN
     IDS_SVC_STOPPENDING     "Stopping..."
     IDS_ERR_SERVICE         "Service query failure!"
     IDS_OK                  "OK"
-    IDS_ERROR               "GLPI Agent Monitor - Error"
+    IDS_ERROR               "Agent Monitor - Error"
     IDS_ERR_FORCEINV_NORESPONSE 
                             "Force inventory error:\nThe agent did not respond to the request."
     IDS_ERR_FORCEINV_NOTALLOWED 
@@ -421,8 +421,8 @@ END
 STRINGTABLE
 BEGIN
     IDS_ERR_SCHANDLE        "Error connecting to the Windows Service Control Manager!"
-    IDS_ERR_SVCHANDLE       "Error opening the GLPI Agent service!"
-    IDS_ERR_SVCOPERATION    "Error trying to control the GLPI Agent service!"
+    IDS_ERR_SVCHANDLE       "Error opening the Agent service!"
+    IDS_ERR_SVCOPERATION    "Error trying to control the Agent service!"
     IDS_SETTINGS            "GLPI Agent Monitor settings"
     IDS_SETTINGS_NEWTICKET_URL "New ticket page URL"
     IDS_ERR_SAVE_SETTINGS   "Error saving GLPI Agent Monitor settings!"
