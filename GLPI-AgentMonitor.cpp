@@ -1,7 +1,7 @@
 /*
  *  ---------------------------------------------------------------------------
  *  GLPI-AgentMonitor.cpp
- *  Copyright (C) 2023, 2024 Leonardo Bernardes (redddcyclone)
+ *  Copyright (C) 2023, 2025 Leonardo Bernardes (redddcyclone)
  *  ---------------------------------------------------------------------------
  * 
  *  LICENSE
@@ -441,7 +441,9 @@ VOID CALLBACK UpdateServiceStatus(HWND hWnd, UINT message, UINT idTimer, DWORD d
 
         HWND hWndSvcButton = GetDlgItem(hWnd, IDC_BTN_STARTSTOPSVC);
         EnableWindow(hWndSvcButton, bEnableButton);
-        SetFocus(hWndSvcButton);
+        if (IsWindowVisible(hWnd)) {
+            SetFocus(hWndSvcButton);
+        }
 
         // Taskbar icon routine
         if (svcStatus.dwCurrentState != SERVICE_RUNNING)

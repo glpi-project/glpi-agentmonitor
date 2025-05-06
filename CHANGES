@@ -1,5 +1,13 @@
 Revision history for GLPI Agent Monitor
 
+Future version
+
+* Fixed a bug where pressing the Space or Enter/Return keys during a restart
+  of the Agent service can cause the Start/Stop service button to be pressed
+  even when the Monitor window is not visible, triggering a UAC prompt if the
+  user is not an administrator.
+  
+
 1.4.0
 
 * Dutch translation added
