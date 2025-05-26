@@ -1,33 +1,33 @@
 Revision history for GLPI Agent Monitor
 
-Future version
+1.4.1
 
 * Fixed a bug where pressing the Space or Enter/Return keys during a restart
   of the Agent service can cause the Start/Stop service button to be pressed
   even when the Monitor window is not visible, triggering a UAC prompt if the
   user is not an administrator.
-  
+
 
 1.4.0
 
 * Dutch translation added
   Thanks Jeffrey Jansma (@perplexityjeff)
-  
+
 * Catalan translation added
   Thanks Bertu Garangou (@bertugarangou)
-  
+
 * When trying to run GLPI Agent Monitor (from Start Menu or directly from the
   executable) and another instance is already running, the running Monitor's
   window will now be shown. (This won't work if the Monitor's running instance
   is elevated)
-  
+
 * Disabled the check for "http://" or "https://" on the GLPI Agent server URL
   parameter, because the URL may be valid without them.
 
 * Fixed a bug where "New Ticket" showed an error if the server URL didn't start
   with "http://" or "https://". This error persisted even after setting a custom
   new ticket URL and the Monitor wasn't closed and reopened after this.
-  
+
 * Added a setting to control whether a screenshot is taken when clicking the
   "New Ticket" button.
 
