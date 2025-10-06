@@ -1,5 +1,11 @@
 Revision history for GLPI Agent Monitor
 
+Future version
+
+* Polish translation added
+  Thanks adamcios (@adamcios)
+  
+
 1.4.1
 
 * Fixed a bug where pressing the Space or Enter/Return keys during a restart

@@ -20,6 +20,112 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
+// Polonês (Polônia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "GLPI Agent - Błąd"
+    IDS_GLPINOTIFY          "GLPI Agent"
+    IDS_STATIC_INFO         "Informacje"
+    IDS_STATIC_AGENTVER     "Wersja agenta:"
+    IDS_STATIC_SERVICESTATUS "Status usługi:"
+    IDS_STATIC_STARTTYPE    "Typ uruchomienia:"
+    IDS_ERR_AGENTSETTINGS   "Błąd ładowania ustawień Agenta GLPI!\nNależy ponownie zainstalować Agenta GLPI."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Ładowanie..."
+    IDS_STATIC_AGENTSTATUS  "Status Agenta"
+    IDS_FORCEINV            "Wymuś inwentaryzację"
+    IDS_CLOSE               "Zamknij"
+    IDS_ERR_NOTRESPONDING   "Agent nie odpowiada!"
+    IDS_ERR_NOTRUNNING      "Agent nie jest uruchomiony!"
+    IDS_SVCSTART_BOOT       "Rozruch"
+    IDS_SVCSTART_SYSTEM     "System"
+    IDS_SVCSTART_AUTO       "Automatyczny"
+    IDS_SVCSTART_DELAYEDAUTO "Automatyczny (opóźn.)"
+    IDS_SVCSTART_MANUAL     "Ręczny"
+    IDS_SVCSTART_DISABLED   "Wyłączony"
+    IDS_ERR_UNKSVCSTART     "Nieznany typ uruchomienia!"
+    IDS_ERR_REGFAIL         "Błąd odczytu rejestru!"
+    IDS_ERR_AGENTVERNOTFOUND "Nie znaleziono wersji Agenta!"
+    IDS_ERR_AGENTNOTFOUND   "Nie zainstalowano Agenta!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Błąd odczytu portu HTTP Agenta GLPI!\nNależy ponownie zainstalować agenta."
+    IDS_SVC_STOPPED         "Zatrzymany"
+    IDS_SVC_RUNNING         "Uruchomiony"
+    IDS_SVC_PAUSED          "Wstrzymany"
+    IDS_SVC_CONTINUEPENDING "Wznawianie..."
+    IDS_SVC_PAUSEPENDING    "Wstrzymywanie..."
+    IDS_SVC_STARTPENDING    "Uruchamianie..."
+    IDS_SVC_STOPPENDING     "Zatrzymywanie..."
+    IDS_ERR_SERVICE         "Błąd odczytu stanu usługi!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Błąd"
+    IDS_ERR_FORCEINV_NORESPONSE 
+                            "Błąd wymuszenia inwentaryzacji:\nAgent nie odpowiedział na żądanie."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Błąd wymuszenia inwentaryzacji:\nOperacja niedozwolona."
+    IDS_MSG_FORCEINV_OK     "Pomyślnie wysłano żądanie wymuszenia inwentaryzacji do Agenta GLPI."
+    IDS_ERR_AGENTERR        "Agent zgłasza jeden lub więcej błędów!\nSprawdź okno  GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Otwórz"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Wymuś inwentaryzację"
+    IDS_RMENU_EXIT          "Wyjście"
+    IDS_FILE                "Plik"
+    IDS_DIR                 "Folder"
+    IDS_ERR_MAINWINDOW      "Błąd tworzenia głownego okna GLPI Agent Monitor!"
+    IDS_RMENU_NEWTICKET     "Nowe zgłoszenie..."
+    IDS_ERR_SERVER          "Błąd odczytuadresu URL serwera GLPI!\nNależy ponownie zainstalować agenta."
+    IDS_NOTIF_NEWTICKET_TITLE "Wykonano zrzut ekranu"
+    IDS_NOTIF_NEWTICKET     "Naciśnij CTRL+V w polu opisu nowego zgłoszenia, aby dołączyć zrzut ekranu do zgłoszenia."
+    IDS_NEWTICKET           "Nowe zgłoszenie..."
+    IDS_VIEWLOGS            "Wyświetl logi agenta"
+    IDS_RMENU_VIEWLOGS      "Wyświetl logi agenta"
+    IDS_STARTSVC            " Uruchom usługę"
+    IDS_STOPSVC             " Ztrzymaj usługę"
+    IDS_RESUMESVC           " Wznów usługę"
+    IDS_WAIT                "Proszę czekać..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Błąd połączenia z menadżerem sterowania usługami Windows!"
+    IDS_ERR_SVCHANDLE       "Błąd otwierania usługi GLPI Agent!"
+    IDS_ERR_SVCOPERATION    "Błąd podczas próby sterowania usługą GLPI Agent!"
+    IDS_SETTINGS            "Ustawienia GLPI Agent Monitor"
+    IDS_SETTINGS_NEWTICKET_URL "Adres URL strony nowego zgłoszenia"
+    IDS_ERR_SAVE_SETTINGS   "Błąd zapisywania ustawień GLPI Agent Monitor!"
+    IDS_CANCEL              "Anuluj"
+    IDS_SAVE                "Zapisz"
+    IDS_BTN_SETTINGS        " Ustawienia"
+    IDS_RMENU_SETTINGS      "Ustawienia"
+    IDS_SETTINGS_NEWTICKET  "Nowe zgłoszenie"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Włącz wykonywanie zrzutu ekranu po kliknięciu przycisku ""Nowe zgłoszenie"""
+END
+
+#endif    // Polonês (Polônia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
 // Russo (Rússia) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
@@ -838,11 +944,11 @@ BEGIN
     RTEXT           "IDS_LOADING",IDC_STARTTYPE,100,157,128,8
     CONTROL         "",IDC_PCLOGO,"Static",SS_BITMAP,94,9,15,13
     DEFPUSHBUTTON   "IDS_STARTSVC",IDC_BTN_STARTSTOPSVC,82,177,86,16
-    PUSHBUTTON      "IDS_FORCEINV",IDC_BTN_FORCE,44,248,72,16
-    PUSHBUTTON      "IDS_NEWTICKET",IDC_BTN_NEWTICKET,132,248,72,16
-    PUSHBUTTON      "IDS_VIEWLOGS",IDC_BTN_VIEWLOGS,44,272,72,16
-    PUSHBUTTON      "IDS_BTN_SETTINGS",IDC_BTN_SETTINGS,132,272,72,16
-    PUSHBUTTON      "IDS_CLOSE",IDC_BTN_CLOSE,88,296,72,16
+    PUSHBUTTON      "IDS_FORCEINV",IDC_BTN_FORCE,39,248,82,16
+    PUSHBUTTON      "IDS_NEWTICKET",IDC_BTN_NEWTICKET,127,248,82,16
+    PUSHBUTTON      "IDS_VIEWLOGS",IDC_BTN_VIEWLOGS,39,272,82,16
+    PUSHBUTTON      "IDS_BTN_SETTINGS",IDC_BTN_SETTINGS,127,272,82,16
+    PUSHBUTTON      "IDS_CLOSE",IDC_BTN_CLOSE,83,296,82,16
 END
 
 IDD_DLG_SETTINGS DIALOGEX 0, 0, 357, 97
