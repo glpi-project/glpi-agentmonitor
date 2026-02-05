@@ -99,7 +99,7 @@ BEGIN
     IDS_VIEWLOGS            "Wyświetl logi agenta"
     IDS_RMENU_VIEWLOGS      "Wyświetl logi agenta"
     IDS_STARTSVC            " Uruchom usługę"
-    IDS_STOPSVC             " Ztrzymaj usługę"
+    IDS_STOPSVC             " Zatrzymaj usługę"
     IDS_RESUMESVC           " Wznów usługę"
     IDS_WAIT                "Proszę czekać..."
 END
