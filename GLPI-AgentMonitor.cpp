@@ -75,6 +75,9 @@ LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 // Settings dialog message processing callback
 LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+// Command line used to execute the Monitor
+WCHAR szCmdLine[1024];
+
 // App instance
 HINSTANCE hInst;
 
@@ -207,6 +210,51 @@ VOID LoadStringAndMessageBox(HINSTANCE hIns, HWND hWn, UINT msgResId, UINT title
         LocalFree(errMsgBuf);
     }
     MessageBox(hWn, szBuf, szTitleBuf, mbFlags);
+}
+
+VOID LoadMonitorSettings()
+{
+    HKEY hk;
+    WCHAR szKey[MAX_PATH];
+
+    // Load GLPI Agent Monitor settings from registry
+    wsprintf(szKey, L"SOFTWARE\\%s\\Monitor", SERVICE_NAME);
+    LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
+    if (lRes != ERROR_SUCCESS)
+    {
+        wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Monitor", SERVICE_NAME);
+        lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
+    }
+
+    // Here I won't check if the key could be opened, as
+    // this is already checked when RegQueryValueEx below
+    // does not return ERROR_SUCCESS.
+
+    // Get new ticket URL
+    DWORD szNewTicketURLLen = sizeof(szNewTicketURL);
+    lRes = RegQueryValueEx(hk, L"NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
+    if (lRes != ERROR_SUCCESS || !wcscmp(szNewTicketURL, L"")) {
+        // Default value if not found or empty
+        if (wcsncmp(L"https://", szServer, 8) != 0 && wcsncmp(L"http://", szServer, 7) != 0) {
+            // Place an "http://" before the URL so that it is at least opened by the system's
+            // default browser instead of doing nothing or unexpected behavior, even if
+            // for some reason the Agent's "server" parameter is empty
+            wsprintf(szNewTicketURL, L"http://%s/front/ticket.form.php", szServer);
+        }
+        else {
+            wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
+        }
+    }
+
+    // Get new ticket screenshot enable
+    DWORD dwNewTicketScreenshotTmp = NULL;
+    DWORD dwNewTicketScreenshotLen = sizeof(dwNewTicketScreenshotTmp);
+    lRes = RegQueryValueExW(hk, L"NewTicket-Screenshot", 0, NULL, (LPBYTE)&dwNewTicketScreenshotTmp, &dwNewTicketScreenshotLen);
+    if (lRes == ERROR_SUCCESS) {
+        bNewTicketScreenshot = (dwNewTicketScreenshotTmp == 1);
+    }
+
+    RegCloseKey(hk);
 }
 
 // Unsets the asynchronous callback and close the WinHttp handle
@@ -630,12 +678,13 @@ HWND GetRunningMonitorHwnd() {
 // Entry point
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
+    wsprintf(szCmdLine, L"%s", lpCmdLine);
     hInst = hInstance;
     DWORD dwErr = NULL;
 
     // Process service operations
-    if (wcsstr(lpCmdLine, L"/startSvc") != nullptr || wcsstr(lpCmdLine, L"/stopSvc") != nullptr ||
-        wcsstr(lpCmdLine, L"/continueSvc") != nullptr) {
+    if (wcsstr(szCmdLine, L"/startSvc") != nullptr || wcsstr(szCmdLine, L"/stopSvc") != nullptr ||
+        wcsstr(szCmdLine, L"/continueSvc") != nullptr) {
         SC_HANDLE hSc = OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT);
         if (!hSc) {
             dwErr = GetLastError();
@@ -648,11 +697,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
             LoadStringAndMessageBox(hInst, NULL, IDS_ERR_SVCHANDLE, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
             return dwErr;
         }
-        if (wcsstr(lpCmdLine, L"/startSvc") != nullptr)
+        if (wcsstr(szCmdLine, L"/startSvc") != nullptr)
             StartService(hAgentSvc, NULL, NULL);
-        else if (wcsstr(lpCmdLine, L"/stopSvc") != nullptr)
+        else if (wcsstr(szCmdLine, L"/stopSvc") != nullptr)
             ControlService(hAgentSvc, SERVICE_CONTROL_STOP, &svcStatus);
-        else if (wcsstr(lpCmdLine, L"/continueSvc") != nullptr)
+        else if (wcsstr(szCmdLine, L"/continueSvc") != nullptr)
             ControlService(hAgentSvc, SERVICE_CONTROL_CONTINUE, &svcStatus);
         dwErr = GetLastError();
         if (dwErr != NULL) {
@@ -664,39 +713,48 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         return 0;
     }
 
-    // Process elevation request (kill previous process)
-    if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
-    {
-        HWND runningMonitorHwnd = GetRunningMonitorHwnd();
-        if (runningMonitorHwnd != NULL) {
-            SendMessage(runningMonitorHwnd, WM_CLOSE, 0xBEBAF7F3, 0xC0CAF7F3);
-        }
-    }
+    // Load GLPI Agent Monitor settings from the registry
+    LoadMonitorSettings();
 
+    // Show the settings dialog in a new elevated instance if requested.
+    // This instance will close as soon as the settings dialog is closed.
+    // The Monitor itself won't be loaded.
+    if (wcsstr(szCmdLine, L"/openSettings") != nullptr)
+    {
+        HWND hWnd = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DLG_SETTINGS), NULL, (DLGPROC)SettingsDlgProc);
+        if (!hWnd) {
+            dwErr = GetLastError();
+            LoadStringAndMessageBox(hInst, NULL, IDS_ERR_MAINWINDOW, IDS_ERROR, MB_OK | MB_ICONERROR, dwErr);
+            return dwErr;
+        }
+
+        ShowWindowFront(hWnd, SW_SHOW);
+
+        // Settings dialog message loop
+        MSG msg;
+        while (GetMessage(&msg, nullptr, 0, 0))
+        {
+            if (!IsDialogMessage(hWnd, &msg)) {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
+
+        return (int)msg.wParam;
+    }
 
     // Create app mutex to keep only one instance running
     hMutex = CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // Wait for mutex to be available if trying to elevate
-        // as the other Monitor instance may not close instantly
-        if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
-        {
-            do {
-                hMutex = CreateMutex(NULL, TRUE, L"GLPI-AgentMonitor");
-            } while (WaitForSingleObject(hMutex, 500) != WAIT_OBJECT_0);
+        // Show running agent window
+        HWND runningMonitorHwnd = GetRunningMonitorHwnd();
+        if (runningMonitorHwnd != NULL) {
+            ShowWindowFront(runningMonitorHwnd, SW_SHOW);
+            UpdateStatus(runningMonitorHwnd, NULL, NULL, NULL);
         }
-        else {
-            // Show running agent window
-            HWND runningMonitorHwnd = GetRunningMonitorHwnd();
-            if (runningMonitorHwnd != NULL) {
-                ShowWindowFront(runningMonitorHwnd, SW_SHOW);
-                UpdateStatus(runningMonitorHwnd, NULL, NULL, NULL);
-            }
-            return 0;
-        }
+        return 0;
     }
-
 
     // Read app version
     WCHAR szFileName[MAX_PATH];
@@ -787,44 +845,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         lRes = RegQueryValueEx(hk, L"logfile", 0, NULL, (LPBYTE)szLogfile, &szLogfileLen);
         if (lRes != ERROR_SUCCESS)
             szLogfile[0] = '\0';
-
-
-        // Load GLPI Agent Monitor settings from registry
-        wsprintf(szKey, L"SOFTWARE\\%s\\Monitor", SERVICE_NAME);
-        LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
-        if (lRes != ERROR_SUCCESS)
-        {
-            wsprintf(szKey, L"SOFTWARE\\WOW6432Node\\%s\\Monitor", SERVICE_NAME);
-            lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ | KEY_WOW64_64KEY, &hk);
-        }
-
-        // Here I won't check if the key could be opened, as
-        // this is already checked when RegQueryValueEx below
-        // does not return ERROR_SUCCESS.
-        
-        // Get new ticket URL
-        DWORD szNewTicketURLLen = sizeof(szNewTicketURL);
-        lRes = RegQueryValueEx(hk, L"NewTicket-URL", 0, NULL, (LPBYTE)szNewTicketURL, &szNewTicketURLLen);
-        if (lRes != ERROR_SUCCESS || !wcscmp(szNewTicketURL, L"")) {
-            // Default value if not found or empty
-            if (wcsncmp(L"https://", szServer, 8) != 0 && wcsncmp(L"http://", szServer, 7) != 0) {
-                // Place an "http://" before the URL so that it is at least opened by the system's
-                // default browser instead of doing nothing or unexpected behavior, even if
-                // for some reason the Agent's "server" parameter is empty
-                wsprintf(szNewTicketURL, L"http://%s/front/ticket.form.php", szServer);
-            }
-            else {
-                wsprintf(szNewTicketURL, L"%s/front/ticket.form.php", szServer);
-            }
-        }
-
-        // Get new ticket screenshot enable
-        DWORD dwNewTicketScreenshotTmp = NULL;
-        DWORD dwNewTicketScreenshotLen = sizeof(dwNewTicketScreenshotTmp);
-        lRes = RegQueryValueExW(hk, L"NewTicket-Screenshot", 0, NULL, (LPBYTE)&dwNewTicketScreenshotTmp, &dwNewTicketScreenshotLen);
-        if (lRes == ERROR_SUCCESS) {
-            bNewTicketScreenshot = (dwNewTicketScreenshotTmp == 1);
-        }
     }
 
     RegCloseKey(hk);
@@ -916,18 +936,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     SetTimer(hWnd, IDT_UPDSVCSTATUS, 500, (TIMERPROC)UpdateServiceStatus);
 
     //-------------------------------------------------------------------------
-
-    // Show window if elevation request was made
-    if (wcsstr(lpCmdLine, L"/elevate") != nullptr)
-    {
-        ShowWindowFront(hWnd, SW_SHOW);
-        UpdateStatus(hWnd, NULL, NULL, NULL);
-
-        // Show settings dialog immediately if requested
-        if (wcsstr(lpCmdLine, L"/openSettings") != nullptr) {
-            DialogBox(hInst, MAKEINTRESOURCE(IDD_DLG_SETTINGS), hWnd, (DLGPROC)SettingsDlgProc);
-        }
-    }
 
     // Main message loop
     MSG msg;
@@ -1069,7 +1077,14 @@ LRESULT CALLBACK SettingsDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
         }
         case WM_CLOSE:
         {
-            EndDialog(hWnd, NULL);
+            if (wcsstr(szCmdLine, L"/openSettings") != nullptr)
+            {
+                DestroyWindow(hWnd);
+                PostQuitMessage(0);
+            }
+            else {
+                EndDialog(hWnd, NULL);
+            }
             return TRUE;
         }
     }
@@ -1168,7 +1183,22 @@ LRESULT CALLBACK DlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     {
                         WCHAR szFilename[MAX_PATH];
                         GetModuleFileName(NULL, szFilename, MAX_PATH);
-                        ShellExecute(hWnd, L"runas", szFilename, L"/elevate /openSettings", NULL, SW_SHOWNORMAL);
+
+                        // Create a new elevated Monitor instance for showing the settings dialog
+                        SHELLEXECUTEINFO sei = { sizeof(SHELLEXECUTEINFO) };
+                        sei.hwnd = hWnd;
+                        sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+                        sei.lpFile = szFilename;
+                        sei.lpParameters = L"/openSettings";
+                        sei.lpVerb = L"runas";
+                        sei.nShow = SW_SHOWNORMAL;
+
+                        // Execute, wait for the window to close and reload settings
+                        if (ShellExecuteEx(&sei) && sei.hProcess != 0) {
+                            WaitForSingleObject(sei.hProcess, INFINITE);
+                            CloseHandle(sei.hProcess);
+                            LoadMonitorSettings();
+                        }
                     }
                     return TRUE;
                 }
