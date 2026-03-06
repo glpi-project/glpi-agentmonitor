@@ -4,6 +4,7 @@ Future version
 
 * Fixed a typo in the Polish translation (#38)
 
+* Fixed potentially wrong execution context kept (#39)
 
 1.4.2
 
