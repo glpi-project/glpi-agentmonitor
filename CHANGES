@@ -4,7 +4,12 @@ Revision history for GLPI Agent Monitor
 
 * Fixed a typo in the Polish translation (#38)
 
-* Fixed potentially wrong execution context kept (#39)
+* Changed the settings dialog behavior when the Monitor is running under a
+  non-admin user account. Now, when the non-admin user tries to open the
+  settings dialog, the Monitor requests elevation and spawns a new process
+  only for showing the settings dialog. When the dialog is closed, the
+  new elevated process is killed and the previous Monitor process resumes
+  execution (#39)
 
 * Updated french translation with missing screenshot control setting resource text
 
