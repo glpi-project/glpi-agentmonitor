@@ -642,6 +642,9 @@ BEGIN
     IDS_SAVE                "Enregistrer"
     IDS_BTN_SETTINGS        " Paramètres"
     IDS_RMENU_SETTINGS      "Paramètres"
+    IDS_SETTINGS_NEWTICKET  "Nouveau ticket"
+    IDS_SETTINGS_NEWTICKET_SCREENSHOT 
+                            "Autoriser la capture d'écran en cliquant sur le bouton ""Nouveau ticket"""
 END
 
 #endif    // Francês (França) resources
