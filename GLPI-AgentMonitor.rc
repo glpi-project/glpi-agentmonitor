@@ -226,6 +226,107 @@ END
 #endif    // Russo (Rússia) resources
 /////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////////////////////
+// Ukrainian (Ucrânia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_UKR)
+LANGUAGE LANG_UKRAINIAN, SUBLANG_DEFAULT
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "GLPI Agent Monitor"
+    IDS_GLPINOTIFYERROR     "Агент GLPI - Помилка"
+    IDS_GLPINOTIFY          "Агент GLPI"
+    IDS_STATIC_INFO         "Інформація"
+    IDS_STATIC_AGENTVER     "Версія агента :"
+    IDS_STATIC_SERVICESTATUS "Стан служби :"
+    IDS_STATIC_STARTTYPE    "Тип запуску :"
+    IDS_ERR_AGENTSETTINGS   "Помилка завантаження налаштувань GLPI Agent!\nПеревстановіть GLPI Agent."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_LOADING             "Завантаження..."
+    IDS_STATIC_AGENTSTATUS  "Стан агента"
+    IDS_FORCEINV            "Інвентаризація"
+    IDS_CLOSE               "Закрити"
+    IDS_ERR_NOTRESPONDING   "Агент не відповідає!"
+    IDS_ERR_NOTRUNNING      "Агент не запущено!"
+    IDS_SVCSTART_BOOT       "Під час завантаження"
+    IDS_SVCSTART_SYSTEM     "Разом із системою"
+    IDS_SVCSTART_AUTO       "Автоматично"
+    IDS_SVCSTART_DELAYEDAUTO "Автоматично (відкладений запуск)"
+    IDS_SVCSTART_MANUAL     "Вручну"
+    IDS_SVCSTART_DISABLED   "Вимкнено"
+    IDS_ERR_UNKSVCSTART     "Невідомий тип запуску!"
+    IDS_ERR_REGFAIL         "Збій запиту до реєстру!"
+    IDS_ERR_AGENTVERNOTFOUND "Версію агента не знайдено!"
+    IDS_ERR_AGENTNOTFOUND   "Агент не встановлено!"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_HTTPDPORT       "Помилка отримання HTTP-порту GLPI Agent!\nПеревстановіть GLPI Agent."
+    IDS_SVC_STOPPED         "Зупинено"
+    IDS_SVC_RUNNING         "Запущено"
+    IDS_SVC_PAUSED          "Призупинено"
+    IDS_SVC_CONTINUEPENDING "Відновлюється..."
+    IDS_SVC_PAUSEPENDING    "Призупиняється..."
+    IDS_SVC_STARTPENDING    "Запускається..."
+    IDS_SVC_STOPPENDING     "Зупиняється..."
+    IDS_ERR_SERVICE         "Помилка запиту до служби!"
+    IDS_OK                  "OK"
+    IDS_ERROR               "GLPI Agent Monitor - Помилка"
+    IDS_ERR_FORCEINV_NORESPONSE "Помилка інвентаризації:\nАгент не відповідає."
+    IDS_ERR_FORCEINV_NOTALLOWED 
+                            "Помилка інвентаризації:\nОперацію не дозволено."
+    IDS_MSG_FORCEINV_OK     "Запит на інвентаризацію успішно надіслано до GLPI Agent."
+    IDS_ERR_AGENTERR        "Агент має одну або декілька помилок!\nПеревірте вікно GLPI Agent Monitor."
+    IDS_RMENU_OPEN          "Відкрити"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RMENU_FORCE         "Інвентаризація"
+    IDS_RMENU_EXIT          "Вихід"
+    IDS_FILE                "Файл"
+    IDS_DIR                 "Каталог"
+    IDS_ERR_MAINWINDOW      "Помилка створення головного вікна GLPI Agent Monitor!"
+    IDS_RMENU_NEWTICKET     "Нова заявка..."
+    IDS_ERR_SERVER          "Помилка отримання URL-адреси сервера GLPI!\nПеревстановіть GLPI Agent."
+    IDS_NOTIF_NEWTICKET_TITLE "Знімок екрана зроблено"
+    IDS_NOTIF_NEWTICKET     "Натисніть CTRL+V у вікні опису нової заявки, щоб прикріпити його до заявки."
+    IDS_NEWTICKET           "Нова заявка..."
+    IDS_VIEWLOGS            "Відкрити журнали"
+    IDS_RMENU_VIEWLOGS      "Відкрити журнали"
+    IDS_STARTSVC            " Запустити службу"
+    IDS_STOPSVC             " Зупинити службу"
+    IDS_RESUMESVC           " Відновити службу"
+    IDS_WAIT                "Зачекайте, будь ласка..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_ERR_SCHANDLE        "Помилка підключення до Диспетчера керування службами Windows (SCM)!"
+    IDS_ERR_SVCHANDLE       "Помилка відкриття служби GLPI Agent!"
+    IDS_ERR_SVCOPERATION    "Помилка керування службою GLPI Agent!"
+    IDS_SETTINGS            "Налаштування GLPI Agent Monitor"
+    IDS_SETTINGS_NEWTICKET_URL "URL сторінки нової заявки"
+    IDS_ERR_SAVE_SETTINGS   "Помилка збереження налаштувань GLPI Agent Monitor!"
+    IDS_CANCEL              "Скасувати"
+    IDS_SAVE                "Зберегти"
+    IDS_BTN_SETTINGS        " Налаштування"
+    IDS_RMENU_SETTINGS      "Налаштування"
+END
+
+#endif    // Ukrainian (Ucrânia) resources
+/////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////
 // Espanhol (Neutro) resources
