@@ -16,9 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
-    - uses: ilammy/msvc-dev-cmd@v1.13.0
-      with:
-        arch: ${{ matrix.arch }}
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v3
     - name: Set version
       run: |
         shopt -s extglob
