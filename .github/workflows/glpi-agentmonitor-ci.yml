@@ -15,15 +15,15 @@ jobs:
         arch: [ x64, x86 ]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - uses: ilammy/msvc-dev-cmd@v1.13.0
       with:
         arch: ${{ matrix.arch }}
     - name: Set version
       run: |
         shopt -s extglob
-        echo "#define VI_FILENAME         \"GLPI-AgentMonitor-$ARCH.exe\""                        > version.h
         if [ -z "${GITHUB_REF##refs/tags/*}" ]; then
+          echo "#define VI_FILENAME         \"GLPI-AgentMonitor-$ARCH.exe\""                        > version-release.h
           TAG=${GITHUB_REF#refs/tags/}
           VTAG=${TAG#*-}
           if [ -n "$TAG" -a -z "${TAG##+([[:digit:]]).+([[:digit:]]).+([[:digit:]])?(-*)}" ]; then
@@ -32,12 +32,19 @@ jobs:
             VERSION=${FULLVERSION%.*}
             MAJOR_VERSION=${VERSION%.*}
             MINOR_VERSION=${VERSION#*.}
-            echo "#define VI_VERSIONDEF       $MAJOR_VERSION,$MINOR_VERSION,$BUILD_VERSION,0"     >> version.h
-            echo "#define VI_VERSIONSTRING    \"$MAJOR_VERSION.$MINOR_VERSION.$BUILD_VERSION.0\"" >> version.h
+            echo "#define VI_VERSIONDEF       $MAJOR_VERSION,$MINOR_VERSION,$BUILD_VERSION,0"     >> version-release.h
+            echo "#define VI_VERSIONSTRING    \"$MAJOR_VERSION.$MINOR_VERSION.$BUILD_VERSION.0\"" >> version-release.h
+          else
+            rm -f version-release.h
+            exit 0
           fi
           if [ -n "$VTAG" ]; then
-            echo "#define VI_PRODUCTNAME      \"GLPI Agent Monitor ($VTAG)\""                     >> version.h
+            echo "#define VI_PRODUCTNAME      \"GLPI Agent Monitor ($VTAG)\""                     >> version-release.h
+          else
+            echo "#define VI_PRODUCTNAME      \"GLPI Agent Monitor\""                             >> version-release.h
           fi
+          rm -f version.h
+          mv -f version-release.h version.h
         fi
       shell: bash
       env:
@@ -71,14 +78,14 @@ jobs:
         CODESIGN_COMMAND: ${{ secrets.CODESIGN_COMMAND }}
         CODESIGN_PRIVATE: ${{ secrets.CODESIGN_PRIVATE }}
     - name: Upload built artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: success() || failure()
       with:
         name: GLPI-AgentMonitor-Build-${{ matrix.arch }}
         path: |
           Release\*.exe
     - name: Upload build logs artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: success() || failure()
       with:
         name: GLPI-AgentMonitor-BuildLogs-${{ matrix.arch }}
@@ -88,7 +95,7 @@ jobs:
           version.h
     - name: VirusTotal Scan submission
       if: startsWith(github.ref, 'refs/tags/')
-      uses: crazy-max/ghaction-virustotal@v4
+      uses: crazy-max/ghaction-virustotal@v5
       with:
         vt_api_key: ${{ secrets.VT_API_KEY }}
         files: |
@@ -145,7 +152,7 @@ jobs:
 
     steps:
     - name: Download x64 Artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         pattern: GLPI-AgentMonitor-Build-*
         merge-multiple: true
@@ -160,7 +167,7 @@ jobs:
         echo "x86=$X86" >>$GITHUB_OUTPUT
       shell: bash
     - name: Publish release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         draft: ${{ contains(github.ref_name, 'test') }}
         prerelease: ${{ contains(github.ref_name, 'beta') }}
