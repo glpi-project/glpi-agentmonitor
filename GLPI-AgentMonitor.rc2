@@ -16,8 +16,7 @@ VS_VERSION_INFO VERSIONINFO
  FILEVERSION VI_VERSIONDEF
  PRODUCTVERSION VI_VERSIONDEF
 #else
- FILEVERSION 1,5,0,0
- PRODUCTVERSION 1,5,0,0
+#error "VI_VERSIONDEF must be defined in version.h"
 #endif
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -37,24 +36,23 @@ BEGIN
 #ifdef VI_VERSIONSTRING
             VALUE "FileVersion", VI_VERSIONSTRING
 #else
-            VALUE "FileVersion", "1.5.0.0"
+#error "VI_VERSIONSTRING must be defined in version.h"
 #endif
 #ifdef VI_FILENAME
             VALUE "InternalName", VI_FILENAME
             VALUE "OriginalFilename", VI_FILENAME
 #else
-            VALUE "InternalName", "GLPI-AgentMonitor.exe"
-            VALUE "OriginalFilename", "GLPI-AgentMonitor.exe"
+#error "VI_FILENAME must be defined in version.h"
 #endif
 #ifdef VI_PRODUCTNAME
             VALUE "ProductName", VI_PRODUCTNAME
 #else
-            VALUE "ProductName", "GLPI Agent Monitor"
+#error "VI_PRODUCTNAME must be defined in version.h"
 #endif
 #ifdef VI_VERSIONSTRING
             VALUE "ProductVersion", VI_VERSIONSTRING
 #else
-            VALUE "ProductVersion", "1.5.0.0"
+#error "VI_VERSIONSTRING must be defined in version.h"
 #endif
         END
     END
